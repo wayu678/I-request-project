@@ -2,9 +2,18 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
+import { BrowserRouter } from 'react-router-dom'
+import { PrimeReactProvider } from 'primereact/api'
+import "primereact/resources/themes/saga-green/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <BrowserRouter>
+      <PrimeReactProvider>
+        <App />
+      </PrimeReactProvider>
+    </BrowserRouter>
   </StrictMode>,
 )
