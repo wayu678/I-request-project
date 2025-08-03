@@ -1,11 +1,13 @@
 import { Button, Card, Flex, Image, Input, Row } from "antd"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
+import { useTranslate } from "../../provider/hooks/translate.hook";
+import { Language } from "../../constants/common";
 
 const Login = () => {
     const navigate = useNavigate();
     const [loginType, setLoginType] = useState<"admin" | "user">("user");
-    const [language, setLanguage] = useState<"th" | "en">("th");
+    const { language, setLanguage, translate } = useTranslate();
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -37,12 +39,8 @@ const Login = () => {
         setLoginType(loginType === "admin" ? "user" : "admin");
     }
 
-    const switchLanguage = () => {
-        setLanguage(language === "th" ? "en" : "th");
-    }
-
     const onKuAllLogin = () => {
-        console.log("kuAllLogin");
+        console.log('onKuAllLogin');
     }
 
     const onForgotPassword = () => {
@@ -70,20 +68,20 @@ const Login = () => {
                                     {loginType === "admin" ? "Login as Student" : "Login as Administrator"}
                                 </Button>
                                 <Button
-                                    type={language === "th" ? "link" : "text"}
-                                    onClick={switchLanguage}
+                                    type={language === Language.TH ? "link" : "text"}
+                                    onClick={() => setLanguage(Language.TH)}
                                 >
                                     <span className="text-sm">
-                                        {`TH`}
+                                        {Language.TH}
                                     </span>
                                 </Button>
                                 /
                                 <Button
-                                    type={language === "en" ? "link" : "text"}
-                                    onClick={switchLanguage}
+                                    type={language === Language.EN ? "link" : "text"}
+                                    onClick={() => setLanguage(Language.EN)}
                                 >
                                     <span className="text-sm">
-                                        {`EN`}
+                                        {Language.EN}
                                     </span>
                                 </Button>
                             </Flex>
@@ -98,19 +96,19 @@ const Login = () => {
                             />
                         </Row>
                         <Row className="w-full" justify="center" align="middle">
-                            <span className="text-lg font-bold text-[#006C68]">{language === "th" ? "เข้าใช้งานระบบยื่นคำร้อง" : "System for Tracking Requests"}</span>
+                            <span className="text-lg font-bold text-[#006C68]">{translate("เข้าใช้งานระบบยื่นคำร้อง", "System for Tracking Requests")}</span>
                         </Row>
                         {
                             loginType === "admin" && (
-                                <Row className="w-full" justify="center" align="middle">
+                                <Row className="w-full fade-in" justify="center" align="middle">
                                     <Flex vertical gap={20} className="w-full">
                                         <Flex vertical className="w-full">
                                             <label className="w-full text-md">
-                                                {language === "th" ? "ชื่อผู้ใช้งาน" : "Username"}
+                                                {translate("ชื่อผู้ใช้งาน", "Username")}
                                             </label>
                                             <Input
                                                 size="large"
-                                                placeholder={language === "th" ? "ชื่อผู้ใช้งาน" : "Username"}
+                                                placeholder={translate("ชื่อผู้ใช้งาน", "Username")}
                                                 value={username}
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                                     setUsername(e.target.value)
@@ -119,11 +117,11 @@ const Login = () => {
                                         </Flex>
                                         <Flex vertical className="w-full">
                                             <label className="w-full text-md">
-                                                {language === "th" ? "รหัสผ่าน" : "Password"}
+                                                {translate("รหัสผ่าน", "Password")}
                                             </label>
                                             <Input
                                                 size="large"
-                                                placeholder={language === "th" ? "รหัสผ่าน" : "Password"}
+                                                placeholder={translate("รหัสผ่าน", "Password")}
                                                 value={password}
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                                     setPassword(e.target.value)
@@ -134,7 +132,7 @@ const Login = () => {
                                                     type="link"
                                                     onClick={onForgotPassword}
                                                 >
-                                                    {language === "th" ? "ลืมรหัสผ่าน ?" : "Forgot Password ?"}
+                                                    {translate("ลืมรหัสผ่าน ?", "Forgot Password ?")}
                                                 </Button>
                                             </Flex>
                                         </Flex>
@@ -146,7 +144,7 @@ const Login = () => {
                                             block
                                             onClick={onLogin}
                                         >
-                                            {language === "th" ? "เข้าสู่ระบบ" : "Login"}
+                                            {translate("เข้าสู่ระบบ", "Login")}
                                         </Button>
                                         <Row justify="center" align="middle">
                                             <hr className="w-full border-[#006C68] max-w-[340px]" />
