@@ -2,7 +2,7 @@ import { Button, Card, Flex, Image, Input, Row } from "antd"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { useTranslate } from "../../provider/hooks/translate.hook";
-import { Language } from "../../constants/common";
+import { LANGUAGE } from "../../constants/common";
 
 const LoginPim = () => {
     const navigate = useNavigate();
@@ -69,20 +69,20 @@ const LoginPim = () => {
                                     {loginType === "admin" ? "Login as Student" : "Login as Administrator"}
                                 </Button>
                                 <Button
-                                    type={language === Language.TH ? "link" : "text"}
-                                    onClick={() => setLanguage(Language.TH)}
+                                    type={language === LANGUAGE.TH ? "link" : "text"}
+                                    onClick={() => setLanguage(LANGUAGE.TH)}
                                 >
                                     <span className="text-sm">
-                                        {Language.TH}
+                                        {LANGUAGE.TH}
                                     </span>
                                 </Button>
                                 /
                                 <Button
-                                    type={language === Language.EN ? "link" : "text"}
-                                    onClick={() => setLanguage(Language.EN)}
+                                    type={language === LANGUAGE.EN ? "link" : "text"}
+                                    onClick={() => setLanguage(LANGUAGE.EN)}
                                 >
                                     <span className="text-sm">
-                                        {Language.EN}
+                                        {LANGUAGE.EN}
                                     </span>
                                 </Button>
                             </Flex>

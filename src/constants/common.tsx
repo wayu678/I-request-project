@@ -1,8 +1,15 @@
-const Language = {
+const LANGUAGE = {
     TH: 'TH',
     EN: 'EN'
 } as const
 
+const LOGIN_TYPE = {
+    ADMIN: 'ADMIN',
+    USER: 'USER'
+} as const
+
 export {
-    Language
+    LANGUAGE,
+    LOGIN_TYPE
 }
+

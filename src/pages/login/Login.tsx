@@ -2,9 +2,10 @@ import { Button, Card, Flex, Image, Input, Row } from "antd"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { useTranslate } from "../../provider/hooks/translate.hook";
-import { Language } from "../../constants/common";
+import { LANGUAGE, LOGIN_TYPE } from "../../constants/common";
 import { useForm } from "react-hook-form";
 import { IreTextbox } from "../../components/utils";
+
 
 interface SignInForm {
     username: string;
@@ -13,7 +14,7 @@ interface SignInForm {
 
 const Login = () => {
     const navigate = useNavigate();
-    const [loginType, setLoginType] = useState<"admin" | "user">("user");
+    const [loginType, setLoginType] = useState<typeof LOGIN_TYPE[keyof typeof LOGIN_TYPE]>(LOGIN_TYPE.USER);
     const { language, setLanguage, translate } = useTranslate();
 
     const signInForm = useForm<SignInForm>();
@@ -36,7 +37,7 @@ const Login = () => {
     }
 
     const switchLoginType = () => {
-        setLoginType(loginType === "admin" ? "user" : "admin");
+        setLoginType(loginType === LOGIN_TYPE.ADMIN ? LOGIN_TYPE.USER : LOGIN_TYPE.ADMIN);
     }
 
     const onKuAllLogin = () => {
@@ -58,23 +59,23 @@ const Login = () => {
                                     type="link"
                                     onClick={switchLoginType}
                                 >
-                                    {loginType === "admin" ? "Login as Student" : "Login as Administrator"}
+                                    {loginType === LOGIN_TYPE.ADMIN ? "Login as Student" : "Login as Administrator"}
                                 </Button>
                                 <Button
-                                    type={language === Language.TH ? "link" : "text"}
-                                    onClick={() => setLanguage(Language.TH)}
+                                    type={language === LANGUAGE.TH ? "link" : "text"}
+                                    onClick={() => setLanguage(LANGUAGE.TH)}
                                 >
                                     <span className="text-sm">
-                                        {Language.TH}
+                                        {LANGUAGE.TH}
                                     </span>
                                 </Button>
                                 /
                                 <Button
-                                    type={language === Language.EN ? "link" : "text"}
-                                    onClick={() => setLanguage(Language.EN)}
+                                    type={language === LANGUAGE.EN ? "link" : "text"}
+                                    onClick={() => setLanguage(LANGUAGE.EN)}
                                 >
                                     <span className="text-sm">
-                                        {Language.EN}
+                                        {LANGUAGE.EN}
                                     </span>
                                 </Button>
                             </Flex>
@@ -92,7 +93,7 @@ const Login = () => {
                             <span className="text-lg font-bold text-[#006C68]">{translate("เข้าใช้งานระบบยื่นคำร้อง", "System for Tracking Requests")}</span>
                         </Row>
                         {
-                            loginType === "admin" && (
+                            loginType === LOGIN_TYPE.ADMIN && (
                                 <>
                                     <Flex vertical className="fade-in">
                                         <IreTextbox
@@ -122,7 +123,7 @@ const Login = () => {
                             )
                         }
                         {
-                            loginType === "admin" && (
+                            loginType === LOGIN_TYPE.ADMIN && (
                                 <>
                                     <Button
                                         className="w-full"

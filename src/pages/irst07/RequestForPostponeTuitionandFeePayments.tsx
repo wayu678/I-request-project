@@ -1,7 +1,7 @@
 import { Button, Card } from "antd"
 import { useNavigate } from "react-router-dom"
 import { useTranslate } from "../../provider/hooks/translate.hook"
-import { Language } from "../../constants/common"
+import { LANGUAGE } from "../../constants/common"
 import { HomeOutlined, ArrowRightOutlined } from "@ant-design/icons"
 import PipelinePage from "./PipelinePage"
 import StudentForm from "./StudentForm"
@@ -11,7 +11,7 @@ const RequestForPostponeTuitionandFeePayments = () => {
     const navigate = useNavigate()
     const { language, setLanguage, translate } = useTranslate()
 
-    const onLanguageSwitch = (newLanguage: typeof Language[keyof typeof Language]) => {
+    const onLanguageSwitch = (newLanguage: typeof LANGUAGE[keyof typeof LANGUAGE]) => {
         try {
             setLanguage(newLanguage)
         } catch (error: any) {
@@ -51,17 +51,17 @@ const RequestForPostponeTuitionandFeePayments = () => {
                     <div className="flex items-center gap-4">
                         <div className="flex items-center gap-1 text-sm">
                             <Button
-                                type={language === Language.TH ? "link" : "text"}
-                                onClick={() => onLanguageSwitch(Language.TH)}
+                                type={language === LANGUAGE.TH ? "link" : "text"}
+                                onClick={() => onLanguageSwitch(LANGUAGE.TH)}
                             >
-                                {Language.TH}
+                                {LANGUAGE.TH}
                             </Button>
                             /
                             <Button
-                                type={language === Language.EN ? "link" : "text"}
-                                onClick={() => onLanguageSwitch(Language.EN)}
+                                type={language === LANGUAGE.EN ? "link" : "text"}
+                                onClick={() => onLanguageSwitch(LANGUAGE.EN)}
                             >
-                                {Language.EN}
+                                {LANGUAGE.EN}
                             </Button>
                         </div>
                         <ArrowRightOutlined
@@ -79,8 +79,8 @@ const RequestForPostponeTuitionandFeePayments = () => {
             <StudentForm />
 
             {/* SaveButton */}
-                <SaveButton />
-            </div>
+            <SaveButton />
+        </div>
     )
 }
 
