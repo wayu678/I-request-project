@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+* {
+  font-family: "Kanit", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-inline-size: 320px;
+  min-block-size: 100vh;
+}
+
+.ant-btn-default.ant-btn-color-green.ant-btn-variant-solid {
+  background-color: #006C68 !important;
+}
+
+.ant-btn-default.ant-btn-color-green.ant-btn-variant-outlined {
+  border-color: #006C68 !important;
+  color: #006C68 !important;
+}
+
+.is-required::after {
+  content: " *";
+  color: red;
+}
+
+.login-bg {
+  background-image: url(https://f.tpkcdn.com/images-720/b9bd86edddd99b27b95cf3896ff2517f.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
