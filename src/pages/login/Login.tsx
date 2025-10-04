@@ -3,31 +3,31 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { useTranslate } from "../../provider/hooks/translate.hook";
 import { Language } from "../../constants/common";
+import { useForm } from "react-hook-form";
+import { IreTextbox } from "../../components/utils";
+
+interface SignInForm {
+    username: string;
+    password: string;
+}
 
 const Login = () => {
     const navigate = useNavigate();
     const [loginType, setLoginType] = useState<"admin" | "user">("user");
     const { language, setLanguage, translate } = useTranslate();
 
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const signInForm = useForm<SignInForm>();
 
-    const onLogin = () => {
+    const onLogin = async () => {
         try {
-            const val = username.trim();
-            const pass = password.trim();
-            if (val.length !== username.length) {
-                throw new Error("space is not allowed");
-            }
+            const username = signInForm.getValues("username")?.trim();
+            const password = signInForm.getValues("password")?.trim();
 
-            if (pass.length !== password.length) {
-                throw new Error("space is not allowed, Password must be 6 characters");
-            }
-
-            if (val.length > 0 && pass.length > 0) {
-                navigate("/irst07");
+            const isValid = await signInForm.trigger();
+            if (isValid) {
+                navigate("/");
             } else {
-                throw new Error("username and password are required");
+                console.warn("Username and password are required");
             }
         } catch (error: any) {
             console.error(error);
@@ -40,7 +40,7 @@ const Login = () => {
     }
 
     const onKuAllLogin = () => {
-        console.log('onKuAllLogin');
+        navigate("/");
     }
 
     const onForgotPassword = () => {
@@ -49,14 +49,7 @@ const Login = () => {
 
     return (
         <>
-            <div className="flex flex-col items-center justify-center h-screen"
-                style={{
-                    backgroundImage: `url(https://f.tpkcdn.com/images-720/b9bd86edddd99b27b95cf3896ff2517f.jpg)`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                }}
-            >
+            <div className="flex flex-col items-center justify-center h-screen login-bg">
                 <Card className="w-full max-w-[450px] h-full max-h-[600px] shadow-lg">
                     <Flex className="w-full h-full" vertical gap={20}>
                         <Row className="w-full">
@@ -100,57 +93,51 @@ const Login = () => {
                         </Row>
                         {
                             loginType === "admin" && (
-                                <Row className="w-full fade-in" justify="center" align="middle">
-                                    <Flex vertical gap={20} className="w-full">
-                                        <Flex vertical className="w-full">
-                                            <label className="w-full text-md">
-                                                {translate("ชื่อผู้ใช้งาน", "Username")}
-                                            </label>
-                                            <Input
-                                                size="large"
-                                                placeholder={translate("ชื่อผู้ใช้งาน", "Username")}
-                                                value={username}
-                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                                    setUsername(e.target.value)
-                                                }
-                                            />
-                                        </Flex>
-                                        <Flex vertical className="w-full">
-                                            <label className="w-full text-md">
-                                                {translate("รหัสผ่าน", "Password")}
-                                            </label>
-                                            <Input
-                                                size="large"
-                                                placeholder={translate("รหัสผ่าน", "Password")}
-                                                value={password}
-                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                                    setPassword(e.target.value)
-                                                }
-                                            />
-                                            <Flex justify="end" align="center" className="w-full">
-                                                <Button
-                                                    type="link"
-                                                    onClick={onForgotPassword}
-                                                >
-                                                    {translate("ลืมรหัสผ่าน ?", "Forgot Password ?")}
-                                                </Button>
-                                            </Flex>
-                                        </Flex>
-                                        <Button
-                                            className="w-full"
-                                            color="green"
-                                            variant="outlined"
-                                            size="large"
-                                            block
-                                            onClick={onLogin}
-                                        >
-                                            {translate("เข้าสู่ระบบ", "Login")}
-                                        </Button>
-                                        <Row justify="center" align="middle">
-                                            <hr className="w-full border-[#006C68] max-w-[340px]" />
-                                        </Row>
+                                <>
+                                    <Flex vertical className="fade-in">
+                                        <IreTextbox
+                                            label={translate("ชื่อผู้ใช้งาน", "Username")}
+                                            formContext={signInForm}
+                                            registerName={signInForm.register("username")}
+                                            isRequired
+                                        />
                                     </Flex>
-                                </Row>
+                                    <Flex vertical className="fade-in">
+                                        <IreTextbox
+                                            label={translate("รหัสผ่าน", "Password")}
+                                            formContext={signInForm}
+                                            registerName={signInForm.register("password")}
+                                            isRequired
+                                        />
+                                        <Flex justify="end" align="center" className="w-full">
+                                            <Button
+                                                type="link"
+                                                onClick={onForgotPassword}
+                                            >
+                                                {translate("ลืมรหัสผ่าน ?", "Forgot Password ?")}
+                                            </Button>
+                                        </Flex>
+                                    </Flex>
+                                </>
+                            )
+                        }
+                        {
+                            loginType === "admin" && (
+                                <>
+                                    <Button
+                                        className="w-full"
+                                        color="green"
+                                        variant="outlined"
+                                        size="large"
+                                        block
+                                        onClick={onLogin}
+                                    >
+                                        {translate("เข้าสู่ระบบ", "Login")}
+                                    </Button>
+                                    <Row justify="center" align="middle">
+                                        <hr className="w-full border-[#006C68] max-w-[340px]" />
+                                    </Row>
+                                </>
                             )
                         }
                         <Row>

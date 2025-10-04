@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 
 import NotFound from "./pages/NotFound";
-import { LoginPim } from "./pages/login";
+import { Login } from "./pages/login";
 
-import { 
+import {
   RequestForPostponeTuitionandFeePayments,
   RequestForPostponeTuitionandFeePaymentsDetail
 } from "./pages/irst07";
@@ -15,7 +15,7 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Demo />} />
       <Route path="/demo" element={<Demo />} />
-      <Route path="/login" element={<LoginPim />} />
+      <Route path="/login" element={<Login />} />
 
       <Route path="/irst07">
         <Route path="" element={<RequestForPostponeTuitionandFeePayments />} />
