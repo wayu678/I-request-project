@@ -28,3 +28,15 @@ body {
   border-color: #006C68 !important;
   color: #006C68 !important;
 }
+
+.is-required::after {
+  content: " *";
+  color: red;
+}
+
+.login-bg {
+  background-image: url(https://f.tpkcdn.com/images-720/b9bd86edddd99b27b95cf3896ff2517f.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
