@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslate } from "../../provider/hooks/translate.hook";
 import { Language } from "../../constants/common";
 
-const Login = () => {
+const LoginPim = () => {
     const navigate = useNavigate();
     const [loginType, setLoginType] = useState<"admin" | "user">("user");
     const { language, setLanguage, translate } = useTranslate();
@@ -41,6 +41,7 @@ const Login = () => {
 
     const onKuAllLogin = () => {
         console.log('onKuAllLogin');
+        navigate("/irst07");
     }
 
     const onForgotPassword = () => {
@@ -172,4 +173,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default LoginPim

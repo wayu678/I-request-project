@@ -1,0 +1,35 @@
+import { Button } from "antd";
+import { useNavigate } from "react-router-dom";
+import { useTranslate } from "../../provider/hooks/translate.hook";
+
+const SaveButton = () => {
+  const navigate = useNavigate();
+  const { translate } = useTranslate();
+
+  const handleSave = () => {
+    console.log("Save button clicked");
+    navigate("/irst07/detail");
+  };
+
+  return (
+    <div className="w-full max-w-6xl flex justify-end pr-5">
+      <Button
+        type="primary"
+        size="large"
+        onClick={handleSave}
+        className="rounded-lg"
+        style={{
+          width: "106px",
+          height: "38px",
+          backgroundColor: "#339966",
+          borderColor: "#339966",
+          boxShadow: "none",
+        }}
+      >
+        {translate("บันทึก", "Save")}
+      </Button>
+    </div>
+  );
+};
+
+export default SaveButton;

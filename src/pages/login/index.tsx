@@ -1,3 +1,3 @@
-import Login from "./Login"
+import LoginPim from "./LoginPim"
 
-export { Login }
+export { LoginPim }

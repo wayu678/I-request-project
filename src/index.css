@@ -18,6 +18,7 @@ body {
   display: flex;
   min-inline-size: 320px;
   min-block-size: 100vh;
+  background-color: #F2F2F2;
 }
 
 .ant-btn-default.ant-btn-color-green.ant-btn-variant-solid {
@@ -29,14 +30,83 @@ body {
   color: #006C68 !important;
 }
 
-.is-required::after {
-  content: " *";
-  color: red;
+/* Ant Design Select font-weight override */
+.ant-select-selection-item {
+  font-weight: normal !important;
 }
 
-.login-bg {
-  background-image: url(https://f.tpkcdn.com/images-720/b9bd86edddd99b27b95cf3896ff2517f.jpg);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+.ant-select-selection-search-input {
+  font-weight: normal !important;
+}
+
+.ant-select .ant-select-selection-item {
+  font-weight: normal !important;
+}
+
+.ant-select .ant-select-selection-search-input {
+  font-weight: normal !important;
+}
+
+.ant-select-selection-placeholder {
+  font-weight: normal !important;
+}
+
+.ant-select .ant-select-selection-placeholder {
+  font-weight: normal !important;
+}
+
+.ant-select-selection-overflow-item {
+  font-weight: normal !important;
+}
+
+.ant-select .ant-select-selection-overflow-item {
+  font-weight: normal !important;
+}
+
+/* Additional specificity for Ant Design v5 */
+.ant-select.ant-select-single .ant-select-selection-item {
+  font-weight: normal !important;
+}
+
+.ant-select.ant-select-single .ant-select-selection-search-input {
+  font-weight: normal !important;
+}
+
+.ant-select.ant-select-multiple .ant-select-selection-item {
+  font-weight: normal !important;
+}
+
+.ant-select.ant-select-multiple .ant-select-selection-search-input {
+  font-weight: normal !important;
+}
+
+/* More specific selectors */
+.ant-select:not(.ant-select-disabled) .ant-select-selection-item {
+  font-weight: normal !important;
+}
+
+.ant-select:not(.ant-select-disabled) .ant-select-selection-search-input {
+  font-weight: normal !important;
+}
+
+/* CSS Custom Properties override */
+.ant-select {
+  --ant-select-selection-item-font-weight: normal !important;
+}
+
+/* Force override with higher specificity */
+div.ant-select .ant-select-selection-item {
+  font-weight: normal !important;
+}
+
+div.ant-select .ant-select-selection-search-input {
+  font-weight: normal !important;
+}
+
+/* Override for all select elements */
+.ant-select-selection-item,
+.ant-select-selection-search-input,
+.ant-select-selection-placeholder,
+.ant-select-selection-overflow-item {
+  font-weight: normal !important;
 }
