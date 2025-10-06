@@ -8,6 +8,8 @@ import {
   RequestForPostponeTuitionandFeePaymentsDetail
 } from "./pages/irst07";
 
+import MakeUpExamForm from "./components/MakeUpExamForm";
+
 import { Demo } from "./pages/demo";
 
 const App = () => {
@@ -16,7 +18,7 @@ const App = () => {
       <Route path="/" element={<Demo />} />
       <Route path="/demo" element={<Demo />} />
       <Route path="/login" element={<Login />} />
-
+      <Route path="/make-up-exam" element={<MakeUpExamForm />} />
       <Route path="/irst07">
         <Route path="" element={<RequestForPostponeTuitionandFeePayments />} />
         <Route path="detail" element={<RequestForPostponeTuitionandFeePaymentsDetail />} />
