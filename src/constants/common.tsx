@@ -12,4 +12,3 @@ export {
     LANGUAGE,
     LOGIN_TYPE
 }
-
