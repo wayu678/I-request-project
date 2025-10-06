@@ -63,5 +63,3 @@ const IreSelect = ({
 };
 
 export default IreSelect;
-
-

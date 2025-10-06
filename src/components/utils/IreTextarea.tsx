@@ -54,5 +54,3 @@ const IreTextarea = ({
 };
 
 export default IreTextarea;
-
-

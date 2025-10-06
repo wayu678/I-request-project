@@ -61,5 +61,3 @@ const IreCalendar = ({
 };
 
 export default IreCalendar;
-
-

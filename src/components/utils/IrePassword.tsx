@@ -53,5 +53,3 @@ const IrePassword = ({
 };
 
 export default IrePassword;
-
-

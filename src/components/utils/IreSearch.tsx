@@ -50,5 +50,3 @@ const IreSearch = ({
 };
 
 export default IreSearch;
-
-
