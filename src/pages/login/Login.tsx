@@ -1,11 +1,11 @@
-import { Button, Card, Flex, Image, Input, Row } from "antd"
+import { Button, Card, Flex, Image, Input, Row, message } from "antd"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslate } from "../../provider/hooks/translate.hook";
 import { LANGUAGE, LOGIN_TYPE } from "../../constants/common";
 import { useForm } from "react-hook-form";
 import { IreTextbox } from "../../components/utils";
-
+import { useAuth } from "../../contexts/AuthContext";
 
 interface SignInForm {
     username: string;
@@ -14,10 +14,15 @@ interface SignInForm {
 
 const Login = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [loginType, setLoginType] = useState<typeof LOGIN_TYPE[keyof typeof LOGIN_TYPE]>(LOGIN_TYPE.USER);
     const { language, setLanguage, translate } = useTranslate();
+    const { login, isLoading } = useAuth();
 
     const signInForm = useForm<SignInForm>();
+
+    // Get return URL from location state
+    const from = location.state?.from?.pathname || '/dashboard';
 
     const onLogin = async () => {
         try {
@@ -25,14 +30,20 @@ const Login = () => {
             const password = signInForm.getValues("password")?.trim();
 
             const isValid = await signInForm.trigger();
-            if (isValid) {
-                navigate("/");
+            if (isValid && username && password) {
+                const success = await login(username, password);
+                if (success) {
+                    message.success('เข้าสู่ระบบสำเร็จ');
+                    navigate(from, { replace: true });
+                } else {
+                    message.error('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+                }
             } else {
-                console.warn("Username and password are required");
+                message.warning('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
             }
         } catch (error: any) {
             console.error(error);
-            throw error;
+            message.error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
         }
     }
 
@@ -40,8 +51,20 @@ const Login = () => {
         setLoginType(loginType === LOGIN_TYPE.ADMIN ? LOGIN_TYPE.USER : LOGIN_TYPE.ADMIN);
     }
 
-    const onKuAllLogin = () => {
-        navigate("/");
+    const onKuAllLogin = async () => {
+        try {
+            // Mock KU All-Login
+            const success = await login("ku_user", "ku_password");
+            if (success) {
+                message.success('เข้าสู่ระบบ KU All-Login สำเร็จ');
+                navigate(from, { replace: true });
+            } else {
+                message.error('ไม่สามารถเข้าสู่ระบบ KU All-Login ได้');
+            }
+        } catch (error) {
+            console.error('KU All-Login failed:', error);
+            message.error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ KU All-Login');
+        }
     }
 
     const onForgotPassword = () => {
@@ -131,6 +154,7 @@ const Login = () => {
                                         variant="outlined"
                                         size="large"
                                         block
+                                        loading={isLoading}
                                         onClick={onLogin}
                                     >
                                         {translate("เข้าสู่ระบบ", "Login")}
@@ -148,6 +172,7 @@ const Login = () => {
                                 variant="solid"
                                 size="large"
                                 block
+                                loading={isLoading}
                                 onClick={onKuAllLogin}
                             >
                                 KU All-Login

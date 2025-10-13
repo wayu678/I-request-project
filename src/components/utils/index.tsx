@@ -6,6 +6,7 @@ import IreSearch from "./IreSearch";
 import IreCalendar from "./IreCalendar";
 import IreUpload from "./IreUpload";
 import IreButton from "./IreButton";
+import IreDisplayField from "./IreDisplayField";
 
 export {
     IreTextbox,
@@ -15,5 +16,6 @@ export {
     IreSearch,
     IreCalendar,
     IreUpload,
-    IreButton
+    IreButton,
+    IreDisplayField
 };

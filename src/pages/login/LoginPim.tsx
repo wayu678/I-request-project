@@ -1,21 +1,24 @@
-import { Button, Card, Flex, Image, Input, Row } from "antd"
+import { Button, Card, Flex, Image, Input, Row, message } from "antd"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { useTranslate } from "../../provider/hooks/translate.hook";
 import { LANGUAGE } from "../../constants/common";
+import { useAuth } from "../../contexts/AuthContext";
 
 const LoginPim = () => {
     const navigate = useNavigate();
     const [loginType, setLoginType] = useState<"admin" | "user">("user");
     const { language, setLanguage, translate } = useTranslate();
+    const { login, isLoading } = useAuth(); // เพิ่ม useAuth hook
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const onLogin = () => {
+    const onLogin = async () => { // เปลี่ยนเป็น async function
         try {
             const val = username.trim();
             const pass = password.trim();
+
             if (val.length !== username.length) {
                 throw new Error("space is not allowed");
             }
@@ -25,13 +28,21 @@ const LoginPim = () => {
             }
 
             if (val.length > 0 && pass.length > 0) {
+                // ใช้ auth service แทนการ navigate โดยตรง
+                await login({
+                    username: val,
+                    password: pass,
+                    loginType: loginType
+                });
+
+                message.success(translate("เข้าสู่ระบบสำเร็จ", "Login successful"));
                 navigate("/irst07");
             } else {
                 throw new Error("username and password are required");
             }
         } catch (error: any) {
             console.error(error);
-            throw error;
+            message.error(error.message || translate("เข้าสู่ระบบไม่สำเร็จ", "Login failed"));
         }
     }
 
@@ -120,7 +131,7 @@ const LoginPim = () => {
                                             <label className="w-full text-md">
                                                 {translate("รหัสผ่าน", "Password")}
                                             </label>
-                                            <Input
+                                            <Input.Password // เปลี่ยนเป็น Input.Password เพื่อซ่อนรหัสผ่าน
                                                 size="large"
                                                 placeholder={translate("รหัสผ่าน", "Password")}
                                                 value={password}
@@ -144,6 +155,7 @@ const LoginPim = () => {
                                             size="large"
                                             block
                                             onClick={onLogin}
+                                            loading={isLoading} // เพิ่ม loading state
                                         >
                                             {translate("เข้าสู่ระบบ", "Login")}
                                         </Button>
