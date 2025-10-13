@@ -34,21 +34,34 @@ const IreSelect = ({
 }: IreSelectProps) => {
     return (
         <>
-            <Flex vertical className={`gap-1 ${widthFull ? "w-full" : ""}`}>
+            <Flex vertical className={`gap-1.5 ${widthFull ? "w-full" : ""}`}>
                 <label className={`w-full text-md ${isRequired ? "is-required" : ""}`}>
                     {label}
                 </label>
                 <Select
                     size="large"
-                    className="w-full"
+                    className="w-full ire-select-custom"
                     placeholder={placeholder ?? label}
                     value={formContext.getValues(registerName.name)}
                     onBlur={() => formContext.clearErrors(registerName.name)}
-                    onChange={(value) => formContext.setValue(registerName.name, value)}
+                    onChange={(value) => {
+                        formContext.setValue(registerName.name, value);
+                        formContext.trigger(registerName.name);
+                    }}
                     status={formContext.formState.errors[registerName.name] ? "error" : undefined}
                     options={options}
                     allowClear={allowClear}
                     disabled={disabled}
+                    showSearch={false}
+                    filterOption={false}
+                    style={{
+                        backgroundColor: '#fff'
+                    }}
+                    styles={{
+                        selector: {
+                            borderColor: '#99CCB3'
+                        }
+                    }}
                 />
                 {
                     errorMessage && (

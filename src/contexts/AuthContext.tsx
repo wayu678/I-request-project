@@ -1,81 +1,101 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authService } from '../services/auth/auth.service';
-import type { User, LoginRequest } from '../services/auth/auth.service';
+import type { ReactNode } from 'react';
+import { tokenService, profileService } from '../services/auth';
 
 interface AuthContextType {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  login: (credentials: LoginRequest) => Promise<void>;
-  logout: () => void;
+    isAuthenticated: boolean;
+    isLoading: boolean;
+    login: (username: string, password: string) => Promise<boolean>;
+    logout: () => void;
+    checkAuth: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 interface AuthProviderProps {
-  children: React.ReactNode;
+    children: ReactNode;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // ตรวจสอบ authentication เมื่อ component mount
-    const checkAuth = async () => {
-      try {
-        if (authService.isAuthenticated()) {
-          const userData = authService.getUser();
-          setUser(userData);
+    useEffect(() => {
+        checkAuth();
+    }, []);
+
+    const checkAuth = async (): Promise<boolean> => {
+        try {
+            setIsLoading(true);
+            const authenticated = tokenService.isAuthenticated();
+            setIsAuthenticated(authenticated);
+            return authenticated;
+        } catch (error) {
+            console.error('Auth check failed:', error);
+            setIsAuthenticated(false);
+            return false;
+        } finally {
+            setIsLoading(false);
         }
-      } catch (error) {
-        console.error('Auth check error:', error);
-        authService.logout();
-      } finally {
-        setIsLoading(false);
-      }
     };
 
-    checkAuth();
-  }, []);
+    const login = async (username: string, password: string): Promise<boolean> => {
+        try {
+            setIsLoading(true);
 
-  const login = async (credentials: LoginRequest) => {
-    try {
-      setIsLoading(true);
-      const response = await authService.login(credentials);
-      setUser(response.user);
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+            // สร้าง Token
+            const tokenData = await tokenService.generateToken(username, password);
+            if (!tokenData) {
+                return false;
+            }
 
-  const logout = () => {
-    authService.logout();
-    setUser(null);
-  };
+            // บันทึก Token
+            tokenService.setToken(tokenData);
 
-  const value: AuthContextType = {
-    user,
-    isAuthenticated: !!user,
-    isLoading,
-    login,
-    logout,
-  };
+            // ตรวจสอบการเข้าสู่ระบบ
+            const authenticated = await checkAuth();
+            return authenticated;
+        } catch (error) {
+            console.error('Login failed:', error);
+            return false;
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+    const logout = () => {
+        try {
+            // ลบ Token
+            tokenService.clearToken();
+
+            // ลบข้อมูล Profile
+            profileService.clearProfileData();
+
+            setIsAuthenticated(false);
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
+
+    const value: AuthContextType = {
+        isAuthenticated,
+        isLoading,
+        login,
+        logout,
+        checkAuth
+    };
+
+    return (
+        <AuthContext.Provider value={value}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
 export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+    const context = useContext(AuthContext);
+    if (context === undefined) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
 };

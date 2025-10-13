@@ -68,3 +68,179 @@ div.ant-select .ant-select-selection-search-input {
 .ant-select {
   --ant-select-selection-item-font-weight: normal !important;
 }
+
+/* IreSelect custom border color */
+.ire-select-custom .ant-select-selector {
+  border-color: #99CCB3 !important;
+}
+
+.ire-select-custom:hover .ant-select-selector {
+  border-color: #99CCB3 !important;
+}
+
+.ire-select-custom.ant-select-focused .ant-select-selector {
+  border-color: #99CCB3 !important;
+  box-shadow: 0 0 0 2px rgba(153, 204, 179, 0.2) !important;
+}
+
+/* DatePicker custom border color */
+.ant-picker {
+  border-color: #99CCB3 !important;
+}
+
+.ant-picker:hover {
+  border-color: #99CCB3 !important;
+}
+
+.ant-picker-focused {
+  border-color: #99CCB3 !important;
+  box-shadow: 0 0 0 2px rgba(153, 204, 179, 0.2) !important;
+}
+
+/* IreSelect default value color and font weight - override Tailwind */
+.ire-select-custom .ant-select-selection-item,
+.ire-select-custom .ant-select-selection-item * {
+  font-weight: normal !important;
+  color: rgba(0, 0, 0, 0.25) !important;
+}
+
+.ire-select-custom .ant-select-selection-placeholder,
+.ire-select-custom .ant-select-selection-placeholder * {
+  font-weight: normal !important;
+  color: rgba(0, 0, 0, 0.25) !important;
+}
+
+/* IreSelect selected value should be dark - when user has actually selected something */
+.ire-select-custom.ant-select-single:not(.ant-select-disabled) .ant-select-selection-item,
+.ire-select-custom.ant-select-single:not(.ant-select-disabled) .ant-select-selection-item * {
+  color: rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Override for actual selected values (not default values) - higher specificity */
+.ant-select.ire-select-custom.ant-select-single:not(.ant-select-disabled) .ant-select-selection-item[title],
+.ant-select.ire-select-custom.ant-select-single:not(.ant-select-disabled) .ant-select-selection-item[title] * {
+  color: rgba(0, 0, 0, 0.88) !important;
+}
+
+/* DatePicker font weight and placeholder color */
+.ant-picker-input input {
+  font-weight: normal !important;
+}
+
+.ant-picker-input input::placeholder {
+  font-weight: normal !important;
+  color: rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Simple IreSelect styling */
+.ire-select-custom .ant-select-selection-item {
+  font-weight: normal !important;
+  color: rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Force normal font weight for page headers - highest specificity */
+div.min-h-screen.bg-gray-100.p-6 div.max-w-7xl.mx-auto div.shadow-sm.p-8 div.flex.items-center.justify-space-between div.flex.items-center span.text-lg.font-normal.text-black {
+  font-weight: normal !important;
+}
+
+/* Alternative selector for page headers */
+.ant-card .ant-flex span.text-lg.font-normal.text-black {
+  font-weight: normal !important;
+}
+
+/* Force specific font weight for Dashboard and Profile headers */
+span[class*="text-lg"][class*="font-normal"][class*="text-black"] {
+  font-weight: normal !important;
+}
+
+/* Override universal selector for page headers */
+* {
+  font-family: "Kanit", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* Exception for page headers */
+span.text-lg.font-normal.text-black {
+  font-weight: normal !important;
+}
+
+/* Table alternating rows */
+.table-row-light {
+  background-color: #F5F5F5 !important;
+}
+
+.table-row-dark {
+  background-color: #FFFFFF !important;
+}
+
+/* Remove table header borders */
+.ant-table-thead > tr > th,
+.ant-table-thead > tr > th:not(:last-child),
+.ant-table-thead > tr > th:not(:first-child),
+.ant-table-thead > tr > th::before,
+.ant-table-thead > tr > th::after {
+  border-right: none !important;
+  border-left: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  border: none !important;
+}
+
+/* Force remove all borders from table headers */
+.ant-table-thead th {
+  border: none !important;
+  border-right: none !important;
+  border-left: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+/* Specific table border removal */
+.ant-table,
+.ant-table table,
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td {
+  border: none !important;
+  border-right: none !important;
+  border-left: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+/* Remove all table cell borders */
+.ant-table-thead > tr > th:not(:last-child) {
+  border-right: none !important;
+}
+
+.ant-table-tbody > tr > td:not(:last-child) {
+  border-right: none !important;
+}
+
+/* Ultimate border removal for dashboard table */
+div[class*="dashboard"] .ant-table-thead > tr > th,
+div[class*="dashboard"] .ant-table-thead > tr > th:not(:last-child),
+div[class*="dashboard"] .ant-table-thead > tr > th:not(:first-child),
+div[class*="dashboard"] .ant-table-thead > tr > th::before,
+div[class*="dashboard"] .ant-table-thead > tr > th::after,
+div[class*="dashboard"] .ant-table-thead > tr > th *,
+div[class*="dashboard"] .ant-table-thead > tr > th .ant-table-column-sorters,
+div[class*="dashboard"] .ant-table-thead > tr > th .ant-table-column-sorters::before,
+div[class*="dashboard"] .ant-table-thead > tr > th .ant-table-column-sorters::after {
+  border: none !important;
+  border-right: none !important;
+  border-left: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Table row borders */
+.ant-table-tbody > tr > td {
+  border-bottom: 1px solid #BAE2CF !important;
+}
+
+.ant-table-thead > tr > th {
+  border-bottom: 1px solid #BAE2CF !important;
+}

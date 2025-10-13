@@ -1,5 +1,6 @@
 import { Flex, Input } from "antd";
 import { type UseFormRegisterReturn, type UseFormReturn } from "react-hook-form";
+import { type ReactNode } from "react";
 
 interface IreTextboxProps {
     label?: string;
@@ -8,7 +9,7 @@ interface IreTextboxProps {
     registerName: UseFormRegisterReturn;
     isRequired?: boolean;
     errorMessage?: string;
-
+    suffix?: ReactNode;
     type?: "text" | "textarea" | "password";
     widthFull?: boolean;
     min?: number;
@@ -24,13 +25,14 @@ const IreTextbox = ({
     isRequired = false,
     widthFull = true,
     errorMessage,
+    suffix,
     min,
     max
 }: IreTextboxProps) => {
     return (
         <>
             <Flex vertical className={`gap-1 ${widthFull ? "w-full" : ""}`}>
-                <label className={`w-full text-md ${isRequired ? "is-required" : ""}`}>
+                <label className={`w-full text-sm mb-2 ${isRequired ? "is-required" : ""}`} style={{ color: 'rgba(0, 0, 0, 0.75)' }}>
                     {label}
                 </label>
                 <Input
@@ -43,10 +45,16 @@ const IreTextbox = ({
                     min={min}
                     max={max}
                     type={type}
+                    suffix={suffix}
+                    className="rounded-lg"
+                    style={{
+                        borderColor: '#99CCB3',
+                        backgroundColor: '#fff'
+                    }}
                 />
                 {
                     errorMessage && (
-                        <label className="text-red-500">
+                        <label className="text-red-500 text-sm">
                             {errorMessage}
                         </label>
                     )
