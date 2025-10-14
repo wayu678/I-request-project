@@ -1,11 +1,13 @@
-import { Button, Card, Flex, Image, Input, Row, message } from "antd"
+import { Button, Card, Flex, Image, Row, message } from "antd"
 import { useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslate } from "../../provider/hooks/translate.hook";
 import { LANGUAGE, LOGIN_TYPE } from "../../constants/common";
 import { useForm } from "react-hook-form";
 import { IreTextbox } from "../../components/utils";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuthService } from "../../services/api/auth";
+import { debugCookies } from "../../utils/cookieUtils";
+
 
 interface SignInForm {
     username: string;
@@ -16,8 +18,9 @@ const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [loginType, setLoginType] = useState<typeof LOGIN_TYPE[keyof typeof LOGIN_TYPE]>(LOGIN_TYPE.USER);
+    const [loading, setLoading] = useState(false);
     const { language, setLanguage, translate } = useTranslate();
-    const { login, isLoading } = useAuth();
+    const { login } = useAuthService();
 
     const signInForm = useForm<SignInForm>();
 
@@ -30,20 +33,63 @@ const Login = () => {
             const password = signInForm.getValues("password")?.trim();
 
             const isValid = await signInForm.trigger();
-            if (isValid && username && password) {
-                const success = await login(username, password);
-                if (success) {
-                    message.success('เข้าสู่ระบบสำเร็จ');
-                    navigate(from, { replace: true });
-                } else {
-                    message.error('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
-                }
-            } else {
-                message.warning('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+            if (!isValid) {
+                message.error(translate("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน", "Please enter username and password"));
+                return;
             }
+
+            if (!username || !password) {
+                message.error(translate("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน", "Please enter username and password"));
+                return;
+            }
+
+            setLoading(true);
+
+            // เรียก API login
+            const loginResponse = await login({
+                username,
+                password
+            });
+
+            console.log('Login response:', loginResponse);
+
+            // Debug cookies หลังจาก login
+            debugCookies();
+
+            if (loginResponse.success) {
+                // ไม่เก็บ token ใน localStorage เพราะ backend ส่งมาเป็น cookies แล้ว
+                // เก็บเฉพาะข้อมูลผู้ใช้ใน localStorage
+                localStorage.setItem('userInfo', JSON.stringify({
+                    id: loginResponse.id,
+                    username: loginResponse.username,
+                    roleCode: loginResponse.roleCode,
+                    campusCode: loginResponse.campusCode,
+                    facultyCode: loginResponse.facultyCode,
+                    majorCode: loginResponse.majorCode,
+                    departmentCode: loginResponse.departmentCode,
+                    advisorCode: loginResponse.advisorCode,
+                    phone: loginResponse.phone,
+                    email: loginResponse.email
+                }));
+
+                message.success(translate("เข้าสู่ระบบสำเร็จ", "Login successful"));
+
+                // Debug: ตรวจสอบ cookies หลังจาก login สำเร็จ
+                console.log("=== Login Success - Cookie Debug ===");
+                debugCookies();
+                console.log("=====================================");
+
+                // นำทางไปยังหน้า Dashboard
+                navigate("/dashboard");
+            } else {
+                message.error(loginResponse.message || translate("เข้าสู่ระบบไม่สำเร็จ", "Login failed"));
+            }
+
         } catch (error: any) {
-            console.error(error);
-            message.error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
+            console.error("Login error:", error);
+            message.error(translate("เข้าสู่ระบบไม่สำเร็จ", "Login failed"));
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -154,7 +200,7 @@ const Login = () => {
                                         variant="outlined"
                                         size="large"
                                         block
-                                        loading={isLoading}
+                                        loading={loading}
                                         onClick={onLogin}
                                     >
                                         {translate("เข้าสู่ระบบ", "Login")}
@@ -172,7 +218,7 @@ const Login = () => {
                                 variant="solid"
                                 size="large"
                                 block
-                                loading={isLoading}
+                                loading={loading}
                                 onClick={onKuAllLogin}
                             >
                                 KU All-Login
