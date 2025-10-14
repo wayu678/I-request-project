@@ -5,6 +5,7 @@ import type { UserLoginResponse } from "../generated-api/models/UserLoginRespons
 
 const authApiClient = new AUTHENTICATIONApi(new Configuration({
     basePath: 'http://localhost:8080/api',
+    credentials: 'include', // เพิ่มเพื่อให้ส่ง cookies
 }));
 
 export const useAuthService = () => {

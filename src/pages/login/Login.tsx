@@ -6,6 +6,8 @@ import { LANGUAGE, LOGIN_TYPE } from "../../constants/common";
 import { useForm } from "react-hook-form";
 import { IreTextbox } from "../../components/utils";
 import { useAuthService } from "../../services/api/auth";
+import { debugCookies } from "../../utils/cookieUtils";
+import "../../utils/cookieTest"; // โหลด cookie testing functions
 
 interface SignInForm {
     username: string;
@@ -49,10 +51,14 @@ const Login = () => {
                 password
             });
 
+            console.log('Login response:', loginResponse);
+
+            // Debug cookies หลังจาก login
+            debugCookies();
+
             if (loginResponse.success) {
-                // บันทึก token และข้อมูลผู้ใช้ลง localStorage
-                localStorage.setItem('accessToken', loginResponse.accessToken);
-                localStorage.setItem('refreshToken', loginResponse.refreshToken);
+                // ไม่เก็บ token ใน localStorage เพราะ backend ส่งมาเป็น cookies แล้ว
+                // เก็บเฉพาะข้อมูลผู้ใช้ใน localStorage
                 localStorage.setItem('userInfo', JSON.stringify({
                     id: loginResponse.id,
                     username: loginResponse.username,
@@ -67,6 +73,11 @@ const Login = () => {
                 }));
 
                 message.success(translate("เข้าสู่ระบบสำเร็จ", "Login successful"));
+
+                // Debug: ตรวจสอบ cookies หลังจาก login สำเร็จ
+                console.log("=== Login Success - Cookie Debug ===");
+                debugCookies();
+                console.log("=====================================");
 
                 // นำทางไปยังหน้า MakeUpExamForm
                 navigate("/makeup-exam");
