@@ -79,8 +79,8 @@ const Login = () => {
                 debugCookies();
                 console.log("=====================================");
 
-                // นำทางไปยังหน้า MakeUpExamForm
-                navigate("/makeup-exam");
+                // นำทางไปยังหน้า Dashboard
+                navigate("/dashboard");
             } else {
                 message.error(loginResponse.message || translate("เข้าสู่ระบบไม่สำเร็จ", "Login failed"));
             }
