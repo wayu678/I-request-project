@@ -15,15 +15,15 @@
 
 import * as runtime from '../runtime';
 import type {
-    AuthChangePasswordRequest,
-    DeleteUser200Response,
-    LogoutRequest,
-    RefreshTokenRequest,
-    RefreshTokenResponse,
-    UserLoginRequest,
-    UserLoginResponse,
-    UserRegisterRequest,
-    UserRegisterResponse,
+  AuthChangePasswordRequest,
+  DeleteUser200Response,
+  LogoutRequest,
+  RefreshTokenRequest,
+  RefreshTokenResponse,
+  UserLoginRequest,
+  UserLoginResponse,
+  UserRegisterRequest,
+  UserRegisterResponse,
 } from '../models/index';
 import {
     AuthChangePasswordRequestFromJSON,
@@ -67,18 +67,18 @@ export interface RegisterRequest {
 }
 
 /**
- * AUTHENTICATIONApi - interface
+ * AuthenticationApi - interface
  * 
  * @export
- * @interface AUTHENTICATIONApiInterface
+ * @interface AuthenticationApiInterface
  */
-export interface AUTHENTICATIONApiInterface {
+export interface AuthenticationApiInterface {
     /**
      * เปลี่ยนรหัสผ่าน
      * @param {AuthChangePasswordRequest} authChangePasswordRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AUTHENTICATIONApiInterface
+     * @memberof AuthenticationApiInterface
      */
     authChangePasswordRaw(requestParameters: AuthChangePasswordOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeleteUser200Response>>;
 
@@ -92,7 +92,7 @@ export interface AUTHENTICATIONApiInterface {
      * @param {UserLoginRequest} userLoginRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AUTHENTICATIONApiInterface
+     * @memberof AuthenticationApiInterface
      */
     loginRaw(requestParameters: LoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserLoginResponse>>;
 
@@ -106,7 +106,7 @@ export interface AUTHENTICATIONApiInterface {
      * @param {LogoutRequest} logoutRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AUTHENTICATIONApiInterface
+     * @memberof AuthenticationApiInterface
      */
     logoutRaw(requestParameters: LogoutOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeleteUser200Response>>;
 
@@ -120,7 +120,7 @@ export interface AUTHENTICATIONApiInterface {
      * @param {RefreshTokenRequest} refreshTokenRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AUTHENTICATIONApiInterface
+     * @memberof AuthenticationApiInterface
      */
     refreshTokenRaw(requestParameters: RefreshTokenOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RefreshTokenResponse>>;
 
@@ -134,7 +134,7 @@ export interface AUTHENTICATIONApiInterface {
      * @param {UserRegisterRequest} userRegisterRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AUTHENTICATIONApiInterface
+     * @memberof AuthenticationApiInterface
      */
     registerRaw(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserRegisterResponse>>;
 
@@ -148,7 +148,7 @@ export interface AUTHENTICATIONApiInterface {
 /**
  * 
  */
-export class AUTHENTICATIONApi extends runtime.BaseAPI implements AUTHENTICATIONApiInterface {
+export class AuthenticationApi extends runtime.BaseAPI implements AuthenticationApiInterface {
 
     /**
      * เปลี่ยนรหัสผ่าน
