@@ -1,11 +1,11 @@
-import { AUTHENTICATIONApi } from "../generated-api/apis/AUTHENTICATIONApi";
+import {    AuthenticationApi } from "../generated-api/apis/AuthenticationApi";
 import { Configuration } from "../generated-api/runtime";
 import type { UserLoginRequest } from "../generated-api/models/UserLoginRequest";
 import type { UserLoginResponse } from "../generated-api/models/UserLoginResponse";
 
-const authApiClient = new AUTHENTICATIONApi(new Configuration({
+const authApiClient = new AuthenticationApi(new Configuration({
     basePath: 'http://localhost:8080/api',
-    credentials: 'include', // เพิ่มเพื่อให้ส่ง cookies
+    credentials: 'include', 
 }));
 
 export const useAuthService = () => {

@@ -133,18 +133,18 @@ export interface UpdateStudentOperationRequest {
 }
 
 /**
- * STUDENTMANAGEMENTApi - interface
+ * StudentManagementApi - interface
  * 
  * @export
- * @interface STUDENTMANAGEMENTApiInterface
+ * @interface StudentManagementApiInterface
  */
-export interface STUDENTMANAGEMENTApiInterface {
+export interface StudentManagementApiInterface {
     /**
      * ตรวจสอบ studentCode ซ้ำ
      * @param {string} studentCode 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     checkStudentCodeExistsRaw(requestParameters: CheckStudentCodeExistsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CheckUsernameExists200Response>>;
 
@@ -158,7 +158,7 @@ export interface STUDENTMANAGEMENTApiInterface {
      * @param {CreateStudentRequest} createStudentRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     createStudentRaw(requestParameters: CreateStudentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateStudentResponse>>;
 
@@ -172,7 +172,7 @@ export interface STUDENTMANAGEMENTApiInterface {
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     deleteStudentRaw(requestParameters: DeleteStudentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeleteUser200Response>>;
 
@@ -186,7 +186,7 @@ export interface STUDENTMANAGEMENTApiInterface {
      * @param {StudentSearchRequest} [studentSearchRequest] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     exportStudentsDataRaw(requestParameters: ExportStudentsDataRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ExportStudentsData200Response>>;
 
@@ -201,7 +201,7 @@ export interface STUDENTMANAGEMENTApiInterface {
      * @param {number} [pageSize] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     getAllStudentsRaw(requestParameters: GetAllStudentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StudentSearchResponse>>;
 
@@ -215,7 +215,7 @@ export interface STUDENTMANAGEMENTApiInterface {
      * @param {string} studentCode 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     getStudentByCodeRaw(requestParameters: GetStudentByCodeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StudentResponse>>;
 
@@ -229,7 +229,7 @@ export interface STUDENTMANAGEMENTApiInterface {
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     getStudentByIdRaw(requestParameters: GetStudentByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StudentResponse>>;
 
@@ -242,7 +242,7 @@ export interface STUDENTMANAGEMENTApiInterface {
      * สถิติของ student
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     getStudentStatisticsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StudentStatisticsResponse>>;
 
@@ -258,7 +258,7 @@ export interface STUDENTMANAGEMENTApiInterface {
      * @param {number} [pageSize] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     getStudentsByAdvisorRaw(requestParameters: GetStudentsByAdvisorRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StudentSearchResponse>>;
 
@@ -274,7 +274,7 @@ export interface STUDENTMANAGEMENTApiInterface {
      * @param {number} [pageSize] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     getStudentsByCampusRaw(requestParameters: GetStudentsByCampusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StudentSearchResponse>>;
 
@@ -290,7 +290,7 @@ export interface STUDENTMANAGEMENTApiInterface {
      * @param {number} [pageSize] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     getStudentsByFacultyRaw(requestParameters: GetStudentsByFacultyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StudentSearchResponse>>;
 
@@ -306,7 +306,7 @@ export interface STUDENTMANAGEMENTApiInterface {
      * @param {number} [pageSize] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     getStudentsByMajorRaw(requestParameters: GetStudentsByMajorRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StudentSearchResponse>>;
 
@@ -322,7 +322,7 @@ export interface STUDENTMANAGEMENTApiInterface {
      * @param {number} [pageSize] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     getStudentsByStatusRaw(requestParameters: GetStudentsByStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StudentSearchResponse>>;
 
@@ -336,7 +336,7 @@ export interface STUDENTMANAGEMENTApiInterface {
      * @param {ImportStudentsDataRequest} importStudentsDataRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     importStudentsDataRaw(requestParameters: ImportStudentsDataOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImportStudentsData200Response>>;
 
@@ -352,7 +352,7 @@ export interface STUDENTMANAGEMENTApiInterface {
      * @param {number} [pageSize] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     searchStudentsRaw(requestParameters: SearchStudentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StudentSearchResponse>>;
 
@@ -367,7 +367,7 @@ export interface STUDENTMANAGEMENTApiInterface {
      * @param {UpdateStudentRequest} updateStudentRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof STUDENTMANAGEMENTApiInterface
+     * @memberof StudentManagementApiInterface
      */
     updateStudentRaw(requestParameters: UpdateStudentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateStudentResponse>>;
 
@@ -381,7 +381,7 @@ export interface STUDENTMANAGEMENTApiInterface {
 /**
  * 
  */
-export class STUDENTMANAGEMENTApi extends runtime.BaseAPI implements STUDENTMANAGEMENTApiInterface {
+export class StudentManagementApi extends runtime.BaseAPI implements StudentManagementApiInterface {
 
     /**
      * ตรวจสอบ studentCode ซ้ำ

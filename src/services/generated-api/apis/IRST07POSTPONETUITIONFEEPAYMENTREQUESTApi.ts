@@ -27,18 +27,18 @@ export interface CreatePostponeTuitionRequestPostRequest {
 }
 
 /**
- * IRST07POSTPONETUITIONFEEPAYMENTREQUESTApi - interface
+ * IRST07PostponeTuitionFeePaymentRequestApi - interface
  * 
  * @export
- * @interface IRST07POSTPONETUITIONFEEPAYMENTREQUESTApiInterface
+ * @interface IRST07PostponeTuitionFeePaymentRequestApiInterface
  */
-export interface IRST07POSTPONETUITIONFEEPAYMENTREQUESTApiInterface {
+export interface IRST07PostponeTuitionFeePaymentRequestApiInterface {
     /**
      * 
      * @param {PostponeTuitionFee} postponeTuitionFee 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof IRST07POSTPONETUITIONFEEPAYMENTREQUESTApiInterface
+     * @memberof IRST07PostponeTuitionFeePaymentRequestApiInterface
      */
     createPostponeTuitionRequestPostRaw(requestParameters: CreatePostponeTuitionRequestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
 
@@ -51,7 +51,7 @@ export interface IRST07POSTPONETUITIONFEEPAYMENTREQUESTApiInterface {
 /**
  * 
  */
-export class IRST07POSTPONETUITIONFEEPAYMENTREQUESTApi extends runtime.BaseAPI implements IRST07POSTPONETUITIONFEEPAYMENTREQUESTApiInterface {
+export class IRST07PostponeTuitionFeePaymentRequestApi extends runtime.BaseAPI implements IRST07PostponeTuitionFeePaymentRequestApiInterface {
 
     /**
      */

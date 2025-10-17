@@ -100,18 +100,18 @@ export interface UserChangePasswordOperationRequest {
 }
 
 /**
- * USERMANAGEMENTApi - interface
+ * UserManagementApi - interface
  * 
  * @export
- * @interface USERMANAGEMENTApiInterface
+ * @interface UserManagementApiInterface
  */
-export interface USERMANAGEMENTApiInterface {
+export interface UserManagementApiInterface {
     /**
      * ตรวจสอบ username ซ้ำ
      * @param {string} username 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof USERMANAGEMENTApiInterface
+     * @memberof UserManagementApiInterface
      */
     checkUsernameExistsRaw(requestParameters: CheckUsernameExistsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CheckUsernameExists200Response>>;
 
@@ -125,7 +125,7 @@ export interface USERMANAGEMENTApiInterface {
      * @param {CreateUserRequest} createUserRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof USERMANAGEMENTApiInterface
+     * @memberof UserManagementApiInterface
      */
     createUserRaw(requestParameters: CreateUserOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateUserResponse>>;
 
@@ -139,7 +139,7 @@ export interface USERMANAGEMENTApiInterface {
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof USERMANAGEMENTApiInterface
+     * @memberof UserManagementApiInterface
      */
     deleteUserRaw(requestParameters: DeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeleteUser200Response>>;
 
@@ -154,7 +154,7 @@ export interface USERMANAGEMENTApiInterface {
      * @param {number} [pageSize] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof USERMANAGEMENTApiInterface
+     * @memberof UserManagementApiInterface
      */
     getAllUsersRaw(requestParameters: GetAllUsersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAllUsersResponse>>;
 
@@ -168,7 +168,7 @@ export interface USERMANAGEMENTApiInterface {
      * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof USERMANAGEMENTApiInterface
+     * @memberof UserManagementApiInterface
      */
     getUserByIdRaw(requestParameters: GetUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserResponse>>;
 
@@ -182,7 +182,7 @@ export interface USERMANAGEMENTApiInterface {
      * @param {string} username 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof USERMANAGEMENTApiInterface
+     * @memberof UserManagementApiInterface
      */
     getUserByUsernameRaw(requestParameters: GetUserByUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserResponse>>;
 
@@ -196,7 +196,7 @@ export interface USERMANAGEMENTApiInterface {
      * @param {string} campusCode 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof USERMANAGEMENTApiInterface
+     * @memberof UserManagementApiInterface
      */
     getUsersByCampusRaw(requestParameters: GetUsersByCampusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserResponse>>>;
 
@@ -210,7 +210,7 @@ export interface USERMANAGEMENTApiInterface {
      * @param {string} roleCode 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof USERMANAGEMENTApiInterface
+     * @memberof UserManagementApiInterface
      */
     getUsersByRoleRaw(requestParameters: GetUsersByRoleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserResponse>>>;
 
@@ -224,7 +224,7 @@ export interface USERMANAGEMENTApiInterface {
      * @param {UserLoginRequest} userLoginRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof USERMANAGEMENTApiInterface
+     * @memberof UserManagementApiInterface
      */
     loginUserRaw(requestParameters: LoginUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserLoginResponse>>;
 
@@ -239,7 +239,7 @@ export interface USERMANAGEMENTApiInterface {
      * @param {UpdateUserRequest} updateUserRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof USERMANAGEMENTApiInterface
+     * @memberof UserManagementApiInterface
      */
     updateUserRaw(requestParameters: UpdateUserOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateUserResponse>>;
 
@@ -254,7 +254,7 @@ export interface USERMANAGEMENTApiInterface {
      * @param {UserChangePasswordRequest} userChangePasswordRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof USERMANAGEMENTApiInterface
+     * @memberof UserManagementApiInterface
      */
     userChangePasswordRaw(requestParameters: UserChangePasswordOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DeleteUser200Response>>;
 
@@ -268,7 +268,7 @@ export interface USERMANAGEMENTApiInterface {
 /**
  * 
  */
-export class USERMANAGEMENTApi extends runtime.BaseAPI implements USERMANAGEMENTApiInterface {
+export class UserManagementApi extends runtime.BaseAPI implements UserManagementApiInterface {
 
     /**
      * ตรวจสอบ username ซ้ำ

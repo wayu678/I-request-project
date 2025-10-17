@@ -152,19 +152,6 @@ export class BaseAPI {
         const headers = Object.assign({}, this.configuration.headers, context.headers);
         Object.keys(headers).forEach(key => headers[key] === undefined ? delete headers[key] : {});
 
-        // เพิ่ม JWT Token ใน header สำหรับ API calls
-        const token = localStorage.getItem('auth_token');
-        if (token) {
-            try {
-                const tokenData = JSON.parse(token);
-                if (tokenData.token && !this.isTokenExpired(tokenData.expiresAt)) {
-                    headers['Authorization'] = `Bearer ${tokenData.token}`;
-                }
-            } catch (error) {
-                console.warn('Failed to parse token from localStorage:', error);
-            }
-        }
-
         const initOverrideFn =
             typeof initOverrides === "function"
                 ? initOverrides
@@ -248,11 +235,6 @@ export class BaseAPI {
             }
         }
         return response;
-    }
-
-    // ตรวจสอบ Token หมดอายุ
-    private isTokenExpired(expiresAt: number): boolean {
-        return Date.now() >= expiresAt;
     }
 
     /**

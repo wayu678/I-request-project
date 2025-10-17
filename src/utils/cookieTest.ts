@@ -1,14 +1,3 @@
-/**
- * ไฟล์ทดสอบการทำงานของ Cookies
- * Cookie Testing File
- * 
- * วิธีการทดสอบ:
- * 1. เปิด Browser Developer Tools (F12)
- * 2. ไปที่ Console tab
- * 3. ทำการ login
- * 4. ดู console logs ที่แสดงข้อมูล cookies
- * 5. ไปที่ Application > Cookies เพื่อดู cookies ที่ถูกตั้งค่า
- */
 
 import {
     getCookie,
@@ -23,10 +12,7 @@ import {
     debugCookies
 } from '../utils/cookieUtils';
 
-/**
- * ทดสอบการทำงานของ cookie utilities
- * Test cookie utilities functionality
- */
+
 export const testCookieUtils = () => {
     console.log("=== Testing Cookie Utilities ===");
 
