@@ -15,17 +15,17 @@
 
 import * as runtime from '../runtime';
 import type {
-  CheckUsernameExists200Response,
-  CreateUserRequest,
-  CreateUserResponse,
-  DeleteUser200Response,
-  GetAllUsersResponse,
-  UpdateUserRequest,
-  UpdateUserResponse,
-  UserChangePasswordRequest,
-  UserLoginRequest,
-  UserLoginResponse,
-  UserResponse,
+    CheckUsernameExists200Response,
+    CreateUserRequest,
+    CreateUserResponse,
+    DeleteUser200Response,
+    GetAllUsersResponse,
+    UpdateUserRequest,
+    UpdateUserResponse,
+    UserChangePasswordRequest,
+    UserLoginRequest,
+    UserLoginResponse,
+    UserResponse,
 } from '../models/index';
 import {
     CheckUsernameExists200ResponseFromJSON,
