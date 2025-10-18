@@ -121,7 +121,7 @@ const Login = () => {
         <>
             <div className="flex flex-col items-center justify-center h-screen login-bg">
                 <Card className="w-full max-w-[450px] h-full max-h-[600px] shadow-lg">
-                    <Flex className="w-full h-full" vertical gap={20}>
+                    <Flex className="w-full h-full" vertical gap={15}>
                         <Row className="w-full">
                             <Flex justify="right" align="center" className="w-full h-full">
                                 <Button
