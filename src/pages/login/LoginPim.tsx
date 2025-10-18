@@ -2,7 +2,7 @@ import { Button, Card, Flex, Image, Input, Row, message } from "antd"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { useTranslate } from "../../provider/hooks/translate.hook";
-import { LANGUAGE } from "../../constants/common";
+import { LANGUAGE, LOGIN_TYPE } from "../../constants/common";
 import { useAuth } from "../../contexts/AuthContext";
 
 const LoginPim = () => {
@@ -29,11 +29,7 @@ const LoginPim = () => {
 
             if (val.length > 0 && pass.length > 0) {
                 // ใช้ auth service แทนการ navigate โดยตรง
-                await login({
-                    username: val,
-                    password: pass,
-                    loginType: loginType
-                });
+                await login(val, pass);
 
                 message.success(translate("เข้าสู่ระบบสำเร็จ", "Login successful"));
                 navigate("/irst07");
