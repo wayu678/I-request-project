@@ -9,17 +9,22 @@ import {
     Pagination,
     Select,
     Flex,
-    DatePicker
+
+
 } from 'antd';
 import {
     PlusOutlined,
     EditOutlined,
     DownOutlined,
     UpOutlined,
-    CalendarOutlined
+    UnorderedListOutlined,
+
 } from '@ant-design/icons';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { IreSelect } from '../../components/utils';
+import {
+    IreSelect,
+    IreCalendar,
+} from '../../components/utils';
 
 const { Option } = Select;
 
@@ -108,27 +113,18 @@ const Dashboard: React.FC = () => {
         { label: 'คำร้องทั่วไป', value: 'คำร้องทั่วไป' }
     ];
 
-    const renderDatePickerField = (label: string, field: "month" | "academicYear", placeholder: string, format: string, picker?: "month" | "year") => (
-        <Flex vertical gap={6} className="w-full">
-            <span className="text-sm font-medium text-gray-700">{label}</span>
-            <DatePicker
-                placeholder={placeholder}
-                format={format}
-                picker={picker}
-                suffixIcon={<CalendarOutlined />}
-                size="large"
-                value={formContext.getValues(field)}
-                onChange={(date) => {
-                    formContext.setValue(field, date);
-                    formContext.trigger(field);
-                }}
-                style={{
-                    borderColor: '#99CCB3',
-                    backgroundColor: '#fff'
-                }}
-            />
-        </Flex>
+    const renderIreCalendar = (label: string, field: "month" | "academicYear", placeholder: string, format: string | "MM" | "YYYY") => (
+        <IreCalendar
+            label={label}
+            formContext={formContext}
+            registerName={formContext.register(field)}
+            placeholder={placeholder}
+            format={format}
+            widthFull={true}
+        />
     );
+
+
 
     const columns = [
         {
@@ -258,18 +254,7 @@ const Dashboard: React.FC = () => {
                     {/* Header inside Card */}
                     <Flex align="center" justify="space-between" style={{ marginBottom: '30px' }}>
                         <Flex align="center">
-                            <div className="flex items-center mr-3">
-                                <div className="flex flex-col mr-1.5">
-                                    <div className="w-0.5 h-0.5 bg-black mb-0.5"></div>
-                                    <div className="w-0.5 h-0.5 bg-black mb-0.5"></div>
-                                    <div className="w-0.5 h-0.5 bg-black"></div>
-                                </div>
-                                <div className="flex flex-col">
-                                    <div className="w-2 h-0.5 bg-black mb-0.5"></div>
-                                    <div className="w-2 h-0.5 bg-black mb-0.5"></div>
-                                    <div className="w-2 h-0.5 bg-black"></div>
-                                </div>
-                            </div>
+                            <UnorderedListOutlined style={{ fontSize: '18px', marginRight: '12px', color: '#000' }} />
                             <span className="text-lg font-normal text-black" style={{ fontWeight: 'normal', fontSize: '18px' }}>Dashboard</span>
                         </Flex>
                     </Flex>
@@ -322,7 +307,7 @@ const Dashboard: React.FC = () => {
                         <Col xs={24} lg={12}>
                             <div style={{ padding: '20px' }}>
                                 <Flex vertical gap={20} style={{ width: '405px' }}>
-                                    {renderDatePickerField("เดือน", "month", "MM", "MM", "month")}
+                                    {renderIreCalendar("เดือน", "month", "MM", "MM")}
                                     <IreSelect
                                         label="เทอม"
                                         placeholder="ภาคต้น, ภาคปลาย, ภาคฤดูร้อน"
@@ -331,7 +316,7 @@ const Dashboard: React.FC = () => {
                                         options={termOptions}
                                         widthFull={true}
                                     />
-                                    {renderDatePickerField("ปีการศึกษา", "academicYear", "YYYY", "YYYY", "year")}
+                                    {renderIreCalendar("ปีการศึกษา", "academicYear", "YYYY", "YYYY")}
                                     <IreSelect
                                         label="ประเภทคำร้อง"
                                         placeholder="คำร้องทั่วไป"

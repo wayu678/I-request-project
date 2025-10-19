@@ -244,3 +244,7 @@ div[class*="dashboard"] .ant-table-thead > tr > th .ant-table-column-sorters::af
 .ant-table-thead > tr > th {
   border-bottom: 1px solid #BAE2CF !important;
 }
+
+.dashboard-container {
+  min-width: 100vh;
+}
