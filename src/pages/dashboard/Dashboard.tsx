@@ -7,21 +7,23 @@ import {
     Table,
     Button,
     Pagination,
-    Select,
     Flex,
-    DatePicker
+
+
 } from 'antd';
 import {
     PlusOutlined,
     EditOutlined,
     DownOutlined,
     UpOutlined,
-    CalendarOutlined
+    UnorderedListOutlined,
+
 } from '@ant-design/icons';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { IreSelect } from '../../components/utils';
-
-const { Option } = Select;
+import {
+    IreSelect,
+    IreCalendar,
+} from '../../components/utils';
 
 // Mock data for donut chart
 const chartData = [
@@ -87,7 +89,6 @@ const tableData = [
 
 const Dashboard: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(5);
 
     const formContext = useForm({
         defaultValues: {
@@ -108,33 +109,24 @@ const Dashboard: React.FC = () => {
         { label: 'คำร้องทั่วไป', value: 'คำร้องทั่วไป' }
     ];
 
-    const renderDatePickerField = (label: string, field: "month" | "academicYear", placeholder: string, format: string, picker?: "month" | "year") => (
-        <Flex vertical gap={6} className="w-full">
-            <span className="text-sm font-medium text-gray-700">{label}</span>
-            <DatePicker
-                placeholder={placeholder}
-                format={format}
-                picker={picker}
-                suffixIcon={<CalendarOutlined />}
-                size="large"
-                value={formContext.getValues(field)}
-                onChange={(date) => {
-                    formContext.setValue(field, date);
-                    formContext.trigger(field);
-                }}
-                style={{
-                    borderColor: '#99CCB3',
-                    backgroundColor: '#fff'
-                }}
-            />
-        </Flex>
+    const renderIreCalendar = (label: string, field: "month" | "academicYear", placeholder: string, format: string | "MM" | "YYYY") => (
+        <IreCalendar
+            label={label}
+            formContext={formContext}
+            registerName={formContext.register(field)}
+            placeholder={placeholder}
+            format={format}
+            widthFull={true}
+        />
     );
+
+
 
     const columns = [
         {
             title: (
                 <Flex align="center" justify="center">
-                    <span style={{ fontSize: '14px', fontWeight: 'normal' }}>ลำดับ</span>
+                    <span className="dashboard-table-header-text">ลำดับ</span>
                 </Flex>
             ),
             dataIndex: 'no',
@@ -145,8 +137,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span style={{ fontSize: '14px', fontWeight: 'normal' }}>วันที่เอกสาร</span>
-                    <UpOutlined style={{ fontSize: '12px' }} />
+                    <span className="dashboard-table-header-text">วันที่เอกสาร</span>
+                    <UpOutlined className="dashboard-table-header-icon" />
                 </Flex>
             ),
             dataIndex: 'documentDate',
@@ -157,8 +149,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span style={{ fontSize: '14px', fontWeight: 'normal' }}>เทอม</span>
-                    <UpOutlined style={{ fontSize: '12px' }} />
+                    <span className="dashboard-table-header-text">เทอม</span>
+                    <UpOutlined className="dashboard-table-header-icon" />
                 </Flex>
             ),
             dataIndex: 'term',
@@ -169,8 +161,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span style={{ fontSize: '14px', fontWeight: 'normal' }}>ปีการศึกษา</span>
-                    <UpOutlined style={{ fontSize: '12px' }} />
+                    <span className="dashboard-table-header-text">ปีการศึกษา</span>
+                    <UpOutlined className="dashboard-table-header-icon" />
                 </Flex>
             ),
             dataIndex: 'academicYear',
@@ -181,8 +173,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span style={{ fontSize: '14px', fontWeight: 'normal' }}>ประเภทคำร้อง</span>
-                    <UpOutlined style={{ fontSize: '12px' }} />
+                    <span className="dashboard-table-header-text">ประเภทคำร้อง</span>
+                    <UpOutlined className="dashboard-table-header-icon" />
                 </Flex>
             ),
             dataIndex: 'requestType',
@@ -193,8 +185,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span style={{ fontSize: '14px', fontWeight: 'normal' }}>สถานะคำร้อง</span>
-                    <UpOutlined style={{ fontSize: '12px' }} />
+                    <span className="dashboard-table-header-text">สถานะคำร้อง</span>
+                    <UpOutlined className="dashboard-table-header-icon" />
                 </Flex>
             ),
             dataIndex: 'status',
@@ -203,17 +195,11 @@ const Dashboard: React.FC = () => {
             align: 'center' as const,
             render: (status: string, record: any) => (
                 <Button
+                    className="dashboard-status-button"
                     style={{
                         backgroundColor: record.statusColor,
                         borderColor: record.statusColor,
-                        color: '#fff',
-                        borderRadius: '16px',
-                        width: '106px',
-                        height: '28px',
-                        fontSize: '12px',
-                        fontWeight: 'normal',
-                        padding: '0 12px',
-                        cursor: 'default'
+                        color: '#fff'
                     }}
                     disabled
                 >
@@ -224,7 +210,7 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center">
-                    <span style={{ fontSize: '14px', fontWeight: 'normal' }}>ดำเนินการ</span>
+                    <span className="dashboard-table-header-text">ดำเนินการ</span>
                 </Flex>
             ),
             key: 'action',
@@ -234,68 +220,47 @@ const Dashboard: React.FC = () => {
                 <Button
                     type="primary"
                     icon={<EditOutlined />}
-                    style={{
-                        backgroundColor: '#17A2B8',
-                        borderColor: '#17A2B8',
-                        borderRadius: '4px',
-                        width: '106px',
-                        height: '38px',
-                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-                    }}
+                    className="dashboard-action-button"
                 >
                     View
-                    <DownOutlined style={{ fontSize: '10px', marginLeft: '4px' }} />
+                    <DownOutlined className="dashboard-icon-small" />
                 </Button>
             ),
         },
     ];
 
     return (
-        <div className="min-h-screen bg-gray-100 p-6">
-            <div className="max-w-7xl mx-auto" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div className="dashboard-container">
+            <div className="dashboard-content">
                 {/* First Card - Dashboard Content */}
-                <Card className="shadow-sm p-8">
-                    {/* Header inside Card */}
-                    <Flex align="center" justify="space-between" style={{ marginBottom: '30px' }}>
-                        <Flex align="center">
-                            <div className="flex items-center mr-3">
-                                <div className="flex flex-col mr-1.5">
-                                    <div className="w-0.5 h-0.5 bg-black mb-0.5"></div>
-                                    <div className="w-0.5 h-0.5 bg-black mb-0.5"></div>
-                                    <div className="w-0.5 h-0.5 bg-black"></div>
-                                </div>
-                                <div className="flex flex-col">
-                                    <div className="w-2 h-0.5 bg-black mb-0.5"></div>
-                                    <div className="w-2 h-0.5 bg-black mb-0.5"></div>
-                                    <div className="w-2 h-0.5 bg-black"></div>
-                                </div>
-                            </div>
-                            <span className="text-lg font-normal text-black" style={{ fontWeight: 'normal', fontSize: '18px' }}>Dashboard</span>
-                        </Flex>
-                    </Flex>
+                <Card className="dashboard-card">
+                    <div className="dashboard-header">
+                        <div className="dashboard-title">
+                            <UnorderedListOutlined className="dashboard-icon-large" />
+                            <span className="dashboard-title-text">Dashboard</span>
+                        </div>
+                    </div>
                     <Row gutter={[24, 24]}>
                         {/* Left Side - Chart */}
                         <Col xs={24} lg={12}>
-                            <div style={{ padding: '20px' }}>
+                            <div className="dashboard-filters">
                                 {/* Legend */}
-                                <Flex justify="center" wrap="wrap" gap={16} style={{ marginBottom: '20px' }}>
+                                <div className="dashboard-legend">
                                     {chartData.map((item) => (
-                                        <Flex key={item.name} align="center" gap={8}>
+                                        <div key={item.name} className="dashboard-legend-item">
                                             <div
+                                                className="dashboard-legend-dot dashboard-legend-dot-custom"
                                                 style={{
-                                                    width: '12px',
-                                                    height: '12px',
-                                                    backgroundColor: item.color,
-                                                    borderRadius: '50%'
+                                                    backgroundColor: item.color
                                                 }}
                                             />
-                                            <span style={{ fontSize: '14px' }}>{item.name}</span>
-                                        </Flex>
+                                            <span className="dashboard-legend-text">{item.name}</span>
+                                        </div>
                                     ))}
-                                </Flex>
+                                </div>
 
                                 {/* Donut Chart */}
-                                <div style={{ height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div className="dashboard-chart-wrapper">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <PieChart>
                                             <Pie
@@ -320,9 +285,9 @@ const Dashboard: React.FC = () => {
 
                         {/* Right Side - Filters */}
                         <Col xs={24} lg={12}>
-                            <div style={{ padding: '20px' }}>
-                                <Flex vertical gap={20} style={{ width: '405px' }}>
-                                    {renderDatePickerField("เดือน", "month", "MM", "MM", "month")}
+                            <div className="dashboard-filters">
+                                <div className="dashboard-filters-container">
+                                    {renderIreCalendar("เดือน", "month", "MM", "MM")}
                                     <IreSelect
                                         label="เทอม"
                                         placeholder="ภาคต้น, ภาคปลาย, ภาคฤดูร้อน"
@@ -331,7 +296,7 @@ const Dashboard: React.FC = () => {
                                         options={termOptions}
                                         widthFull={true}
                                     />
-                                    {renderDatePickerField("ปีการศึกษา", "academicYear", "YYYY", "YYYY", "year")}
+                                    {renderIreCalendar("ปีการศึกษา", "academicYear", "YYYY", "YYYY")}
                                     <IreSelect
                                         label="ประเภทคำร้อง"
                                         placeholder="คำร้องทั่วไป"
@@ -340,89 +305,36 @@ const Dashboard: React.FC = () => {
                                         options={requestTypeOptions}
                                         widthFull={true}
                                     />
-                                </Flex>
+                                </div>
                             </div>
                         </Col>
                     </Row>
                 </Card>
 
                 {/* Second Card - Table Section */}
-                <Card className="shadow-sm">
-                    <div style={{ padding: '20px' }}>
+                <Card className="dashboard-card">
+                    <div className="dashboard-table-container">
                         {/* Create Request Button */}
-                        <Flex justify="flex-end" style={{ marginBottom: '16px' }}>
+                        <div className="dashboard-create-request-button">
                             <Button
                                 type="primary"
                                 size="large"
                                 icon={<PlusOutlined />}
-                                style={{
-                                    backgroundColor: '#339966',
-                                    borderColor: '#339966',
-                                    borderRadius: '6px',
-                                    height: '40px',
-                                    paddingLeft: '16px',
-                                    paddingRight: '8px',
-                                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-                                }}
+                                className="dashboard-create-request-button-button"
                             >
                                 สร้างคำร้อง
-                                <DownOutlined style={{ fontSize: '12px', marginLeft: '8px' }} />
+                                <DownOutlined className="dashboard-icon-button" />
                             </Button>
-                        </Flex>
+                        </div>
 
                         {/* Table */}
-                        <div style={{
-                            border: 'none',
-                            borderCollapse: 'separate',
-                            borderSpacing: 0
-                        }}>
-                            <style>
-                                {`
-                                    .dashboard-table .ant-table-thead > tr > th {
-                                        border: none !important;
-                                        border-right: none !important;
-                                        border-left: none !important;
-                                        border-top: none !important;
-                                        border-bottom: none !important;
-                                    }
-                                    .dashboard-table .ant-table-thead > tr > th:not(:last-child) {
-                                        border-right: none !important;
-                                    }
-                                    .dashboard-table .ant-table-tbody > tr > td:not(:last-child) {
-                                        border-right: none !important;
-                                    }
-                                    .dashboard-table .ant-table {
-                                        border: none !important;
-                                    }
-                                    .dashboard-table .ant-table table {
-                                        border: none !important;
-                                    }
-                                    .dashboard-table .ant-table-thead > tr > th::before,
-                                    .dashboard-table .ant-table-thead > tr > th::after {
-                                        display: none !important;
-                                    }
-                                    .dashboard-table .ant-table-thead > tr > th * {
-                                        border: none !important;
-                                    }
-                                    .dashboard-table .ant-table-thead > tr > th .ant-table-column-sorters {
-                                        border: none !important;
-                                    }
-                                    .dashboard-table .ant-table-thead > tr > th .ant-table-column-sorters::before,
-                                    .dashboard-table .ant-table-thead > tr > th .ant-table-column-sorters::after {
-                                        display: none !important;
-                                    }
-                                `}
-                            </style>
+                        <div className="dashboard-table">
                             <Table
                                 className="dashboard-table"
                                 columns={columns}
                                 dataSource={tableData}
                                 pagination={false}
                                 size="middle"
-                                style={{
-                                    backgroundColor: '#fff',
-                                    border: 'none'
-                                }}
                                 rowClassName={(_, index) =>
                                     index % 2 === 0 ? 'table-row-light' : 'table-row-dark'
                                 }
@@ -431,17 +343,7 @@ const Dashboard: React.FC = () => {
                                         cell: (props: any) => (
                                             <th
                                                 {...props}
-                                                style={{
-                                                    ...props.style,
-                                                    backgroundColor: '#BAE2CF',
-                                                    color: '#006C68',
-                                                    border: 'none !important',
-                                                    borderRight: 'none !important',
-                                                    borderLeft: 'none !important',
-                                                    borderTop: 'none !important',
-                                                    borderBottom: 'none !important',
-                                                    outline: 'none'
-                                                }}
+                                                className="dashboard-table-header-cell"
                                             />
                                         ),
                                     },
@@ -450,11 +352,11 @@ const Dashboard: React.FC = () => {
                         </div>
 
                         {/* Pagination */}
-                        <Flex justify="center" align="center" style={{ marginTop: '16px' }}>
+                        <div className="dashboard-pagination">
                             <Pagination
                                 current={currentPage}
                                 total={25}
-                                pageSize={pageSize}
+                                pageSize={5}
                                 showSizeChanger={false}
                                 showQuickJumper={false}
                                 showTotal={() => null}
@@ -465,49 +367,33 @@ const Dashboard: React.FC = () => {
                                     if (type === 'prev') {
                                         return <Button
                                             size="small"
-                                            icon={<UpOutlined style={{ transform: 'rotate(-90deg)', color: '#999' }} />}
-                                            style={{
-                                                border: '1px solid #d9d9d9',
-                                                backgroundColor: '#fff',
-                                                color: '#999'
-                                            }}
+                                            icon={<UpOutlined className="dashboard-pagination-icon-prev" />}
+                                            className="dashboard-pagination-prev-btn"
                                         />;
                                     }
                                     if (type === 'next') {
                                         return <Button
                                             size="small"
-                                            icon={<UpOutlined style={{ transform: 'rotate(90deg)', color: '#999' }} />}
-                                            style={{
-                                                border: '1px solid #d9d9d9',
-                                                backgroundColor: '#fff',
-                                                color: '#999'
-                                            }}
+                                            icon={<UpOutlined className="dashboard-pagination-icon-next" />}
+                                            className="dashboard-pagination-next-btn"
                                         />;
                                     }
                                     if (type === 'jump-prev') {
                                         return <Button
                                             size="small"
-                                            style={{
-                                                border: '1px solid #d9d9d9',
-                                                backgroundColor: '#fff',
-                                                color: '#999'
-                                            }}
+                                            className="dashboard-pagination-jump-btn"
                                         >«</Button>;
                                     }
                                     if (type === 'jump-next') {
                                         return <Button
                                             size="small"
-                                            style={{
-                                                border: '1px solid #d9d9d9',
-                                                backgroundColor: '#fff',
-                                                color: '#999'
-                                            }}
+                                            className="dashboard-pagination-jump-btn"
                                         >»</Button>;
                                     }
                                     return originalElement;
                                 }}
                             />
-                        </Flex>
+                        </div>
                     </div>
                 </Card>
             </div>
