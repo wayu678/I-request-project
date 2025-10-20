@@ -2,15 +2,46 @@ import { Button, Card, Flex, Row, Col, Spin } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { profileService, type ProfileData } from "../../services/auth";
-import { useAuth } from "../../contexts/AuthContext";
 import { IreDisplayField } from "../../components/utils";
+
+interface ProfileData {
+    // Personal Information
+    titleTH: string;
+    titleEN: string;
+    fullNameTH: string;
+    fullNameEN: string;
+
+    // Academic Information
+    campusAffiliation: string;
+    department: string;
+    advisor: string;
+    facultyTH: string;
+    campus: string;
+    faculty: string;
+    major: string;
+
+    // Contact Information
+    email: string;
+    phone: string;
+
+    // Address Information
+    houseNo: string;
+    villageNo: string;
+    building: string;
+    floor: string;
+    alley: string;
+    street: string;
+    subDistrict: string;
+    district: string;
+    province: string;
+    country: string;
+    postalCode: string;
+}
 
 
 
 const Profile = () => {
     const navigate = useNavigate();
-    const { logout } = useAuth();
     const [profileData, setProfileData] = useState<ProfileData | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -21,23 +52,48 @@ const Profile = () => {
     const loadProfileData = async () => {
         try {
             setLoading(true);
-            const data = await profileService.getDisplayableProfileData();
-            setProfileData(data);
+            console.log('📋 Profile: Loading profile data via API...');
+
+            const response = await fetch('/api/user/profile', {
+                method: 'GET',
+                credentials: 'include' // ส่ง cookies อัตโนมัติ
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('📋 Profile: Profile data loaded:', data);
+                setProfileData(data);
+            } else {
+                console.error('📋 Profile: Failed to load profile data');
+                setProfileData(null);
+            }
         } catch (error) {
-            console.error('Failed to load profile data:', error);
+            console.error('📋 Profile: Failed to load profile data:', error);
+            setProfileData(null);
         } finally {
             setLoading(false);
         }
     };
 
-
     const handleEditAll = () => {
         navigate('/profile/edit');
     };
 
-    const handleLogout = () => {
-        logout();
-        navigate('/login');
+    const handleLogout = async () => {
+        try {
+            console.log('🚪 Profile: Starting logout...');
+
+            await fetch('/api/auth/logout', {
+                method: 'POST',
+                credentials: 'include' // ส่ง cookies อัตโนมัติ
+            });
+
+            console.log('🚪 Profile: Logout successful');
+            navigate('/login');
+        } catch (error) {
+            console.error('🚪 Profile: Logout failed:', error);
+            navigate('/login');
+        }
     };
 
 

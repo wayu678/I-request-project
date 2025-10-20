@@ -1,12 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { tokenService, profileService } from '../services/auth';
 
 interface AuthContextType {
     isAuthenticated: boolean;
     isLoading: boolean;
     login: (username: string, password: string) => Promise<boolean>;
-    logout: () => void;
+    logout: () => Promise<void>;
     checkAuth: () => Promise<boolean>;
 }
 
@@ -27,11 +26,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const checkAuth = async (): Promise<boolean> => {
         try {
             setIsLoading(true);
-            const authenticated = tokenService.isAuthenticated();
-            setIsAuthenticated(authenticated);
-            return authenticated;
+
+            // ตรวจสอบจาก localStorage แทนการเรียก API
+            const token = localStorage.getItem('accessToken');
+            const isAuthenticated = !!token;
+
+            setIsAuthenticated(isAuthenticated);
+            return isAuthenticated;
         } catch (error) {
-            console.error('Auth check failed:', error);
             setIsAuthenticated(false);
             return false;
         } finally {
@@ -43,37 +45,49 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         try {
             setIsLoading(true);
 
-            // สร้าง Token
-            const tokenData = await tokenService.generateToken(username, password);
-            if (!tokenData) {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password }),
+                credentials: 'include' // ส่ง cookies อัตโนมัติ
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                // บันทึก token ลง localStorage สำหรับการตรวจสอบ
+                if (data.accessToken) {
+                    localStorage.setItem('accessToken', data.accessToken);
+                }
+
+                setIsAuthenticated(true);
+                return true;
+            } else {
                 return false;
             }
-
-            // บันทึก Token
-            tokenService.setToken(tokenData);
-
-            // ตรวจสอบการเข้าสู่ระบบ
-            const authenticated = await checkAuth();
-            return authenticated;
         } catch (error) {
-            console.error('Login failed:', error);
             return false;
         } finally {
             setIsLoading(false);
         }
     };
 
-    const logout = () => {
+    const logout = async (): Promise<void> => {
         try {
-            // ลบ Token
-            tokenService.clearToken();
+            await fetch('/api/auth/logout', {
+                method: 'POST',
+                credentials: 'include' // ส่ง cookies อัตโนมัติ
+            });
 
-            // ลบข้อมูล Profile
-            profileService.clearProfileData();
-
+            // ลบ token จาก localStorage
+            localStorage.removeItem('accessToken');
             setIsAuthenticated(false);
         } catch (error) {
-            console.error('Logout failed:', error);
+            // แม้ว่า logout จะล้มเหลว ก็ให้ตั้งค่าเป็น false
+            localStorage.removeItem('accessToken');
+            setIsAuthenticated(false);
         }
     };
 

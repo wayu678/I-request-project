@@ -6,7 +6,6 @@ import { LANGUAGE, LOGIN_TYPE } from "../../constants/common";
 import { useForm } from "react-hook-form";
 import { IreTextbox } from "../../components/utils";
 import { useAuthService } from "../../services/api/auth";
-import { debugCookies } from "../../utils/cookieUtils";
 
 
 interface SignInForm {
@@ -45,42 +44,17 @@ const Login = () => {
 
             setLoading(true);
 
-            // เรียก API login
+            // ใช้ useAuthService() login function
             const loginResponse = await login({
                 username,
                 password
             });
 
-            console.log('Login response:', loginResponse);
-
-            // Debug cookies หลังจาก login
-            debugCookies();
-
             if (loginResponse.success) {
-                // ไม่เก็บ token ใน localStorage เพราะ backend ส่งมาเป็น cookies แล้ว
-                // เก็บเฉพาะข้อมูลผู้ใช้ใน localStorage
-                localStorage.setItem('userInfo', JSON.stringify({
-                    id: loginResponse.id,
-                    username: loginResponse.username,
-                    roleCode: loginResponse.roleCode,
-                    campusCode: loginResponse.campusCode,
-                    facultyCode: loginResponse.facultyCode,
-                    majorCode: loginResponse.majorCode,
-                    departmentCode: loginResponse.departmentCode,
-                    advisorCode: loginResponse.advisorCode,
-                    phone: loginResponse.phone,
-                    email: loginResponse.email
-                }));
-
                 message.success(translate("เข้าสู่ระบบสำเร็จ", "Login successful"));
 
-                // Debug: ตรวจสอบ cookies หลังจาก login สำเร็จ
-                console.log("=== Login Success - Cookie Debug ===");
-                debugCookies();
-                console.log("=====================================");
-
-                // นำทางไปยังหน้า Dashboard
-                navigate("/dashboard");
+                // นำทางไปยังหน้า Dashboard หรือ return URL
+                navigate(from, { replace: true });
             } else {
                 message.error(loginResponse.message || translate("เข้าสู่ระบบไม่สำเร็จ", "Login failed"));
             }
@@ -99,9 +73,14 @@ const Login = () => {
 
     const onKuAllLogin = async () => {
         try {
+            setLoading(true);
             // Mock KU All-Login
-            const success = await login("ku_user", "ku_password");
-            if (success) {
+            const loginResponse = await login({
+                username: "ku_user",
+                password: "ku_password"
+            });
+
+            if (loginResponse.success) {
                 message.success('เข้าสู่ระบบ KU All-Login สำเร็จ');
                 navigate(from, { replace: true });
             } else {
@@ -110,6 +89,8 @@ const Login = () => {
         } catch (error) {
             console.error('KU All-Login failed:', error);
             message.error('เกิดข้อผิดพลาดในการเข้าสู่ระบบ KU All-Login');
+        } finally {
+            setLoading(false);
         }
     }
 
