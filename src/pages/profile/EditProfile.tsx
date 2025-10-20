@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { profileService, type ProfileData } from "../../services/auth";
 import { IreTextbox, IreDisplayField } from "../../components/utils";
-import "./profile.css";
 
 
 const EditProfile = () => {

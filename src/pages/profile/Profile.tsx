@@ -3,7 +3,6 @@ import { LogoutOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { IreDisplayField } from "../../components/utils";
-import "./profile.css";
 
 interface ProfileData {
     // Personal Information
