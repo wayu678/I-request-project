@@ -17,7 +17,6 @@ import {
     DownOutlined,
     UpOutlined,
     UnorderedListOutlined,
-
 } from '@ant-design/icons';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import {
@@ -126,7 +125,7 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center">
-                    <span className="dashboard-table-header-text">ลำดับ</span>
+                    <span className="text-sm font-medium text-gray-700">ลำดับ</span>
                 </Flex>
             ),
             dataIndex: 'no',
@@ -137,8 +136,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span className="dashboard-table-header-text">วันที่เอกสาร</span>
-                    <UpOutlined className="dashboard-table-header-icon" />
+                    <span className="text-sm font-medium text-gray-700">วันที่เอกสาร</span>
+                    <UpOutlined className="text-xs text-gray-500" />
                 </Flex>
             ),
             dataIndex: 'documentDate',

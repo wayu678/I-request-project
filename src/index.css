@@ -521,3 +521,95 @@ div[class*="dashboard"] .ant-table-thead > tr > th .ant-table-column-sorters::af
   transform: rotate(90deg);
   color: #999;
 }
+
+/* Dashboard Table Container Styles */
+.dashboard-table-container {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Dashboard Table Header Cell Styles */
+.dashboard-table-header-cell {
+  background-color: #BAE2CF !important;
+  color: #006C68 !important;
+  font-weight: normal !important;
+  font-size: 14px !important;
+  border: none !important;
+  padding: 12px 16px !important;
+}
+
+/* Dashboard Responsive Styles */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 16px;
+  }
+  
+  .dashboard-content {
+    gap: 16px;
+  }
+  
+  .dashboard-card {
+    padding: 20px;
+  }
+  
+  .dashboard-filters-container {
+    width: 100%;
+  }
+  
+  .dashboard-create-request-button {
+    justify-content: center;
+  }
+  
+  .dashboard-table {
+    overflow-x: auto;
+  }
+}
+
+/* Dashboard Interactive Effects */
+.dashboard-create-request-button-button:hover {
+  background-color: #2d8659 !important;
+  border-color: #2d8659 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-action-button:hover {
+  background-color: #138496 !important;
+  border-color: #138496 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-pagination-prev-btn:hover,
+.dashboard-pagination-next-btn:hover,
+.dashboard-pagination-jump-btn:hover {
+  border-color: #17A2B8 !important;
+  color: #17A2B8 !important;
+}
+
+/* Dashboard Loading States */
+.dashboard-loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.dashboard-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #17A2B8;
+  border-radius: 50%;
+  animation: dashboard-spin 1s linear infinite;
+}
+
+@keyframes dashboard-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
