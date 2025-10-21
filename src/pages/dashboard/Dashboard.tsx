@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
     Card,
@@ -8,8 +8,8 @@ import {
     Button,
     Pagination,
     Flex,
-
-
+    Spin,
+    message,
 } from 'antd';
 import {
     PlusOutlined,
@@ -23,71 +23,16 @@ import {
     IreSelect,
     IreCalendar,
 } from '../../components/utils';
-
-// Mock data for donut chart
-const chartData = [
-    { name: 'ร่าง', value: 45, color: '#8C8C8C' },
-    { name: 'กำลังดำเนินการ', value: 30, color: '#13C2C2' },
-    { name: 'ส่งกลับแก้ไข', value: 15, color: '#FF4D4F' },
-    { name: 'เสร็จสิ้น', value: 10, color: '#52C41A' }
-];
-
-// Mock data for table
-const tableData = [
-    {
-        key: '1',
-        no: 1,
-        documentDate: '10/07/2568',
-        term: 'ภาคต้น',
-        academicYear: '2568',
-        requestType: 'คำร้องทั่วไป',
-        status: 'ร่าง',
-        statusColor: '#8C8C8C'
-    },
-    {
-        key: '2',
-        no: 2,
-        documentDate: '11/07/2568',
-        term: 'ภาคต้น',
-        academicYear: '2568',
-        requestType: 'คำร้องขอสอบชดเชย',
-        status: 'กำลังดำเนินการ',
-        statusColor: '#13C2C2'
-    },
-    {
-        key: '3',
-        no: 3,
-        documentDate: '12/07/2568',
-        term: 'ภาคต้น',
-        academicYear: '2568',
-        requestType: 'คำร้องขอย้ายคณะ',
-        status: 'ส่งกลับแก้ไข',
-        statusColor: '#FF4D4F'
-    },
-    {
-        key: '4',
-        no: 4,
-        documentDate: '13/07/2568',
-        term: 'ภาคต้น',
-        academicYear: '2568',
-        requestType: 'คำร้องขอเทียบโอนรายวิชา',
-        status: 'ยกเลิก',
-        statusColor: '#FA8C16'
-    },
-    {
-        key: '5',
-        no: 5,
-        documentDate: '14/07/2568',
-        term: 'ภาคต้น',
-        academicYear: '2568',
-        requestType: 'คำร้องขอลงทะเบียนเรียน',
-        status: 'เสร็จสิ้น',
-        statusColor: '#52C41A'
-    }
-];
+import { fetchDashboardSummary, fetchDashboardTable } from '../../services/api/dashboard';
+import type { DashboardSummaryItem, DashboardRow } from '../../services/api/dashboard';
 
 const Dashboard: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize] = useState(5);
+    const [loading, setLoading] = useState(true);
+    const [chartData, setChartData] = useState<DashboardSummaryItem[]>([]);
+    const [tableData, setTableData] = useState<DashboardRow[]>([]);
+    const [total, setTotal] = useState(0);
 
     const formContext = useForm({
         defaultValues: {
@@ -108,6 +53,50 @@ const Dashboard: React.FC = () => {
         { label: 'คำร้องทั่วไป', value: 'คำร้องทั่วไป' }
     ];
 
+    // ดึงข้อมูล dashboard เมื่อ component mount
+    useEffect(() => {
+        loadDashboardData();
+    }, []);
+
+    // ดึงข้อมูลใหม่เมื่อ filter เปลี่ยน
+    useEffect(() => {
+        const subscription = formContext.watch((value) => {
+            loadDashboardData();
+        });
+        return () => subscription.unsubscribe();
+    }, [formContext.watch]);
+
+    const loadDashboardData = async () => {
+        try {
+            setLoading(true);
+
+            // ดึงข้อมูล chart summary
+            const summaryData = await fetchDashboardSummary();
+            setChartData(summaryData);
+
+            // ดึงข้อมูล table
+            const formValues = formContext.getValues();
+            const tableParams = {
+                page: currentPage,
+                pageSize: pageSize,
+                month: formValues.month,
+                term: formValues.term,
+                year: formValues.academicYear,
+                requestType: formValues.requestType
+            };
+
+            const tableResult = await fetchDashboardTable(tableParams);
+            setTableData(tableResult.items);
+            setTotal(tableResult.total);
+
+        } catch (error) {
+            console.error('Error loading dashboard data:', error);
+            message.error('ไม่สามารถโหลดข้อมูลได้');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const renderIreCalendar = (label: string, field: "month" | "academicYear", placeholder: string, format: string | "MM" | "YYYY") => (
         <IreCalendar
             label={label}
@@ -118,8 +107,6 @@ const Dashboard: React.FC = () => {
             widthFull={true}
         />
     );
-
-
 
     const columns = [
         {
@@ -228,6 +215,26 @@ const Dashboard: React.FC = () => {
         },
     ];
 
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        loadDashboardData();
+    };
+
+    if (loading) {
+        return (
+            <div className="dashboard-container">
+                <div className="dashboard-content">
+                    <Card className="dashboard-card">
+                        <div style={{ textAlign: 'center', padding: '50px' }}>
+                            <Spin size="large" />
+                            <div style={{ marginTop: '16px' }}>กำลังโหลดข้อมูล...</div>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="dashboard-container">
             <div className="dashboard-content">
@@ -334,6 +341,7 @@ const Dashboard: React.FC = () => {
                                 dataSource={tableData}
                                 pagination={false}
                                 size="middle"
+                                loading={loading}
                                 rowClassName={(_, index) =>
                                     index % 2 === 0 ? 'table-row-light' : 'table-row-dark'
                                 }
@@ -354,14 +362,12 @@ const Dashboard: React.FC = () => {
                         <div className="dashboard-pagination">
                             <Pagination
                                 current={currentPage}
-                                total={25}
-                                pageSize={5}
+                                total={total}
+                                pageSize={pageSize}
                                 showSizeChanger={false}
                                 showQuickJumper={false}
                                 showTotal={() => null}
-                                onChange={(page) => {
-                                    setCurrentPage(page);
-                                }}
+                                onChange={handlePageChange}
                                 itemRender={(_, type, originalElement) => {
                                     if (type === 'prev') {
                                         return <Button
