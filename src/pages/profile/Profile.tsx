@@ -54,7 +54,7 @@ const Profile = () => {
             setLoading(true);
             console.log('📋 Profile: Loading profile data via API...');
 
-            const response = await fetch('/api/user/profile', {
+            const response = await fetch('http://localhost:8080/api/user/profile', {
                 method: 'GET',
                 credentials: 'include' // ส่ง cookies อัตโนมัติ
             });
@@ -83,7 +83,7 @@ const Profile = () => {
         try {
             console.log('🚪 Profile: Starting logout...');
 
-            await fetch('/api/auth/logout', {
+            await fetch('http://localhost:8080/api/auth/logout', {
                 method: 'POST',
                 credentials: 'include' // ส่ง cookies อัตโนมัติ
             });
