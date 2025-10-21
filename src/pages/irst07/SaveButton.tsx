@@ -2,12 +2,20 @@ import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useTranslate } from "../../provider/hooks/translate.hook";
 
-const SaveButton = () => {
+interface SaveButtonProps {
+  studentData?: any;
+}
+
+const SaveButton = ({ studentData }: SaveButtonProps) => {
   const navigate = useNavigate();
   const { translate } = useTranslate();
 
   const handleSave = () => {
-    console.log("Save button clicked");
+    console.log("Save button clicked", studentData);
+    // ส่งข้อมูลไปยังหน้า detail ผ่าน state หรือ localStorage
+    if (studentData) {
+      localStorage.setItem('studentData', JSON.stringify(studentData));
+    }
     navigate("/irst07/detail");
   };
 

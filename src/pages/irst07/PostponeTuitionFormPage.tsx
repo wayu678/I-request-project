@@ -7,9 +7,10 @@ const { TextArea } = Input;
 
 interface PostponeTuitionFormPageProps {
   onFormChange: (data: any) => void;
+  studentData?: any; // ข้อมูลจาก StudentForm
 }
 
-const PostponeTuitionFormPage = ({ onFormChange }: PostponeTuitionFormPageProps) => {
+const PostponeTuitionFormPage = ({ onFormChange, studentData }: PostponeTuitionFormPageProps) => {
   const { translate } = useTranslate();
 
   const [formData, setFormData] = useState({

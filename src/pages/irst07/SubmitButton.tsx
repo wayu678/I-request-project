@@ -1,10 +1,10 @@
 import { Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useTranslate } from "../../provider/hooks/translate.hook";
-import axios from "axios";
+import { postponeTuitionService, type PostponeTuitionFormData } from "../../services/api/postponeTuitionService";
 
 interface SubmitButtonProps {
-  formData: any;
+  formData: Partial<PostponeTuitionFormData>;
 }
 
 const SubmitButton = ({ formData }: SubmitButtonProps) => {
@@ -25,27 +25,20 @@ const SubmitButton = ({ formData }: SubmitButtonProps) => {
   // ✅ ฟังก์ชันส่งข้อมูลไป backend
   const onSubmit = async () => {
     try {
-      const payload = {
-        semester_code: formData.semesterCode,
-        academic_year: formData.academicYear ? formData.academicYear.format("YYYY") : null,
-        fee_amount: parseFloat(formData.feeAmount),
-        has_outstanding_dept: formData.hasOutstandingDept,
-        dept_semester_code: formData.deptSemesterCode,
-        dept_academic_year: formData.deptAcademicYear ? formData.deptAcademicYear.format("YYYY") : null,
-        dept_amount: parseFloat(formData.deptAmount),
-        cause: formData.cause,
-        expected_pay_date: formData.expectedPayDate
-          ? formData.expectedPayDate.format("YYYY-MM-DD")
-          : null,
-        student_code: formData.studentCode,
-        parent_phone: formData.parentPhone,
-      };
+      console.log("Submitting form data:", formData);
 
-      console.log("Submitting payload to backend:", payload);
+      // ตรวจสอบว่ามีข้อมูลครบถ้วนหรือไม่
+      const requiredFields = ['semesterCode', 'academicYear', 'feeAmount', 'hasOutstandingDept', 'cause', 'expectedPayDate', 'studentCode', 'parentPhone'];
+      const missingFields = requiredFields.filter(field => !formData[field as keyof PostponeTuitionFormData]);
 
-      const response = await axios.post("http://localhost:8080/postpone", payload);
+      if (missingFields.length > 0) {
+        message.error(translate("กรุณากรอกข้อมูลให้ครบถ้วน", "Please fill in all required fields"));
+        return;
+      }
 
-      console.log("Server response:", response.data);
+      const response = await postponeTuitionService.createPostponeTuitionRequest(formData as PostponeTuitionFormData);
+
+      console.log("Server response:", response);
       message.success(translate("ส่งข้อมูลเรียบร้อย", "Submit successfully"));
       navigate("/irst07/detail");
     } catch (error: any) {

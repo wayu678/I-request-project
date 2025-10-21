@@ -7,11 +7,12 @@ import { HomeOutlined, ArrowRightOutlined } from "@ant-design/icons"
 import PipelinePage from "./PipelinePage"
 import PostponeTuitionFormPage from "./PostponeTuitionFormPage"
 import SubmitButton from "./SubmitButton"
+import type { PostponeTuitionFormData } from "../../services/api/postponeTuitionService"
 
 const RequestForPostponeTuitionandFeePaymentsDetail = () => {
   const navigate = useNavigate()
   const { language, setLanguage, translate } = useTranslate()
-  const [formData, setFormData] = useState({}) // เก็บข้อมูล form
+  const [formData, setFormData] = useState<Partial<PostponeTuitionFormData>>({}) // เก็บข้อมูล form
 
   const onLanguageSwitch = (newLanguage: typeof LANGUAGE[keyof typeof LANGUAGE]) => {
     try {

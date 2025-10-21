@@ -18,9 +18,25 @@ export type DashboardRow = {
 };
 
 // แทนที่การใช้ apiClient ให้ใช้ fetch โดยตรงเพื่อส่ง cookies
-export async function fetchDashboardSummary(): Promise<DashboardSummaryItem[]> {
+export async function fetchDashboardSummary(params?: {
+    month?: number | null;
+    term?: string | null;
+    year?: number | null;
+    requestType?: string | null;
+}): Promise<DashboardSummaryItem[]> {
     try {
-        const response = await fetch('http://localhost:8080/api/dashboard/summary', {
+        const queryParams = new URLSearchParams();
+
+        if (params?.month) queryParams.append('month', params.month.toString());
+        if (params?.term) queryParams.append('term', params.term);
+        if (params?.year) queryParams.append('year', params.year.toString());
+        if (params?.requestType) queryParams.append('requestType', params.requestType);
+
+        const url = params && Object.keys(params).length > 0
+            ? `http://localhost:8080/api/dashboard/summary?${queryParams}`
+            : 'http://localhost:8080/api/dashboard/summary';
+
+        const response = await fetch(url, {
             method: 'GET',
             credentials: 'include' // ส่ง cookies อัตโนมัติ
         });

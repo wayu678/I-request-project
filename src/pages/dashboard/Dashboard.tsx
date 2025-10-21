@@ -61,6 +61,7 @@ const Dashboard: React.FC = () => {
     // ดึงข้อมูลใหม่เมื่อ filter เปลี่ยน
     useEffect(() => {
         const subscription = formContext.watch((value) => {
+            setCurrentPage(1); // reset หน้าแรกเมื่อ filter เปลี่ยน
             loadDashboardData();
         });
         return () => subscription.unsubscribe();
@@ -70,19 +71,29 @@ const Dashboard: React.FC = () => {
         try {
             setLoading(true);
 
-            // ดึงข้อมูล chart summary
-            const summaryData = await fetchDashboardSummary();
+            // ดึงค่า form values และกรองค่า null/undefined
+            const formValues = formContext.getValues();
+            const filterParams = {
+                month: formValues.month || null,
+                term: formValues.term || null,
+                year: formValues.academicYear || null,
+                requestType: formValues.requestType || null
+            };
+
+            // Debug logging
+            console.log('Dashboard form values:', formValues);
+            console.log('Dashboard filter params:', filterParams);
+            console.log('Term value specifically:', formValues.term);
+
+            // ดึงข้อมูล chart summary พร้อม filter
+            const summaryData = await fetchDashboardSummary(filterParams);
             setChartData(summaryData);
 
-            // ดึงข้อมูล table
-            const formValues = formContext.getValues();
+            // ดึงข้อมูล table พร้อม filter
             const tableParams = {
                 page: currentPage,
                 pageSize: pageSize,
-                month: formValues.month,
-                term: formValues.term,
-                year: formValues.academicYear,
-                requestType: formValues.requestType
+                ...filterParams
             };
 
             const tableResult = await fetchDashboardTable(tableParams);
