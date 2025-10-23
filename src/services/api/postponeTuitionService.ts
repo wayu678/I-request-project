@@ -5,6 +5,7 @@ import { Configuration } from '../generated-api/runtime';
 // สร้าง configuration สำหรับ API
 const configuration = new Configuration({
     basePath: 'http://localhost:8080/api', // เพิ่ม /api prefix ตาม backend routes
+    credentials: 'include' // ✅ เพิ่ม credentials เพื่อส่ง cookies
 });
 
 // สร้าง API instance

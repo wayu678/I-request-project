@@ -16,7 +16,7 @@ interface SignInForm {
 const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [loginType, setLoginType] = useState<typeof LOGIN_TYPE[keyof typeof LOGIN_TYPE]>(LOGIN_TYPE.USER);
+    const [loginType, setLoginType] = useState<typeof LOGIN_TYPE[keyof typeof LOGIN_TYPE]>(LOGIN_TYPE.ADMIN);
     const [loading, setLoading] = useState(false);
     const { language, setLanguage, translate } = useTranslate();
     const { login } = useAuthService();

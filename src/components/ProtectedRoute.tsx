@@ -17,19 +17,18 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
     const checkAuth = async () => {
         try {
-            console.log('🔍 ProtectedRoute: Checking authentication via localStorage...');
+            // ตรวจสอบจาก cookies โดยการเรียก API
+            const response = await fetch('http://localhost:8080/api/auth/current-user', {
+                method: 'GET',
+                credentials: 'include' // ส่ง cookies อัตโนมัติ
+            });
 
-            // ตรวจสอบจาก localStorage แทนการเรียก API
-            const token = localStorage.getItem('accessToken');
-            const authenticated = !!token;
-
-            console.log('🔍 ProtectedRoute: Authentication result:', authenticated);
+            const authenticated = response.ok;
             setIsAuthenticated(authenticated);
         } catch (error) {
             console.error('❌ ProtectedRoute: Auth check failed:', error);
             setIsAuthenticated(false);
         } finally {
-            console.log('🔍 ProtectedRoute: Setting isLoading to false');
             setIsLoading(false);
         }
     };

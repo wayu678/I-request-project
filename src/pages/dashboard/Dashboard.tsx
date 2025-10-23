@@ -10,6 +10,8 @@ import {
     Flex,
     Spin,
     message,
+    Typography,
+    Tag,
 } from 'antd';
 import {
     PlusOutlined,
@@ -17,6 +19,8 @@ import {
     DownOutlined,
     UpOutlined,
     UnorderedListOutlined,
+    UserOutlined,
+    CheckCircleOutlined,
 } from '@ant-design/icons';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import {
@@ -25,14 +29,22 @@ import {
 } from '../../components/utils';
 import { fetchDashboardSummary, fetchDashboardTable } from '../../services/api/dashboard';
 import type { DashboardSummaryItem, DashboardRow } from '../../services/api/dashboard';
+import { useAuth } from '../../contexts/AuthContext';
+
+const { Title, Text } = Typography;
 
 const Dashboard: React.FC = () => {
+    const { user } = useAuth();
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize] = useState(5);
     const [loading, setLoading] = useState(true);
     const [chartData, setChartData] = useState<DashboardSummaryItem[]>([]);
     const [tableData, setTableData] = useState<DashboardRow[]>([]);
     const [total, setTotal] = useState(0);
+
+    // ตรวจสอบประเภทผู้ใช้
+    const isStudent = user?.roleCode === 'STUDENT';
+    const isApprover = user?.roleCode === 'ADMIN' || user?.roleCode === 'APPROVER';
 
     const formContext = useForm({
         defaultValues: {
@@ -79,11 +91,6 @@ const Dashboard: React.FC = () => {
                 year: formValues.academicYear || null,
                 requestType: formValues.requestType || null
             };
-
-            // Debug logging
-            console.log('Dashboard form values:', formValues);
-            console.log('Dashboard filter params:', filterParams);
-            console.log('Term value specifically:', formValues.term);
 
             // ดึงข้อมูล chart summary พร้อม filter
             const summaryData = await fetchDashboardSummary(filterParams);
@@ -331,18 +338,20 @@ const Dashboard: React.FC = () => {
                 {/* Second Card - Table Section */}
                 <Card className="dashboard-card">
                     <div className="dashboard-table-container">
-                        {/* Create Request Button */}
-                        <div className="dashboard-create-request-button">
-                            <Button
-                                type="primary"
-                                size="large"
-                                icon={<PlusOutlined />}
-                                className="dashboard-create-request-button-button"
-                            >
-                                สร้างคำร้อง
-                                <DownOutlined className="dashboard-icon-button" />
-                            </Button>
-                        </div>
+                        {/* Create Request Button - Only for Students */}
+                        {isStudent && (
+                            <div className="dashboard-create-request-button">
+                                <Button
+                                    type="primary"
+                                    size="large"
+                                    icon={<PlusOutlined />}
+                                    className="dashboard-create-request-button-button"
+                                >
+                                    สร้างคำร้อง
+                                    <DownOutlined className="dashboard-icon-button" />
+                                </Button>
+                            </div>
+                        )}
 
                         {/* Table */}
                         <div className="dashboard-table">

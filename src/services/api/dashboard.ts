@@ -71,7 +71,9 @@ export async function fetchDashboardTable(params: {
         if (params.year) queryParams.append('year', params.year.toString());
         if (params.requestType) queryParams.append('requestType', params.requestType);
 
-        const response = await fetch(`http://localhost:8080/api/dashboard/requests?${queryParams}`, {
+        const url = `http://localhost:8080/api/dashboard/requests?${queryParams}`;
+
+        const response = await fetch(url, {
             method: 'GET',
             credentials: 'include' // ส่ง cookies อัตโนมัติ
         });
