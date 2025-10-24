@@ -7,9 +7,10 @@ const { TextArea } = Input;
 
 interface PostponeTuitionFormPageProps {
   onFormChange: (data: any) => void;
+  studentData?: any; // ข้อมูลจาก StudentForm
 }
 
-const PostponeTuitionFormPage = ({ onFormChange }: PostponeTuitionFormPageProps) => {
+const PostponeTuitionFormPage = ({ onFormChange, studentData }: PostponeTuitionFormPageProps) => {
   const { translate } = useTranslate();
 
   const [formData, setFormData] = useState({
@@ -22,9 +23,52 @@ const PostponeTuitionFormPage = ({ onFormChange }: PostponeTuitionFormPageProps)
     deptAmount: "",
     cause: "",
     expectedPayDate: null as any,
-    studentCode: "",
+    studentCode: "", // จะถูกเติมจาก JWT token
     parentPhone: ""
   });
+
+  // ดึงข้อมูล user จาก JWT token และ localStorage เมื่อ component mount
+  useEffect(() => {
+    // โหลดข้อมูลจาก localStorage ก่อน
+    const savedStudentData = localStorage.getItem('studentData');
+    if (savedStudentData) {
+      const studentData = JSON.parse(savedStudentData);
+      console.log('Loaded student data from localStorage:', studentData);
+
+      // เติมข้อมูลจากหน้าแรก
+      setFormData(prev => ({
+        ...prev,
+        studentCode: studentData.studentId || '', // ใช้ studentId จากหน้าแรก
+      }));
+    }
+
+    // ดึงข้อมูล user จาก JWT token
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/auth/current-user', {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          console.log('Current user data:', userData);
+
+          // เติมข้อมูล student จาก JWT token (ถ้ามี)
+          setFormData(prev => ({
+            ...prev,
+            studentCode: prev.studentCode || userData.studentCode || userData.username || '',
+          }));
+        } else {
+          console.log('Failed to fetch current user data');
+        }
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
 
   // ส่ง formData ขึ้น parent ทุกครั้งที่เปลี่ยน
   useEffect(() => {
@@ -35,12 +79,13 @@ const PostponeTuitionFormPage = ({ onFormChange }: PostponeTuitionFormPageProps)
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const renderInputField = (label: string, field: string, placeholder: string) => (
+  const renderInputField = (label: string, field: string, placeholder: string, disabled = false) => (
     <Flex vertical gap="middle" className="w-full">
       <span className="text-sm font-medium text-gray-700">{label} <span className="text-red-500">*</span></span>
       <Input
         placeholder={placeholder}
         size="large"
+        disabled={disabled}
         value={(formData as any)[field]}
         onChange={e => handleChange(field, e.target.value)}
       />
@@ -154,7 +199,7 @@ const PostponeTuitionFormPage = ({ onFormChange }: PostponeTuitionFormPageProps)
           </Col>
 
           <Col span={12}>
-            {renderInputField(translate("รหัสนิสิต", "Student Code"), "studentCode", "64XXXXXXXX")}
+            {renderInputField(translate("รหัสนิสิต", "Student Code"), "studentCode", "64XXXXXXXX", true)}
           </Col>
           <Col span={12}>
             {renderInputField(translate("หมายเลขโทรศัพท์ผู้ปกครอง", "Parent Phone Number"), "parentPhone", "099-999-9999")}

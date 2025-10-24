@@ -1,13 +1,27 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { tokenService, profileService } from '../services/auth';
+
+interface User {
+    id: number;
+    username: string;
+    roleCode: string;
+    campusCode: string;
+    facultyCode?: string;
+    majorCode?: string;
+    departmentCode?: string;
+    advisorCode?: string;
+    phone?: string;
+    email?: string;
+}
 
 interface AuthContextType {
     isAuthenticated: boolean;
     isLoading: boolean;
+    user: User | null;
     login: (username: string, password: string) => Promise<boolean>;
-    logout: () => void;
+    logout: () => Promise<void>;
     checkAuth: () => Promise<boolean>;
+    getCurrentUser: () => Promise<User | null>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,20 +33,43 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
         checkAuth();
     }, []);
 
+    const getCurrentUser = async (): Promise<User | null> => {
+        try {
+            const response = await fetch('http://localhost:8080/api/auth/current-user', {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                const userData = await response.json();
+                return userData;
+            }
+            return null;
+        } catch (error) {
+            console.error('Error getting current user:', error);
+            return null;
+        }
+    };
+
     const checkAuth = async (): Promise<boolean> => {
         try {
             setIsLoading(true);
-            const authenticated = tokenService.isAuthenticated();
-            setIsAuthenticated(authenticated);
-            return authenticated;
+
+            const userData = await getCurrentUser();
+            const isAuthenticated = userData !== null;
+
+            setIsAuthenticated(isAuthenticated);
+            setUser(userData);
+            return isAuthenticated;
         } catch (error) {
-            console.error('Auth check failed:', error);
             setIsAuthenticated(false);
+            setUser(null);
             return false;
         } finally {
             setIsLoading(false);
@@ -43,46 +80,54 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         try {
             setIsLoading(true);
 
-            // สร้าง Token
-            const tokenData = await tokenService.generateToken(username, password);
-            if (!tokenData) {
+            const response = await fetch('http://localhost:8080/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password }),
+                credentials: 'include' // ส่ง cookies อัตโนมัติ
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setIsAuthenticated(true);
+                setUser(data);
+                return true;
+            } else {
                 return false;
             }
-
-            // บันทึก Token
-            tokenService.setToken(tokenData);
-
-            // ตรวจสอบการเข้าสู่ระบบ
-            const authenticated = await checkAuth();
-            return authenticated;
         } catch (error) {
-            console.error('Login failed:', error);
+            console.error('Login error:', error);
             return false;
         } finally {
             setIsLoading(false);
         }
     };
 
-    const logout = () => {
+    const logout = async (): Promise<void> => {
         try {
-            // ลบ Token
-            tokenService.clearToken();
-
-            // ลบข้อมูล Profile
-            profileService.clearProfileData();
+            await fetch('http://localhost:8080/api/auth/logout', {
+                method: 'POST',
+                credentials: 'include' // ส่ง cookies อัตโนมัติ
+            });
 
             setIsAuthenticated(false);
         } catch (error) {
-            console.error('Logout failed:', error);
+            // แม้ว่า logout จะล้มเหลว ก็ให้ตั้งค่าเป็น false
+            setIsAuthenticated(false);
+            setUser(null);
         }
     };
 
     const value: AuthContextType = {
         isAuthenticated,
         isLoading,
+        user,
         login,
         logout,
-        checkAuth
+        checkAuth,
+        getCurrentUser
     };
 
     return (

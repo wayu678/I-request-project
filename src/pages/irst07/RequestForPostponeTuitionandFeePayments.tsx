@@ -6,10 +6,14 @@ import { HomeOutlined, ArrowRightOutlined } from "@ant-design/icons"
 import PipelinePage from "./PipelinePage"
 import StudentForm from "./StudentForm"
 import SaveButton from "./SaveButton"
+import { useState } from "react"
 
 const RequestForPostponeTuitionandFeePayments = () => {
     const navigate = useNavigate()
     const { language, setLanguage, translate } = useTranslate()
+
+    // State สำหรับเก็บข้อมูลจากฟอร์ม
+    const [studentData, setStudentData] = useState<any>(null)
 
     const onLanguageSwitch = (newLanguage: typeof LANGUAGE[keyof typeof LANGUAGE]) => {
         try {
@@ -76,10 +80,10 @@ const RequestForPostponeTuitionandFeePayments = () => {
             <PipelinePage currentStep={0} />
 
             {/* StudentForm */}
-            <StudentForm />
+            <StudentForm onFormChange={setStudentData} />
 
             {/* SaveButton */}
-            <SaveButton />
+            <SaveButton studentData={studentData} />
         </div>
     )
 }

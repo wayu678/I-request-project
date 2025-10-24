@@ -1,5 +1,5 @@
 import { Flex, Row, Col, Input, Card } from "antd"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useTranslate } from "../../provider/hooks/translate.hook"
 
 interface StudentFormData {
@@ -12,7 +12,11 @@ interface StudentFormData {
     phoneNumber: string;
 }
 
-const StudentForm = () => {
+interface StudentFormProps {
+    onFormChange?: (data: StudentFormData) => void;
+}
+
+const StudentForm = ({ onFormChange }: StudentFormProps) => {
     const { translate } = useTranslate()
 
     const [formData, setFormData] = useState<StudentFormData>({
@@ -26,6 +30,13 @@ const StudentForm = () => {
     })
 
     const [errors, setErrors] = useState<Partial<StudentFormData>>({})
+
+    // ส่งข้อมูลไปยัง parent component ทุกครั้งที่เปลี่ยน
+    useEffect(() => {
+        if (onFormChange) {
+            onFormChange(formData);
+        }
+    }, [formData, onFormChange]);
 
     const errorMessages = {
         studentName: translate("กรุณากรอกชื่อนิสิต", "Please enter student name"),

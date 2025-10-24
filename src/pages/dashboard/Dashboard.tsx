@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
     Card,
@@ -8,8 +8,10 @@ import {
     Button,
     Pagination,
     Flex,
-
-
+    Spin,
+    message,
+    Typography,
+    Tag,
 } from 'antd';
 import {
     PlusOutlined,
@@ -17,78 +19,41 @@ import {
     DownOutlined,
     UpOutlined,
     UnorderedListOutlined,
-
+    UserOutlined,
+    CheckCircleOutlined,
 } from '@ant-design/icons';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import {
     IreSelect,
     IreCalendar,
 } from '../../components/utils';
+import { fetchDashboardSummary, fetchDashboardTable } from '../../services/api/dashboard';
+import type { DashboardSummaryItem, DashboardRow } from '../../services/api/dashboard';
+import { useAuth } from '../../contexts/AuthContext';
 
-// Mock data for donut chart
-const chartData = [
-    { name: 'ร่าง', value: 45, color: '#8C8C8C' },
-    { name: 'กำลังดำเนินการ', value: 30, color: '#13C2C2' },
-    { name: 'ส่งกลับแก้ไข', value: 15, color: '#FF4D4F' },
-    { name: 'เสร็จสิ้น', value: 10, color: '#52C41A' }
-];
-
-// Mock data for table
-const tableData = [
-    {
-        key: '1',
-        no: 1,
-        documentDate: '10/07/2568',
-        term: 'ภาคต้น',
-        academicYear: '2568',
-        requestType: 'คำร้องทั่วไป',
-        status: 'ร่าง',
-        statusColor: '#8C8C8C'
-    },
-    {
-        key: '2',
-        no: 2,
-        documentDate: '11/07/2568',
-        term: 'ภาคต้น',
-        academicYear: '2568',
-        requestType: 'คำร้องขอสอบชดเชย',
-        status: 'กำลังดำเนินการ',
-        statusColor: '#13C2C2'
-    },
-    {
-        key: '3',
-        no: 3,
-        documentDate: '12/07/2568',
-        term: 'ภาคต้น',
-        academicYear: '2568',
-        requestType: 'คำร้องขอย้ายคณะ',
-        status: 'ส่งกลับแก้ไข',
-        statusColor: '#FF4D4F'
-    },
-    {
-        key: '4',
-        no: 4,
-        documentDate: '13/07/2568',
-        term: 'ภาคต้น',
-        academicYear: '2568',
-        requestType: 'คำร้องขอเทียบโอนรายวิชา',
-        status: 'ยกเลิก',
-        statusColor: '#FA8C16'
-    },
-    {
-        key: '5',
-        no: 5,
-        documentDate: '14/07/2568',
-        term: 'ภาคต้น',
-        academicYear: '2568',
-        requestType: 'คำร้องขอลงทะเบียนเรียน',
-        status: 'เสร็จสิ้น',
-        statusColor: '#52C41A'
-    }
-];
+const { Title, Text } = Typography;
 
 const Dashboard: React.FC = () => {
+    const { user } = useAuth();
     const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize] = useState(5);
+    const [loading, setLoading] = useState(true);
+
+    // สร้างฟังก์ชันสำหรับข้อมูล default ที่สวยงาม
+    const getDefaultChartData = (): DashboardSummaryItem[] => [
+        { name: 'ร่าง', value: 1, color: '#989898' },
+        { name: 'กำลังดำเนินการ', value: 1, color: '#17A2B8' },
+        { name: 'ส่งกลับแก้ไข', value: 1, color: '#FF3B30' },
+        { name: 'เสร็จสิ้น', value: 1, color: '#03BC77' }
+    ];
+
+    const [chartData, setChartData] = useState<DashboardSummaryItem[]>(getDefaultChartData());
+    const [tableData, setTableData] = useState<DashboardRow[]>([]);
+    const [total, setTotal] = useState(0);
+
+    // ตรวจสอบประเภทผู้ใช้
+    const isStudent = user?.roleCode === 'STUDENT';
+    const isApprover = user?.roleCode === 'ADMIN' || user?.roleCode === 'APPROVER';
 
     const formContext = useForm({
         defaultValues: {
@@ -109,6 +74,59 @@ const Dashboard: React.FC = () => {
         { label: 'คำร้องทั่วไป', value: 'คำร้องทั่วไป' }
     ];
 
+    // ดึงข้อมูล dashboard เมื่อ component mount
+    useEffect(() => {
+        loadDashboardData();
+    }, []);
+
+    // ดึงข้อมูลใหม่เมื่อ filter เปลี่ยน
+    useEffect(() => {
+        const subscription = formContext.watch((value) => {
+            setCurrentPage(1); // reset หน้าแรกเมื่อ filter เปลี่ยน
+            loadDashboardData();
+        });
+        return () => subscription.unsubscribe();
+    }, [formContext.watch]);
+
+    const loadDashboardData = async () => {
+        try {
+            setLoading(true);
+
+            // ดึงค่า form values และกรองค่า null/undefined
+            const formValues = formContext.getValues();
+            const filterParams = {
+                month: formValues.month || null,
+                term: formValues.term || null,
+                year: formValues.academicYear || null,
+                requestType: formValues.requestType || null
+            };
+
+            // ดึงข้อมูล chart summary พร้อม filter
+            const summaryData = await fetchDashboardSummary(filterParams);
+
+            // ใช้ข้อมูลจริงหรือข้อมูล default ที่สวยงาม
+            setChartData(summaryData && summaryData.length > 0 ? summaryData : getDefaultChartData());
+
+            // ดึงข้อมูล table พร้อม filter
+            const tableParams = {
+                page: currentPage,
+                pageSize: pageSize,
+                ...filterParams
+            };
+
+            const tableResult = await fetchDashboardTable(tableParams);
+            setTableData(tableResult.items);
+            setTotal(tableResult.total);
+
+        } catch (error) {
+            console.error('Error loading dashboard data:', error);
+            message.error('ไม่สามารถโหลดข้อมูลได้');
+            setChartData(getDefaultChartData());
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const renderIreCalendar = (label: string, field: "month" | "academicYear", placeholder: string, format: string | "MM" | "YYYY") => (
         <IreCalendar
             label={label}
@@ -120,13 +138,11 @@ const Dashboard: React.FC = () => {
         />
     );
 
-
-
     const columns = [
         {
             title: (
                 <Flex align="center" justify="center">
-                    <span className="dashboard-table-header-text">ลำดับ</span>
+                    <span className="text-sm font-medium text-gray-700">ลำดับ</span>
                 </Flex>
             ),
             dataIndex: 'no',
@@ -137,8 +153,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span className="dashboard-table-header-text">วันที่เอกสาร</span>
-                    <UpOutlined className="dashboard-table-header-icon" />
+                    <span className="text-sm font-medium text-gray-700">วันที่เอกสาร</span>
+                    <UpOutlined className="text-xs text-gray-500" />
                 </Flex>
             ),
             dataIndex: 'documentDate',
@@ -229,6 +245,26 @@ const Dashboard: React.FC = () => {
         },
     ];
 
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        loadDashboardData();
+    };
+
+    if (loading) {
+        return (
+            <div className="dashboard-container">
+                <div className="dashboard-content">
+                    <Card className="dashboard-card">
+                        <div style={{ textAlign: 'center', padding: '50px' }}>
+                            <Spin size="large" />
+                            <div style={{ marginTop: '16px' }}>กำลังโหลดข้อมูล...</div>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="dashboard-container">
             <div className="dashboard-content">
@@ -246,7 +282,7 @@ const Dashboard: React.FC = () => {
                             <div className="dashboard-filters">
                                 {/* Legend */}
                                 <div className="dashboard-legend">
-                                    {chartData.map((item) => (
+                                    {(chartData || []).map((item) => (
                                         <div key={item.name} className="dashboard-legend-item">
                                             <div
                                                 className="dashboard-legend-dot dashboard-legend-dot-custom"
@@ -264,7 +300,7 @@ const Dashboard: React.FC = () => {
                                     <ResponsiveContainer width="100%" height="100%">
                                         <PieChart>
                                             <Pie
-                                                data={chartData}
+                                                data={chartData || []}
                                                 cx="50%"
                                                 cy="50%"
                                                 innerRadius={60}
@@ -272,7 +308,7 @@ const Dashboard: React.FC = () => {
                                                 paddingAngle={2}
                                                 dataKey="value"
                                             >
-                                                {chartData.map((entry, index) => (
+                                                {(chartData || []).map((entry, index) => (
                                                     <Cell key={`cell-${index}`} fill={entry.color} />
                                                 ))}
                                             </Pie>
@@ -314,18 +350,20 @@ const Dashboard: React.FC = () => {
                 {/* Second Card - Table Section */}
                 <Card className="dashboard-card">
                     <div className="dashboard-table-container">
-                        {/* Create Request Button */}
-                        <div className="dashboard-create-request-button">
-                            <Button
-                                type="primary"
-                                size="large"
-                                icon={<PlusOutlined />}
-                                className="dashboard-create-request-button-button"
-                            >
-                                สร้างคำร้อง
-                                <DownOutlined className="dashboard-icon-button" />
-                            </Button>
-                        </div>
+                        {/* Create Request Button - Only for Students */}
+                        {isStudent && (
+                            <div className="dashboard-create-request-button">
+                                <Button
+                                    type="primary"
+                                    size="large"
+                                    icon={<PlusOutlined />}
+                                    className="dashboard-create-request-button-button"
+                                >
+                                    สร้างคำร้อง
+                                    <DownOutlined className="dashboard-icon-button" />
+                                </Button>
+                            </div>
+                        )}
 
                         {/* Table */}
                         <div className="dashboard-table">
@@ -335,6 +373,7 @@ const Dashboard: React.FC = () => {
                                 dataSource={tableData}
                                 pagination={false}
                                 size="middle"
+                                loading={loading}
                                 rowClassName={(_, index) =>
                                     index % 2 === 0 ? 'table-row-light' : 'table-row-dark'
                                 }
@@ -355,14 +394,12 @@ const Dashboard: React.FC = () => {
                         <div className="dashboard-pagination">
                             <Pagination
                                 current={currentPage}
-                                total={25}
-                                pageSize={5}
+                                total={total}
+                                pageSize={pageSize}
                                 showSizeChanger={false}
                                 showQuickJumper={false}
                                 showTotal={() => null}
-                                onChange={(page) => {
-                                    setCurrentPage(page);
-                                }}
+                                onChange={handlePageChange}
                                 itemRender={(_, type, originalElement) => {
                                     if (type === 'prev') {
                                         return <Button
