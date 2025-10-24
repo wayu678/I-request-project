@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Layout from "./layout/Layout";
 
 import NotFound from "./pages/NotFound";
 import { Login } from "./pages/login";
@@ -21,28 +22,45 @@ const App = () => {
   return (
     <AuthProvider>
       <Routes>
+        {/* Routes without Layout (no sidebar) */}
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<Demo />} />
         <Route path="/demo" element={<Demo />} />
         <Route path="/demo/createRequest" element={<CreateRequest />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/make-up-exam" element={<MakeUpExamForm />} />
 
-        {/* Protected Routes */}
+        {/* Routes with Layout (with sidebar) */}
+        <Route path="/dashboard" element={
+          <Layout>
+            <Dashboard />
+          </Layout>
+        } />
+        <Route path="/make-up-exam" element={
+          <Layout>
+            <MakeUpExamForm />
+          </Layout>
+        } />
+
+        {/* Protected Routes with Layout */}
         <Route path="/profile/*" element={
           <ProtectedRoute>
-            <ProfileRoutes />
+            <Layout>
+              <ProfileRoutes />
+            </Layout>
           </ProtectedRoute>
         } />
 
         <Route path="/irst07" element={
           <ProtectedRoute>
-            <RequestForPostponeTuitionandFeePayments />
+            <Layout>
+              <RequestForPostponeTuitionandFeePayments />
+            </Layout>
           </ProtectedRoute>
         } />
         <Route path="/irst07/detail" element={
           <ProtectedRoute>
-            <RequestForPostponeTuitionandFeePaymentsDetail />
+            <Layout>
+              <RequestForPostponeTuitionandFeePaymentsDetail />
+            </Layout>
           </ProtectedRoute>
         } />
 

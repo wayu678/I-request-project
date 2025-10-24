@@ -12,6 +12,7 @@ import {
     message,
     Typography,
     Tag,
+    DatePicker,
 } from 'antd';
 import {
     PlusOutlined,
@@ -21,6 +22,7 @@ import {
     UnorderedListOutlined,
     UserOutlined,
     CheckCircleOutlined,
+    CalendarOutlined,
 } from '@ant-design/icons';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import {
@@ -30,11 +32,75 @@ import {
 import { fetchDashboardSummary, fetchDashboardTable } from '../../services/api/dashboard';
 import type { DashboardSummaryItem, DashboardRow } from '../../services/api/dashboard';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTranslate } from '../../provider/hooks/translate.hook';
 
 const { Title, Text } = Typography;
 
+// Mock data for donut chart - will be translated in component
+const getChartData = (translate: (th: string, en: string) => string) => [
+    { name: translate('ร่าง', 'Draft'), value: 45, color: '#8C8C8C' },
+    { name: translate('กำลังดำเนินการ', 'In Progress'), value: 30, color: '#13C2C2' },
+    { name: translate('ส่งกลับแก้ไข', 'Returned for Revision'), value: 15, color: '#FF4D4F' },
+    { name: translate('เสร็จสิ้น', 'Completed'), value: 10, color: '#52C41A' }
+];
+
+// Mock data for table - will be translated in component
+const getTableData = (translate: (th: string, en: string) => string) => [
+    {
+        key: '1',
+        no: 1,
+        documentDate: '10/07/2568',
+        term: translate('ภาคต้น', 'First Semester'),
+        academicYear: '2568',
+        requestType: translate('คำร้องทั่วไป', 'General Request'),
+        status: translate('ร่าง', 'Draft'),
+        statusColor: '#8C8C8C'
+    },
+    {
+        key: '2',
+        no: 2,
+        documentDate: '11/07/2568',
+        term: translate('ภาคต้น', 'First Semester'),
+        academicYear: '2568',
+        requestType: translate('คำร้องขอสอบชดเชย', 'Make-up Exam Request'),
+        status: translate('กำลังดำเนินการ', 'In Progress'),
+        statusColor: '#13C2C2'
+    },
+    {
+        key: '3',
+        no: 3,
+        documentDate: '12/07/2568',
+        term: translate('ภาคต้น', 'First Semester'),
+        academicYear: '2568',
+        requestType: translate('คำร้องขอย้ายคณะ', 'Faculty Transfer Request'),
+        status: translate('ส่งกลับแก้ไข', 'Returned for Revision'),
+        statusColor: '#FF4D4F'
+    },
+    {
+        key: '4',
+        no: 4,
+        documentDate: '13/07/2568',
+        term: translate('ภาคต้น', 'First Semester'),
+        academicYear: '2568',
+        requestType: translate('คำร้องขอเทียบโอนรายวิชา', 'Credit Transfer Request'),
+        status: translate('ยกเลิก', 'Cancelled'),
+        statusColor: '#FA8C16'
+    },
+    {
+        key: '5',
+        no: 5,
+        documentDate: '14/07/2568',
+        term: translate('ภาคต้น', 'First Semester'),
+        academicYear: '2568',
+        requestType: translate('คำร้องขอลงทะเบียนเรียน', 'Registration Request'),
+        status: translate('เสร็จสิ้น', 'Completed'),
+        statusColor: '#52C41A'
+    }
+];
+
 const Dashboard: React.FC = () => {
     const { user } = useAuth();
+    const { translate } = useTranslate();
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize] = useState(5);
     const [loading, setLoading] = useState(true);
@@ -65,13 +131,13 @@ const Dashboard: React.FC = () => {
     });
 
     const termOptions = [
-        { label: 'ภาคต้น', value: 'ภาคต้น' },
-        { label: 'ภาคปลาย', value: 'ภาคปลาย' },
-        { label: 'ภาคฤดูร้อน', value: 'ภาคฤดูร้อน' }
+        { label: translate('ภาคต้น', 'First Semester'), value: 'ภาคต้น' },
+        { label: translate('ภาคปลาย', 'Second Semester'), value: 'ภาคปลาย' },
+        { label: translate('ภาคฤดูร้อน', 'Summer Semester'), value: 'ภาคฤดูร้อน' }
     ];
 
     const requestTypeOptions = [
-        { label: 'คำร้องทั่วไป', value: 'คำร้องทั่วไป' }
+        { label: translate('คำร้องทั่วไป', 'General Request'), value: 'คำร้องทั่วไป' }
     ];
 
     // ดึงข้อมูล dashboard เมื่อ component mount
@@ -142,7 +208,7 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center">
-                    <span className="text-sm font-medium text-gray-700">ลำดับ</span>
+                    <span style={{ fontSize: '14px', fontWeight: 'normal' }}>{translate('ลำดับ', 'NO')}</span>
                 </Flex>
             ),
             dataIndex: 'no',
@@ -153,8 +219,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span className="text-sm font-medium text-gray-700">วันที่เอกสาร</span>
-                    <UpOutlined className="text-xs text-gray-500" />
+                    <span style={{ fontSize: '14px', fontWeight: 'normal' }}>{translate('วันที่เอกสาร', 'Document Date')}</span>
+                    <UpOutlined style={{ fontSize: '12px' }} />
                 </Flex>
             ),
             dataIndex: 'documentDate',
@@ -165,8 +231,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span className="dashboard-table-header-text">เทอม</span>
-                    <UpOutlined className="dashboard-table-header-icon" />
+                    <span style={{ fontSize: '14px', fontWeight: 'normal' }}>{translate('เทอม', 'Semester')}</span>
+                    <UpOutlined style={{ fontSize: '12px' }} />
                 </Flex>
             ),
             dataIndex: 'term',
@@ -177,8 +243,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span className="dashboard-table-header-text">ปีการศึกษา</span>
-                    <UpOutlined className="dashboard-table-header-icon" />
+                    <span style={{ fontSize: '14px', fontWeight: 'normal' }}>{translate('ปีการศึกษา', 'Academic Year')}</span>
+                    <UpOutlined style={{ fontSize: '12px' }} />
                 </Flex>
             ),
             dataIndex: 'academicYear',
@@ -189,8 +255,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span className="dashboard-table-header-text">ประเภทคำร้อง</span>
-                    <UpOutlined className="dashboard-table-header-icon" />
+                    <span style={{ fontSize: '14px', fontWeight: 'normal' }}>{translate('ประเภทคำร้อง', 'Request Type')}</span>
+                    <UpOutlined style={{ fontSize: '12px' }} />
                 </Flex>
             ),
             dataIndex: 'requestType',
@@ -201,8 +267,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span className="dashboard-table-header-text">สถานะคำร้อง</span>
-                    <UpOutlined className="dashboard-table-header-icon" />
+                    <span style={{ fontSize: '14px', fontWeight: 'normal' }}>{translate('สถานะคำร้อง', 'Status')}</span>
+                    <UpOutlined style={{ fontSize: '12px' }} />
                 </Flex>
             ),
             dataIndex: 'status',
@@ -226,7 +292,7 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center">
-                    <span className="dashboard-table-header-text">ดำเนินการ</span>
+                    <span style={{ fontSize: '14px', fontWeight: 'normal' }}>{translate('ดำเนินการ', 'Action')}</span>
                 </Flex>
             ),
             key: 'action',
@@ -238,8 +304,8 @@ const Dashboard: React.FC = () => {
                     icon={<EditOutlined />}
                     className="dashboard-action-button"
                 >
-                    View
-                    <DownOutlined className="dashboard-icon-small" />
+                    {translate('View', 'View')}
+                    <DownOutlined style={{ fontSize: '10px', marginLeft: '4px' }} />
                 </Button>
             ),
         },
@@ -266,16 +332,28 @@ const Dashboard: React.FC = () => {
     }
 
     return (
-        <div className="dashboard-container">
-            <div className="dashboard-content">
+        <div className="min-h-screen bg-gray-100" style={{ paddingTop: '0px', paddingBottom: '10px', paddingLeft: '10px', paddingRight: '10px' }}>
+            <div className="max-w-7xl mx-auto" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {/* First Card - Dashboard Content */}
-                <Card className="dashboard-card">
-                    <div className="dashboard-header">
-                        <div className="dashboard-title">
-                            <UnorderedListOutlined className="dashboard-icon-large" />
-                            <span className="dashboard-title-text">Dashboard</span>
-                        </div>
-                    </div>
+                <Card className="shadow-sm p-8">
+                    {/* Header inside Card */}
+                    <Flex align="center" justify="space-between" style={{ marginBottom: '30px' }}>
+                        <Flex align="center">
+                            <div className="flex items-center mr-3">
+                                <div className="flex flex-col mr-1.5">
+                                    <div className="w-0.5 h-0.5 bg-black mb-0.5"></div>
+                                    <div className="w-0.5 h-0.5 bg-black mb-0.5"></div>
+                                    <div className="w-0.5 h-0.5 bg-black"></div>
+                                </div>
+                                <div className="flex flex-col">
+                                    <div className="w-2 h-0.5 bg-black mb-0.5"></div>
+                                    <div className="w-2 h-0.5 bg-black mb-0.5"></div>
+                                    <div className="w-2 h-0.5 bg-black"></div>
+                                </div>
+                            </div>
+                            <span className="text-lg font-normal text-black" style={{ fontWeight: 'normal', fontSize: '18px' }}>{translate('แดชบอร์ด', 'Dashboard')}</span>
+                        </Flex>
+                    </Flex>
                     <Row gutter={[24, 24]}>
                         {/* Left Side - Chart */}
                         <Col xs={24} lg={12}>
@@ -321,48 +399,56 @@ const Dashboard: React.FC = () => {
 
                         {/* Right Side - Filters */}
                         <Col xs={24} lg={12}>
-                            <div className="dashboard-filters">
-                                <div className="dashboard-filters-container">
-                                    {renderIreCalendar("เดือน", "month", "MM", "MM")}
+                            <div style={{ padding: '20px' }}>
+                                <Flex vertical gap={20} style={{ width: '405px' }}>
+                                    {renderIreCalendar(translate("เดือน", "Month"), "month", "MM", "MM")}
                                     <IreSelect
-                                        label="เทอม"
-                                        placeholder="ภาคต้น, ภาคปลาย, ภาคฤดูร้อน"
+                                        label={translate("เทอม", "Term")}
+                                        placeholder={translate("ภาคต้น, ภาคปลาย, ภาคฤดูร้อน", "First Semester, Second Semester, Summer Semester")}
                                         formContext={formContext}
                                         registerName={formContext.register('term')}
                                         options={termOptions}
                                         widthFull={true}
                                     />
-                                    {renderIreCalendar("ปีการศึกษา", "academicYear", "YYYY", "YYYY")}
+                                    {renderIreCalendar(translate("ปีการศึกษา", "Academic Year"), "academicYear", "YYYY", "YYYY")}
                                     <IreSelect
-                                        label="ประเภทคำร้อง"
-                                        placeholder="คำร้องทั่วไป"
+                                        label={translate("ประเภทคำร้อง", "Request Type")}
+                                        placeholder={translate("คำร้องทั่วไป", "General Request")}
                                         formContext={formContext}
                                         registerName={formContext.register('requestType')}
                                         options={requestTypeOptions}
                                         widthFull={true}
                                     />
-                                </div>
+                                </Flex>
                             </div>
                         </Col>
                     </Row>
                 </Card>
 
                 {/* Second Card - Table Section */}
-                <Card className="dashboard-card">
-                    <div className="dashboard-table-container">
+                <Card className="shadow-sm">
+                    <div style={{ padding: '20px' }}>
                         {/* Create Request Button - Only for Students */}
                         {isStudent && (
-                            <div className="dashboard-create-request-button">
+                            <Flex justify="flex-end" style={{ marginBottom: '16px' }}>
                                 <Button
                                     type="primary"
                                     size="large"
                                     icon={<PlusOutlined />}
-                                    className="dashboard-create-request-button-button"
+                                    style={{
+                                        backgroundColor: '#339966',
+                                        borderColor: '#339966',
+                                        borderRadius: '6px',
+                                        height: '40px',
+                                        paddingLeft: '16px',
+                                        paddingRight: '8px',
+                                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+                                    }}
                                 >
-                                    สร้างคำร้อง
-                                    <DownOutlined className="dashboard-icon-button" />
+                                    {translate('สร้างคำร้อง', 'Create Request')}
+                                    <DownOutlined style={{ fontSize: '12px', marginLeft: '8px' }} />
                                 </Button>
-                            </div>
+                            </Flex>
                         )}
 
                         {/* Table */}

@@ -1,8 +1,10 @@
-import { Button, Card, Spin } from "antd";
+import { Button, Card, Spin, Flex, Col } from "antd";
 import { LogoutOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { IreDisplayField } from "../../components/utils";
+import { useTranslate } from "../../provider/hooks/translate.hook";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface ProfileData {
     // Personal Information
@@ -42,6 +44,8 @@ interface ProfileData {
 
 const Profile = () => {
     const navigate = useNavigate();
+    const { logout } = useAuth();
+    const { translate } = useTranslate();
     const [profileData, setProfileData] = useState<ProfileData | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -107,16 +111,16 @@ const Profile = () => {
 
     if (!profileData) {
         return (
-            <div className="profile-error-container">
-                <Card className="profile-error-card">
-                    <div className="profile-error-content">
-                        <div className="profile-error-text">ไม่สามารถโหลดข้อมูล Profile ได้</div>
+            <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
+                <Card>
+                    <div className="text-center">
+                        <div className="text-lg text-gray-700 mb-4">{translate('ไม่สามารถโหลดข้อมูล Profile ได้', 'Unable to load Profile data')}</div>
                         <Button
                             type="primary"
                             onClick={loadProfileData}
                             className="profile-btn profile-btn-primary profile-retry-btn"
                         >
-                            ลองใหม่
+                            {translate('ลองใหม่', 'Try Again')}
                         </Button>
                     </div>
                 </Card>
@@ -130,252 +134,267 @@ const Profile = () => {
                 {/* Profile Content */}
                 <Card className="profile-card">
                     {/* Header inside Card */}
-                    <div className="profile-header">
-                        <div className="profile-title-section">
-                            <UnorderedListOutlined className="profile-title-icon" />
-                            <span className="profile-title-text">Profile</span>
-                        </div>
+                    <Flex align="center" justify="space-between" style={{ marginBottom: '30px' }}>
+                        <Flex align="center">
+                            <div className="flex items-center mr-3">
+                                <div className="flex flex-col mr-1.5">
+                                    <div className="w-0.5 h-0.5 bg-black mb-0.5"></div>
+                                    <div className="w-0.5 h-0.5 bg-black mb-0.5"></div>
+                                    <div className="w-0.5 h-0.5 bg-black"></div>
+                                </div>
+                                <div className="flex flex-col">
+                                    <div className="w-2 h-0.5 bg-black mb-0.5"></div>
+                                    <div className="w-2 h-0.5 bg-black mb-0.5"></div>
+                                    <div className="w-2 h-0.5 bg-black"></div>
+                                </div>
+                            </div>
+                            <span className="text-lg font-normal text-black" style={{ fontWeight: 'normal', fontSize: '18px' }}>{translate('โปรไฟล์', 'Profile')}</span>
+                        </Flex>
                         <Button
                             type="text"
                             icon={<LogoutOutlined />}
                             onClick={handleLogout}
                             className="profile-logout-btn"
                         >
-                            ออกจากระบบ
+                            {translate('ออกจากระบบ', 'Logout')}
                         </Button>
-                    </div>
+                    </Flex>
                     <div className="profile-grid">
                         {/* Left Column - Personal and Academic Information */}
-                        <div className="profile-section">
-                            {/* Row 1 */}
-                            <div className="profile-field-row-half">
-                                <div className="profile-field-half profile-field-half-left">
-                                    <IreDisplayField
-                                        label="คำนำหน้าชื่อ (TH)"
-                                        value={profileData.titleTH}
-                                        showEditIcon={false}
-                                    />
+                        <Col xs={24} lg={12}>
+                            <div className="space-y-6">
+                                {/* Row 1 */}
+                                <div className="flex">
+                                    <div className="w-1/2 pr-4">
+                                        <IreDisplayField
+                                            label={translate("คำนำหน้าชื่อ (TH)", "Title (TH)")}
+                                            value={profileData.titleTH}
+                                            showEditIcon={false}
+                                        />
+                                    </div>
+                                    <div className="w-1/2 pl-4">
+                                        <IreDisplayField
+                                            label={translate("ชื่อ-นามสกุล (TH)", "Full Name (TH)")}
+                                            value={profileData.fullNameTH}
+                                            showEditIcon={false}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="profile-field-half profile-field-half-right">
-                                    <IreDisplayField
-                                        label="ชื่อ-นามสกุล (TH)"
-                                        value={profileData.fullNameTH}
-                                        showEditIcon={false}
-                                    />
-                                </div>
-                            </div>
 
-                            {/* Row 2 */}
-                            <div className="profile-field-row-half">
-                                <div className="profile-field-half profile-field-half-left">
-                                    <IreDisplayField
-                                        label="คำนำหน้าชื่อ (EN)"
-                                        value={profileData.titleEN}
-                                        showEditIcon={false}
-                                    />
+                                {/* Row 2 */}
+                                <div className="flex">
+                                    <div className="w-1/2 pr-4">
+                                        <IreDisplayField
+                                            label={translate("คำนำหน้าชื่อ (EN)", "Title (EN)")}
+                                            value={profileData.titleEN}
+                                            showEditIcon={false}
+                                        />
+                                    </div>
+                                    <div className="w-1/2 pl-4">
+                                        <IreDisplayField
+                                            label={translate("ชื่อ-นามสกุล (EN)", "Full Name (EN)")}
+                                            value={profileData.fullNameEN}
+                                            showEditIcon={false}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="profile-field-half profile-field-half-right">
-                                    <IreDisplayField
-                                        label="ชื่อ-นามสกุล (EN)"
-                                        value={profileData.fullNameEN}
-                                        showEditIcon={false}
-                                    />
-                                </div>
-                            </div>
 
-                            {/* Row 3 */}
-                            <div className="profile-field-row-half">
-                                <div className="profile-field-half profile-field-half-left">
-                                    <IreDisplayField
-                                        label="วิทยาเขตสังกัด"
-                                        value={profileData.campusAffiliation}
-                                        showEditIcon={false}
-                                    />
+                                {/* Row 3 */}
+                                <div className="flex">
+                                    <div className="w-1/2 pr-4">
+                                        <IreDisplayField
+                                            label={translate("วิทยาเขตสังกัด", "Campus Affiliation")}
+                                            value={profileData.campusAffiliation}
+                                            showEditIcon={false}
+                                        />
+                                    </div>
+                                    <div className="w-1/2 pl-4">
+                                        <IreDisplayField
+                                            label={translate("ชื่อคณะสังกัด (TH)", "Faculty Name (TH)")}
+                                            value={profileData.facultyTH}
+                                            showEditIcon={false}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="profile-field-half profile-field-half-right">
-                                    <IreDisplayField
-                                        label="ชื่อคณะสังกัด (TH)"
-                                        value={profileData.facultyTH}
-                                        showEditIcon={false}
-                                    />
-                                </div>
-                            </div>
 
-                            {/* Row 4 */}
-                            <div className="profile-field-row-half">
-                                <div className="profile-field-half profile-field-half-left">
-                                    <IreDisplayField
-                                        label="ภาควิชา"
-                                        value={profileData.department}
-                                        showEditIcon={false}
-                                    />
+                                {/* Row 4 */}
+                                <div className="flex">
+                                    <div className="w-1/2 pr-4">
+                                        <IreDisplayField
+                                            label={translate("ภาควิชา", "Department")}
+                                            value={profileData.department}
+                                            showEditIcon={false}
+                                        />
+                                    </div>
+                                    <div className="w-1/2 pl-4">
+                                        <IreDisplayField
+                                            label={translate("วิทยาเขต", "Campus")}
+                                            value={profileData.campus}
+                                            showEditIcon={false}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="profile-field-half profile-field-half-right">
-                                    <IreDisplayField
-                                        label="วิทยาเขต"
-                                        value={profileData.campus}
-                                        showEditIcon={false}
-                                    />
-                                </div>
-                            </div>
 
-                            {/* Row 5 */}
-                            <div className="profile-field-row-half">
-                                <div className="profile-field-half profile-field-half-left">
-                                    <IreDisplayField
-                                        label="อาจารย์ที่ปรึกษา"
-                                        value={profileData.advisor}
-                                        showEditIcon={false}
-                                    />
+                                {/* Row 5 */}
+                                <div className="flex">
+                                    <div className="w-1/2 pr-4">
+                                        <IreDisplayField
+                                            label={translate("อาจารย์ที่ปรึกษา", "Advisor")}
+                                            value={profileData.advisor}
+                                            showEditIcon={false}
+                                        />
+                                    </div>
+                                    <div className="w-1/2 pl-4">
+                                        <IreDisplayField
+                                            label={translate("คณะ", "Faculty")}
+                                            value={profileData.faculty}
+                                            showEditIcon={false}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="profile-field-half profile-field-half-right">
-                                    <IreDisplayField
-                                        label="คณะ"
-                                        value={profileData.faculty}
-                                        showEditIcon={false}
-                                    />
-                                </div>
-                            </div>
 
-                            {/* Row 6 */}
-                            <div className="profile-field-row-half">
-                                <div className="profile-field-half profile-field-half-left">
-                                    {/* Empty space */}
-                                </div>
-                                <div className="profile-field-half profile-field-half-right">
-                                    <IreDisplayField
-                                        label="สาขา"
-                                        value={profileData.major}
-                                        showEditIcon={false}
-                                    />
+                                {/* Row 6 */}
+                                <div className="flex">
+                                    <div className="w-1/2 pr-4">
+                                        {/* Empty space */}
+                                    </div>
+                                    <div className="w-1/2 pl-4">
+                                        <IreDisplayField
+                                            label={translate("สาขา", "Major")}
+                                            value={profileData.major}
+                                            showEditIcon={false}
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </Col>
 
                         {/* Right Column - Contact and Address Information */}
-                        <div className="profile-section">
-                            {/* Row 1 */}
-                            <div className="profile-field-row">
-                                <div className="profile-field-full">
-                                    <IreDisplayField
-                                        label="E-mail"
-                                        value={profileData.email}
-                                        showEditIcon={true}
-                                    />
+                        <Col xs={24} lg={12}>
+                            <div className="space-y-6">
+                                {/* Row 1 */}
+                                <div className="flex gap-4">
+                                    <div className="flex-1">
+                                        <IreDisplayField
+                                            label={translate("E-mail", "E-mail")}
+                                            value={profileData.email}
+                                            showEditIcon={true}
+                                        />
+                                    </div>
+                                    <div className="flex-1">
+                                        <IreDisplayField
+                                            label={translate("เบอร์โทรศัพท์", "Phone Number")}
+                                            value={profileData.phone}
+                                            showEditIcon={true}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="profile-field-full">
-                                    <IreDisplayField
-                                        label="เบอร์โทรศัพท์"
-                                        value={profileData.phone}
-                                        showEditIcon={true}
-                                    />
-                                </div>
-                            </div>
 
-                            {/* Row 2 */}
-                            <div className="profile-field-row">
-                                <div className="profile-field-full">
-                                    <IreDisplayField
-                                        label="บ้านเลขที่"
-                                        value={profileData.houseNo}
-                                        showEditIcon={true}
-                                    />
+                                {/* Row 2 */}
+                                <div className="flex gap-4">
+                                    <div className="flex-1">
+                                        <IreDisplayField
+                                            label={translate("บ้านเลขที่", "House Number")}
+                                            value={profileData.houseNo}
+                                            showEditIcon={true}
+                                        />
+                                    </div>
+                                    <div className="flex-1">
+                                        <IreDisplayField
+                                            label={translate("หมู่ที่", "Village Number")}
+                                            value={profileData.villageNo}
+                                            showEditIcon={true}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="profile-field-full">
-                                    <IreDisplayField
-                                        label="หมู่ที่"
-                                        value={profileData.villageNo}
-                                        showEditIcon={true}
-                                    />
-                                </div>
-                            </div>
 
-                            {/* Row 3 */}
-                            <div className="profile-field-row">
-                                <div className="profile-field-full">
-                                    <IreDisplayField
-                                        label="อาคาร"
-                                        value={profileData.building}
-                                        showEditIcon={true}
-                                    />
+                                {/* Row 3 */}
+                                <div className="flex gap-4">
+                                    <div className="flex-1">
+                                        <IreDisplayField
+                                            label={translate("อาคาร", "Building")}
+                                            value={profileData.building}
+                                            showEditIcon={true}
+                                        />
+                                    </div>
+                                    <div className="flex-1">
+                                        <IreDisplayField
+                                            label={translate("ชั้น", "Floor")}
+                                            value={profileData.floor}
+                                            showEditIcon={true}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="profile-field-full">
-                                    <IreDisplayField
-                                        label="ชั้น"
-                                        value={profileData.floor}
-                                        showEditIcon={true}
-                                    />
-                                </div>
-                            </div>
 
-                            {/* Row 4 */}
-                            <div className="profile-field-row">
-                                <div className="profile-field-full">
-                                    <IreDisplayField
-                                        label="ตรอก/ซอย"
-                                        value={profileData.alley}
-                                        showEditIcon={true}
-                                    />
+                                {/* Row 4 */}
+                                <div className="flex gap-4">
+                                    <div className="flex-1">
+                                        <IreDisplayField
+                                            label={translate("ตรอก/ซอย", "Alley")}
+                                            value={profileData.alley}
+                                            showEditIcon={true}
+                                        />
+                                    </div>
+                                    <div className="flex-1">
+                                        <IreDisplayField
+                                            label={translate("ถนน", "Street")}
+                                            value={profileData.street}
+                                            showEditIcon={true}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="profile-field-full">
-                                    <IreDisplayField
-                                        label="ถนน"
-                                        value={profileData.street}
-                                        showEditIcon={true}
-                                    />
-                                </div>
-                            </div>
 
-                            {/* Row 5 */}
-                            <div className="profile-field-row">
-                                <div className="profile-field-full">
-                                    <IreDisplayField
-                                        label="ตำบล/แขวง"
-                                        value={profileData.subDistrict}
-                                        showEditIcon={true}
-                                    />
+                                {/* Row 5 */}
+                                <div className="flex gap-4">
+                                    <div className="flex-1">
+                                        <IreDisplayField
+                                            label={translate("ตำบล/แขวง", "Sub-district")}
+                                            value={profileData.subDistrict}
+                                            showEditIcon={true}
+                                        />
+                                    </div>
+                                    <div className="flex-1">
+                                        <IreDisplayField
+                                            label={translate("อำเภอ/เขต", "District")}
+                                            value={profileData.district}
+                                            showEditIcon={true}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="profile-field-full">
-                                    <IreDisplayField
-                                        label="อำเภอ/เขต"
-                                        value={profileData.district}
-                                        showEditIcon={true}
-                                    />
-                                </div>
-                            </div>
 
-                            {/* Row 6 */}
-                            <div className="profile-field-row">
-                                <div className="profile-field-full">
-                                    <IreDisplayField
-                                        label="จังหวัด"
-                                        value={profileData.province}
-                                        showEditIcon={true}
-                                    />
+                                {/* Row 6 */}
+                                <div className="flex gap-4">
+                                    <div className="flex-1">
+                                        <IreDisplayField
+                                            label={translate("จังหวัด", "Province")}
+                                            value={profileData.province}
+                                            showEditIcon={true}
+                                        />
+                                    </div>
+                                    <div className="flex-1">
+                                        <IreDisplayField
+                                            label={translate("ประเทศ", "Country")}
+                                            value={profileData.country}
+                                            showEditIcon={true}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="profile-field-full">
-                                    <IreDisplayField
-                                        label="ประเทศ"
-                                        value={profileData.country}
-                                        showEditIcon={true}
-                                    />
-                                </div>
-                            </div>
 
-                            {/* Row 7 - Postal Code */}
-                            <div className="profile-field-row">
-                                <div className="profile-field-full">
-                                    <IreDisplayField
-                                        label="รหัสไปรษณีย์"
-                                        value={profileData.postalCode}
-                                        showEditIcon={true}
-                                    />
-                                </div>
-                                <div className="profile-field-full">
-                                    {/* Empty space to match layout */}
+                                {/* Row 7 - Postal Code */}
+                                <div className="flex gap-4">
+                                    <div className="flex-1">
+                                        <IreDisplayField
+                                            label={translate("รหัสไปรษณีย์", "Postal Code")}
+                                            value={profileData.postalCode}
+                                            showEditIcon={true}
+                                        />
+                                    </div>
+                                    <div className="flex-1">
+                                        {/* Empty space to match layout */}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </Col>
                     </div>
 
                 </Card>
@@ -387,7 +406,7 @@ const Profile = () => {
                         onClick={handleEditAll}
                         className="profile-btn profile-btn-edit"
                     >
-                        Edit
+                        {translate('แก้ไขทั้งหมด', 'Edit All')}
                     </Button>
                 </div>
             </div>
