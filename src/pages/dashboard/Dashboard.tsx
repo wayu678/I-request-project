@@ -41,11 +41,10 @@ const Dashboard: React.FC = () => {
 
     // สร้างฟังก์ชันสำหรับข้อมูล default ที่สวยงาม
     const getDefaultChartData = (): DashboardSummaryItem[] => [
-        { name: 'รอการอนุมัติ', value: 1, color: '#ffc107' },
-        { name: 'อนุมัติแล้ว', value: 1, color: '#28a745' },
-        { name: 'ปฏิเสธ', value: 1, color: '#dc3545' },
-        { name: 'กำลังดำเนินการ', value: 1, color: '#17a2b8' },
-        { name: 'เสร็จสิ้น', value: 1, color: '#6f42c1' }
+        { name: 'ร่าง', value: 1, color: '#989898' },
+        { name: 'กำลังดำเนินการ', value: 1, color: '#17A2B8' },
+        { name: 'ส่งกลับแก้ไข', value: 1, color: '#FF3B30' },
+        { name: 'เสร็จสิ้น', value: 1, color: '#03BC77' }
     ];
 
     const [chartData, setChartData] = useState<DashboardSummaryItem[]>(getDefaultChartData());
