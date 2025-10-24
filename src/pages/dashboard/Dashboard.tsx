@@ -38,7 +38,17 @@ const Dashboard: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize] = useState(5);
     const [loading, setLoading] = useState(true);
-    const [chartData, setChartData] = useState<DashboardSummaryItem[]>([]);
+
+    // สร้างฟังก์ชันสำหรับข้อมูล default ที่สวยงาม
+    const getDefaultChartData = (): DashboardSummaryItem[] => [
+        { name: 'รอการอนุมัติ', value: 1, color: '#ffc107' },
+        { name: 'อนุมัติแล้ว', value: 1, color: '#28a745' },
+        { name: 'ปฏิเสธ', value: 1, color: '#dc3545' },
+        { name: 'กำลังดำเนินการ', value: 1, color: '#17a2b8' },
+        { name: 'เสร็จสิ้น', value: 1, color: '#6f42c1' }
+    ];
+
+    const [chartData, setChartData] = useState<DashboardSummaryItem[]>(getDefaultChartData());
     const [tableData, setTableData] = useState<DashboardRow[]>([]);
     const [total, setTotal] = useState(0);
 
@@ -94,7 +104,9 @@ const Dashboard: React.FC = () => {
 
             // ดึงข้อมูล chart summary พร้อม filter
             const summaryData = await fetchDashboardSummary(filterParams);
-            setChartData(summaryData);
+
+            // ใช้ข้อมูลจริงหรือข้อมูล default ที่สวยงาม
+            setChartData(summaryData && summaryData.length > 0 ? summaryData : getDefaultChartData());
 
             // ดึงข้อมูล table พร้อม filter
             const tableParams = {
@@ -110,6 +122,7 @@ const Dashboard: React.FC = () => {
         } catch (error) {
             console.error('Error loading dashboard data:', error);
             message.error('ไม่สามารถโหลดข้อมูลได้');
+            setChartData(getDefaultChartData());
         } finally {
             setLoading(false);
         }
@@ -270,7 +283,7 @@ const Dashboard: React.FC = () => {
                             <div className="dashboard-filters">
                                 {/* Legend */}
                                 <div className="dashboard-legend">
-                                    {chartData.map((item) => (
+                                    {(chartData || []).map((item) => (
                                         <div key={item.name} className="dashboard-legend-item">
                                             <div
                                                 className="dashboard-legend-dot dashboard-legend-dot-custom"
@@ -288,7 +301,7 @@ const Dashboard: React.FC = () => {
                                     <ResponsiveContainer width="100%" height="100%">
                                         <PieChart>
                                             <Pie
-                                                data={chartData}
+                                                data={chartData || []}
                                                 cx="50%"
                                                 cy="50%"
                                                 innerRadius={60}
@@ -296,7 +309,7 @@ const Dashboard: React.FC = () => {
                                                 paddingAngle={2}
                                                 dataKey="value"
                                             >
-                                                {chartData.map((entry, index) => (
+                                                {(chartData || []).map((entry, index) => (
                                                     <Cell key={`cell-${index}`} fill={entry.color} />
                                                 ))}
                                             </Pie>
