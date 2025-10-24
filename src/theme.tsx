@@ -6,6 +6,6 @@ export const customTheme = {
         colorError: '#ff4d4f',
         borderRadius: 6,
         fontSize: 14,
-        fontFamily: 'Kanit',
+        fontFamily: 'Sarabun',
     } as const,
 };
