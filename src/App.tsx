@@ -30,9 +30,11 @@ const App = () => {
 
         {/* Routes with Layout (with sidebar) */}
         <Route path="/dashboard" element={
-          <Layout>
-            <Dashboard />
-          </Layout>
+          <ProtectedRoute>
+            <Layout>
+              <Dashboard />
+            </Layout>
+          </ProtectedRoute>
         } />
         <Route path="/make-up-exam" element={
           <Layout>
