@@ -199,7 +199,7 @@ const Dashboard: React.FC = () => {
             const formValues = formContext.getValues();
             const filterParams = {
                 month: formValues.month || null,
-                semester: formValues.semester || null,
+                term: formValues.semester || null,
                 year: formValues.academicYear || null,
                 requestType: formValues.requestType || null
             };

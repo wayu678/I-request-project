@@ -17,7 +17,7 @@ export type DashboardRow = {
     statusColor?: string;
 };
 
-// แทนที่การใช้ apiClient ให้ใช้ fetch โดยตรงเพื่อส่ง cookies
+// เรียกใช้ API จริงจาก backend แทน mock data
 export async function fetchDashboardSummary(params?: {
     month?: number | null;
     term?: string | null;
@@ -25,20 +25,38 @@ export async function fetchDashboardSummary(params?: {
     requestType?: string | null;
 }): Promise<DashboardSummaryItem[]> {
     try {
-        // Mock data for development
-        const mockData: DashboardSummaryItem[] = [
-            { name: 'ร่าง', value: 45, color: '#8C8C8C' },
-            { name: 'กำลังดำเนินการ', value: 30, color: '#13C2C2' },
-            { name: 'ส่งกลับแก้ไข', value: 15, color: '#FF4D4F' },
-            { name: 'เสร็จสิ้น', value: 10, color: '#52C41A' }
-        ];
-
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 500));
+        console.log('[Dashboard API] Fetching summary with params:', params);
         
-        return mockData;
+        // สร้าง query parameters
+        const queryParams = new URLSearchParams();
+        if (params?.month) queryParams.append('month', params.month.toString());
+        if (params?.term) queryParams.append('term', params.term);
+        if (params?.year) queryParams.append('year', params.year.toString());
+        if (params?.requestType) queryParams.append('requestType', params.requestType);
+
+        const queryString = queryParams.toString();
+        const url = `/api/dashboard/summary${queryString ? `?${queryString}` : ''}`;
+        
+        console.log('[Dashboard API] Request URL:', url);
+        
+        const response = await fetch(url, {
+            method: 'GET',
+            credentials: 'include', // ส่ง cookies อัตโนมัติ
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('[Dashboard API] Summary response:', data);
+        
+        return data;
     } catch (error) {
-        console.error('Error fetching dashboard summary:', error);
+        console.error('[Dashboard API] Error fetching summary:', error);
         throw error;
     }
 }
@@ -52,69 +70,40 @@ export async function fetchDashboardTable(params: {
     requestType?: string | null;
 }): Promise<{ items: DashboardRow[]; total: number }> {
     try {
-        // Mock data for development
-        const mockData: DashboardRow[] = [
-            {
-                key: '1',
-                no: 1,
-                documentDate: '10/07/2568',
-                term: 'ภาคต้น',
-                academicYear: '2568',
-                requestType: 'คำร้องทั่วไป',
-                status: 'ร่าง',
-                statusColor: '#8C8C8C'
-            },
-            {
-                key: '2',
-                no: 2,
-                documentDate: '11/07/2568',
-                term: 'ภาคปลาย',
-                academicYear: '2568',
-                requestType: 'คำร้องทั่วไป',
-                status: 'กำลังดำเนินการ',
-                statusColor: '#13C2C2'
-            },
-            {
-                key: '3',
-                no: 3,
-                documentDate: '12/07/2568',
-                term: 'ภาคต้น',
-                academicYear: '2568',
-                requestType: 'คำร้องทั่วไป',
-                status: 'ส่งกลับแก้ไข',
-                statusColor: '#FF4D4F'
-            },
-            {
-                key: '4',
-                no: 4,
-                documentDate: '13/07/2568',
-                term: 'ภาคปลาย',
-                academicYear: '2568',
-                requestType: 'คำร้องทั่วไป',
-                status: 'เสร็จสิ้น',
-                statusColor: '#52C41A'
-            },
-            {
-                key: '5',
-                no: 5,
-                documentDate: '14/07/2568',
-                term: 'ภาคต้น',
-                academicYear: '2568',
-                requestType: 'คำร้องทั่วไป',
-                status: 'ร่าง',
-                statusColor: '#8C8C8C'
-            }
-        ];
-
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 500));
+        console.log('[Dashboard API] Fetching table with params:', params);
         
-        return {
-            items: mockData,
-            total: mockData.length
-        };
+        // สร้าง query parameters
+        const queryParams = new URLSearchParams();
+        queryParams.append('page', params.page.toString());
+        queryParams.append('pageSize', params.pageSize.toString());
+        if (params.month) queryParams.append('month', params.month.toString());
+        if (params.term) queryParams.append('term', params.term);
+        if (params.year) queryParams.append('year', params.year.toString());
+        if (params.requestType) queryParams.append('requestType', params.requestType);
+
+        const queryString = queryParams.toString();
+        const url = `/api/dashboard/requests?${queryString}`;
+        
+        console.log('[Dashboard API] Request URL:', url);
+        
+        const response = await fetch(url, {
+            method: 'GET',
+            credentials: 'include', // ส่ง cookies อัตโนมัติ
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('[Dashboard API] Table response:', data);
+        
+        return data;
     } catch (error) {
-        console.error('Error fetching dashboard table:', error);
+        console.error('[Dashboard API] Error fetching table:', error);
         throw error;
     }
 }
