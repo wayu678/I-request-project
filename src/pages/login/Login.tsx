@@ -114,6 +114,7 @@ const Login = () => {
                                 <Button
                                     type={language === LANGUAGE.TH ? "link" : "text"}
                                     onClick={() => setLanguage(LANGUAGE.TH)}
+                                    style={{ color: language === LANGUAGE.TH ? '#339966' : '#000000' }}
                                 >
                                     <span className="text-sm">
                                         {LANGUAGE.TH}
@@ -123,6 +124,7 @@ const Login = () => {
                                 <Button
                                     type={language === LANGUAGE.EN ? "link" : "text"}
                                     onClick={() => setLanguage(LANGUAGE.EN)}
+                                    style={{ color: language === LANGUAGE.EN ? '#339966' : '#000000' }}
                                 >
                                     <span className="text-sm">
                                         {LANGUAGE.EN}

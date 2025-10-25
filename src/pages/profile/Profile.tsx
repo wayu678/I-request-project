@@ -103,7 +103,7 @@ const Profile = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gray-100 p-6 flex items-center justify-center">
+            <div className="min-h-screen bg-gray-100 p-4 lg:p-6 flex items-center justify-center">
                 <Spin size="large" />
             </div>
         );
@@ -159,20 +159,20 @@ const Profile = () => {
                             {translate('ออกจากระบบ', 'Logout')}
                         </Button>
                     </Flex>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
                         {/* Left Column - Personal and Academic Information */}
                         <Col xs={24} lg={12}>
-                            <div className="space-y-6">
+                            <div className="space-y-4 lg:space-y-6">
                                 {/* Row 1 */}
-                                <div className="flex">
-                                    <div className="w-1/2 pr-4">
+                                <div className="flex flex-col sm:flex-row gap-4">
+                                    <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("คำนำหน้าชื่อ (TH)", "Title (TH)")}
                                             value={profileData.titleTH}
                                             showEditIcon={false}
                                         />
                                     </div>
-                                    <div className="w-1/2 pl-4">
+                                    <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("ชื่อ-นามสกุล (TH)", "Full Name (TH)")}
                                             value={profileData.fullNameTH}
@@ -182,15 +182,15 @@ const Profile = () => {
                                 </div>
 
                                 {/* Row 2 */}
-                                <div className="flex">
-                                    <div className="w-1/2 pr-4">
+                                <div className="flex flex-col sm:flex-row gap-4">
+                                    <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("คำนำหน้าชื่อ (EN)", "Title (EN)")}
                                             value={profileData.titleEN}
                                             showEditIcon={false}
                                         />
                                     </div>
-                                    <div className="w-1/2 pl-4">
+                                    <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("ชื่อ-นามสกุล (EN)", "Full Name (EN)")}
                                             value={profileData.fullNameEN}
@@ -200,15 +200,15 @@ const Profile = () => {
                                 </div>
 
                                 {/* Row 3 */}
-                                <div className="flex">
-                                    <div className="w-1/2 pr-4">
+                                <div className="flex flex-col sm:flex-row gap-4">
+                                    <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("วิทยาเขตสังกัด", "Campus Affiliation")}
                                             value={profileData.campusAffiliation}
                                             showEditIcon={false}
                                         />
                                     </div>
-                                    <div className="w-1/2 pl-4">
+                                    <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("ชื่อคณะสังกัด (TH)", "Faculty Name (TH)")}
                                             value={profileData.facultyTH}
@@ -218,15 +218,15 @@ const Profile = () => {
                                 </div>
 
                                 {/* Row 4 */}
-                                <div className="flex">
-                                    <div className="w-1/2 pr-4">
+                                <div className="flex flex-col sm:flex-row gap-4">
+                                    <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("ภาควิชา", "Department")}
                                             value={profileData.department}
                                             showEditIcon={false}
                                         />
                                     </div>
-                                    <div className="w-1/2 pl-4">
+                                    <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("วิทยาเขต", "Campus")}
                                             value={profileData.campus}
@@ -236,15 +236,15 @@ const Profile = () => {
                                 </div>
 
                                 {/* Row 5 */}
-                                <div className="flex">
-                                    <div className="w-1/2 pr-4">
+                                <div className="flex flex-col sm:flex-row gap-4">
+                                    <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("อาจารย์ที่ปรึกษา", "Advisor")}
                                             value={profileData.advisor}
                                             showEditIcon={false}
                                         />
                                     </div>
-                                    <div className="w-1/2 pl-4">
+                                    <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("คณะ", "Faculty")}
                                             value={profileData.faculty}
@@ -254,11 +254,11 @@ const Profile = () => {
                                 </div>
 
                                 {/* Row 6 */}
-                                <div className="flex">
-                                    <div className="w-1/2 pr-4">
+                                <div className="flex flex-col sm:flex-row gap-4">
+                                    <div className="flex-1">
                                         {/* Empty space */}
                                     </div>
-                                    <div className="w-1/2 pl-4">
+                                    <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("สาขา", "Major")}
                                             value={profileData.major}
@@ -271,9 +271,9 @@ const Profile = () => {
 
                         {/* Right Column - Contact and Address Information */}
                         <Col xs={24} lg={12}>
-                            <div className="space-y-6">
+                            <div className="space-y-4 lg:space-y-6">
                                 {/* Row 1 */}
-                                <div className="flex gap-4">
+                                <div className="flex flex-col sm:flex-row gap-4">
                                     <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("E-mail", "E-mail")}
@@ -291,7 +291,7 @@ const Profile = () => {
                                 </div>
 
                                 {/* Row 2 */}
-                                <div className="flex gap-4">
+                                <div className="flex flex-col sm:flex-row gap-4">
                                     <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("บ้านเลขที่", "House Number")}
@@ -309,7 +309,7 @@ const Profile = () => {
                                 </div>
 
                                 {/* Row 3 */}
-                                <div className="flex gap-4">
+                                <div className="flex flex-col sm:flex-row gap-4">
                                     <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("อาคาร", "Building")}
@@ -327,7 +327,7 @@ const Profile = () => {
                                 </div>
 
                                 {/* Row 4 */}
-                                <div className="flex gap-4">
+                                <div className="flex flex-col sm:flex-row gap-4">
                                     <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("ตรอก/ซอย", "Alley")}
@@ -345,7 +345,7 @@ const Profile = () => {
                                 </div>
 
                                 {/* Row 5 */}
-                                <div className="flex gap-4">
+                                <div className="flex flex-col sm:flex-row gap-4">
                                     <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("ตำบล/แขวง", "Sub-district")}
@@ -363,7 +363,7 @@ const Profile = () => {
                                 </div>
 
                                 {/* Row 6 */}
-                                <div className="flex gap-4">
+                                <div className="flex flex-col sm:flex-row gap-4">
                                     <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("จังหวัด", "Province")}
@@ -381,7 +381,7 @@ const Profile = () => {
                                 </div>
 
                                 {/* Row 7 - Postal Code */}
-                                <div className="flex gap-4">
+                                <div className="flex flex-col sm:flex-row gap-4">
                                     <div className="flex-1">
                                         <IreDisplayField
                                             label={translate("รหัสไปรษณีย์", "Postal Code")}
@@ -404,7 +404,7 @@ const Profile = () => {
                     <Button
                         size="large"
                         onClick={handleEditAll}
-                        className="bg-white text-cyan-600 border-cyan-600 hover:bg-cyan-50 hover:border-cyan-700 rounded-lg px-8 py-2 font-medium transition-all duration-200"
+                        className="bg-white text-cyan-600 border-cyan-600 hover:bg-cyan-50 hover:border-cyan-700 rounded-lg px-6 lg:px-8 py-2 font-medium transition-all duration-200 w-full sm:w-auto"
                     >
                         {translate('แก้ไขทั้งหมด', 'Edit All')}
                     </Button>

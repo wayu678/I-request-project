@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Layout from "./layout/Layout";
+import MainTemplate from "./layout";
 
 import NotFound from "./pages/NotFound";
 import { Login } from "./pages/login";
@@ -22,51 +22,103 @@ const App = () => {
   return (
     <AuthProvider>
       <Routes>
-        {/* Routes without Layout (no sidebar) */}
+        {/* Routes without MainTemplate (no sidebar/header) - เฉพาะหน้า login */}
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Demo />} />
-        <Route path="/demo" element={<Demo />} />
-        <Route path="/demo/createRequest" element={<CreateRequest />} />
 
-        {/* Routes with Layout (with sidebar) */}
+        {/* Routes with MainTemplate (with sidebar/header) - ทุกหน้ายกเว้น login */}
+        <Route path="/" element={
+          <MainTemplate>
+            <Demo />
+          </MainTemplate>
+        } />
+        <Route path="/demo" element={
+          <MainTemplate>
+            <Demo />
+          </MainTemplate>
+        } />
+        <Route path="/demo/createRequest" element={
+          <MainTemplate>
+            <CreateRequest />
+          </MainTemplate>
+        } />
+        <Route path="/demo/general-request" element={
+          <MainTemplate>
+            <CreateRequest />
+          </MainTemplate>
+        } />
+        <Route path="/demo/registration-request" element={
+          <MainTemplate>
+            <CreateRequest />
+          </MainTemplate>
+        } />
+        <Route path="/demo/leave-absence" element={
+          <MainTemplate>
+            <CreateRequest />
+          </MainTemplate>
+        } />
+        <Route path="/demo/resignation" element={
+          <MainTemplate>
+            <CreateRequest />
+          </MainTemplate>
+        } />
+        <Route path="/demo/change-faculty" element={
+          <MainTemplate>
+            <CreateRequest />
+          </MainTemplate>
+        } />
+        <Route path="/demo/change-program" element={
+          <MainTemplate>
+            <CreateRequest />
+          </MainTemplate>
+        } />
+        <Route path="/demo/transfer-credits" element={
+          <MainTemplate>
+            <CreateRequest />
+          </MainTemplate>
+        } />
+
         <Route path="/dashboard" element={
           <ProtectedRoute>
-            <Layout>
+            <MainTemplate>
               <Dashboard />
-            </Layout>
+            </MainTemplate>
           </ProtectedRoute>
         } />
         <Route path="/make-up-exam" element={
-          <Layout>
+          <MainTemplate>
             <MakeUpExamForm />
-          </Layout>
+          </MainTemplate>
         } />
 
-        {/* Protected Routes with Layout */}
+        {/* Protected Routes with MainTemplate */}
         <Route path="/profile/*" element={
           <ProtectedRoute>
-            <Layout>
+            <MainTemplate>
               <ProfileRoutes />
-            </Layout>
+            </MainTemplate>
           </ProtectedRoute>
         } />
 
         <Route path="/irst07" element={
           <ProtectedRoute>
-            <Layout>
+            <MainTemplate>
               <RequestForPostponeTuitionandFeePayments />
-            </Layout>
+            </MainTemplate>
           </ProtectedRoute>
         } />
         <Route path="/irst07/detail" element={
           <ProtectedRoute>
-            <Layout>
+            <MainTemplate>
               <RequestForPostponeTuitionandFeePaymentsDetail />
-            </Layout>
+            </MainTemplate>
           </ProtectedRoute>
         } />
 
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={
+          <MainTemplate>
+            <NotFound />
+          </MainTemplate>
+        } />
       </Routes>
     </AuthProvider>
   )

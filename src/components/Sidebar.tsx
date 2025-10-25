@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Avatar, Spin } from 'antd';
 import {
     PieChartOutlined,
     FileTextOutlined,
     UserOutlined,
-    UpOutlined
+    UpOutlined,
+    CloseOutlined
 } from '@ant-design/icons';
 import { useTranslate } from '../provider/hooks/translate.hook';
 import { useAuth } from '../contexts/AuthContext';
@@ -18,12 +19,29 @@ interface MenuItem {
     path?: string;
 }
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const { translate, language } = useTranslate();
     const { user, isLoading, error } = useAuth();
     const [expandedMenus, setExpandedMenus] = useState<string[]>(['create-request']);
+
+    // ตรวจสอบและเปิดเมนูอัตโนมัติเมื่ออยู่ในหน้าเมนูย่อย
+    useEffect(() => {
+        const currentPath = location.pathname;
+
+        // ตรวจสอบว่าอยู่ในหน้าเมนูย่อยของ create-request หรือไม่
+        if (currentPath.startsWith('/demo') || currentPath.startsWith('/irst07') || currentPath.startsWith('/make-up-exam')) {
+            if (!expandedMenus.includes('create-request')) {
+                setExpandedMenus(prev => [...prev, 'create-request']);
+            }
+        }
+    }, [location.pathname, expandedMenus]);
 
     const menuItems: MenuItem[] = [
         {
@@ -33,19 +51,29 @@ const Sidebar: React.FC = () => {
             path: '/dashboard'
         },
         {
+            key: 'master-data',
+            label: translate('ข้อมูลหลัก', 'Master Data'),
+            icon: <FileTextOutlined className="text-base" />,
+            children: [
+                { key: 'master-account', label: translate('กำหนดผู้ใช้งาน', 'Manage Account'), path: '/demo/master-account' },
+                { key: 'master-request-type', label: translate('จัดการประเภทคำร้อง', 'Manage Request Type'), path: '/demo/master-request-type' },
+                { key: 'master-value', label: translate('กำหนดค่าหลัก', 'Manage Master Value'), path: '/demo/master-value' }
+            ]
+        },
+        {
             key: 'create-request',
             label: translate('สร้างคำร้อง', 'Create Request'),
             icon: <FileTextOutlined className="text-base" />,
             children: [
-                { key: 'general-request', label: translate('คำร้องทั่วไป', 'General Request'), path: '/demo/createRequest' },
-                { key: 'registration-request', label: translate('คำร้องขอลงทะเบียนเรียน', 'Request for Registration'), path: '/demo/createRequest' },
+                { key: 'general-request', label: translate('คำร้องทั่วไป', 'General Request'), path: '/demo/general-request' },
+                { key: 'registration-request', label: translate('คำร้องขอลงทะเบียนเรียน', 'Request for Registration'), path: '/demo/registration-request' },
                 { key: 'postpone-tuition', label: translate('คําร้องขอผ่อนผันค่าธรรมเนียมการศึกษา', 'Request for Postpone Tuition and Fee Payments'), path: '/irst07' },
-                { key: 'leave-absence', label: translate('คำร้องขอลาพักการศึกษา', 'Request for Leave of Absence'), path: '/demo/createRequest' },
-                { key: 'resignation', label: translate('คำร้องขอลาออก', 'Request for Resignation'), path: '/demo/createRequest' },
+                { key: 'leave-absence', label: translate('คำร้องขอลาพักการศึกษา', 'Request for Leave of Absence'), path: '/demo/leave-absence' },
+                { key: 'resignation', label: translate('คำร้องขอลาออก', 'Request for Resignation'), path: '/demo/resignation' },
                 { key: 'makeup-exam', label: translate('คำร้องขอสอบชดเชย', 'Request for a Make-up Exam'), path: '/make-up-exam' },
-                { key: 'change-faculty', label: translate('คำร้องขอย้ายคณะ', 'Request for Change of Faculty'), path: '/demo/createRequest' },
-                { key: 'change-program', label: translate('คําร้องขอย้ายหลักสูตรและสาขาวิชาเอกภายในคณะ', 'Request for Change of Program and Major within the same Faculty'), path: '/demo/createRequest' },
-                { key: 'transfer-credits', label: translate('คำร้องขอเทียบโอนรายวิชา', 'Request for Transfer Credits'), path: '/demo/createRequest' }
+                { key: 'change-faculty', label: translate('คำร้องขอย้ายคณะ', 'Request for Change of Faculty'), path: '/demo/change-faculty' },
+                { key: 'change-program', label: translate('คําร้องขอย้ายหลักสูตรและสาขาวิชาเอกภายในคณะ', 'Request for Change of Program and Major within the same Faculty'), path: '/demo/change-program' },
+                { key: 'transfer-credits', label: translate('คำร้องขอเทียบโอนรายวิชา', 'Request for Transfer Credits'), path: '/demo/transfer-credits' }
             ]
         },
         {
@@ -64,9 +92,15 @@ const Sidebar: React.FC = () => {
         );
     };
 
-    const handleMenuClick = (path?: string) => {
+    const handleMenuClick = (path?: string, parentKey?: string) => {
         if (path) {
             navigate(path);
+            // เปิดเมนูหลักเมื่อเลือกเมนูย่อย
+            if (parentKey && !expandedMenus.includes(parentKey)) {
+                setExpandedMenus(prev => [...prev, parentKey]);
+            }
+            // ปิด sidebar บน mobile เมื่อเลือกเมนู
+            onClose();
         }
     };
 
@@ -79,10 +113,6 @@ const Sidebar: React.FC = () => {
         return location.pathname === path;
     };
 
-    const isSubMenuActive = (children?: MenuItem[]) => {
-        if (!children) return false;
-        return children.some(child => isMenuActive(child.path));
-    };
 
     // Helper functions สำหรับการแสดงชื่อและ role
     const getUserDisplayName = (): string => {
@@ -140,7 +170,17 @@ const Sidebar: React.FC = () => {
     };
 
     return (
-        <div className="h-screen text-white flex flex-col fixed left-0 top-0 z-50 shadow-lg font-sans w-70" style={{ backgroundColor: '#2F3337' }}>
+        <div className={`h-screen text-white flex flex-col fixed left-0 top-0 z-50 shadow-lg font-sans w-70 lg:w-70 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`} style={{ backgroundColor: '#2F3337' }}>
+            {/* Mobile Close Button */}
+            <div className="lg:hidden flex justify-end p-4">
+                <button
+                    onClick={onClose}
+                    className="text-white hover:text-gray-300 transition-colors"
+                >
+                    <CloseOutlined className="text-xl" />
+                </button>
+            </div>
+
             {/* User Profile Section */}
             <div className="w-75 h-18 p-5 flex items-center gap-4">
                 <Avatar
@@ -188,19 +228,13 @@ const Sidebar: React.FC = () => {
                         {item.children ? (
                             <>
                                 <div
-                                    className={`flex items-center px-5 py-3 cursor-pointer transition-colors duration-200 text-white text-base font-normal ${isSubMenuActive(item.children) ? 'text-white' : ''
-                                        }`}
+                                    className="flex items-center px-5 py-3 cursor-pointer transition-colors duration-200 text-white text-base font-normal"
                                     onClick={() => toggleMenu(item.key)}
-                                    style={isSubMenuActive(item.children) ? { backgroundColor: '#339966' } : {}}
                                     onMouseEnter={(e) => {
-                                        if (!isSubMenuActive(item.children)) {
-                                            e.currentTarget.style.backgroundColor = '#404040';
-                                        }
+                                        e.currentTarget.style.backgroundColor = '#404040';
                                     }}
                                     onMouseLeave={(e) => {
-                                        if (!isSubMenuActive(item.children)) {
-                                            e.currentTarget.style.backgroundColor = '';
-                                        }
+                                        e.currentTarget.style.backgroundColor = '';
                                     }}
                                 >
                                     <div className="mr-3 flex items-center justify-center w-6 h-6">
@@ -219,7 +253,7 @@ const Sidebar: React.FC = () => {
                                                 key={child.key}
                                                 className={`px-5 py-2.5 pl-13 cursor-pointer transition-colors duration-200 text-white text-base leading-relaxed break-words font-normal relative ${isMenuActive(child.path) ? 'text-white' : ''
                                                     }`}
-                                                onClick={() => handleMenuClick(child.path)}
+                                                onClick={() => handleMenuClick(child.path, item.key)}
                                                 style={isMenuActive(child.path) ? { backgroundColor: '#339966' } : {}}
                                                 onMouseEnter={(e) => {
                                                     if (!isMenuActive(child.path)) {

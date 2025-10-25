@@ -495,7 +495,7 @@ html body div#root div.bg-gray-100 div.max-w-7xl.mx-auto.flex.flex-col.gap-2\.5 
 }
 
 /* ULTIMATE FORCE - Override ALL button styles */
-button.ant-btn,
+/* button.ant-btn,
 button.ant-btn-primary,
 .ant-table-tbody button,
 .ant-table-tbody button.ant-btn,
@@ -503,7 +503,7 @@ button.ant-btn-primary,
   height: 28px !important;
   min-height: 28px !important;
   max-height: 28px !important;
-}
+} */
 
 /* Force status button height */
 .ant-table-tbody button[disabled] {

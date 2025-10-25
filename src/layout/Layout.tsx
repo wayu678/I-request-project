@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 
@@ -7,11 +7,21 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+
+    const handleMenuClick = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
+
+    const handleSidebarClose = () => {
+        setSidebarOpen(false);
+    };
+
     return (
         <div className="flex min-h-screen">
-            <Sidebar />
+            <Sidebar isOpen={sidebarOpen} onClose={handleSidebarClose} />
             <div className="flex-1 ml-70 flex flex-col">
-                <Header />
+                <Header onMenuClick={handleMenuClick} />
                 <main className="flex-1">
                     {children}
                 </main>
