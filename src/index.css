@@ -520,9 +520,9 @@ button.ant-btn-primary,
 }
 
 /* Force Create Request button height */
-div.mb-2\.5 button,
-div.mb-2\.5 button.ant-btn,
-div.mb-2\.5 button.ant-btn-primary {
+div.mb-3 button,
+div.mb-3 button.ant-btn,
+div.mb-3 button.ant-btn-primary {
   height: 38px !important;
   min-height: 38px !important;
   max-height: 38px !important;
@@ -585,5 +585,15 @@ html body div#root div.bg-gray-100 div.max-w-7xl.mx-auto.flex.flex-col.gap-2\.5 
   height: 50px !important;
   min-height: 50px !important;
   max-height: 50px !important;
+}
+
+/* Force chart colors - Completed status */
+.recharts-sector[data-recharts-item-data-key="value"][data-recharts-item-index="3"] {
+  fill: #03BC77 !important;
+}
+
+/* Force legend colors */
+div[style*="background-color: rgb(82, 196, 26)"] {
+  background-color: #03BC77 !important;
 }
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import {
     Card,
     Row,
@@ -23,7 +24,8 @@ import {
     UserOutlined,
     CheckCircleOutlined,
     CalendarOutlined,
-
+    AppstoreOutlined,
+    BarsOutlined,
 } from '@ant-design/icons';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import {
@@ -42,7 +44,7 @@ const getChartData = (translate: (th: string, en: string) => string) => [
     { name: translate('ร่าง', 'Draft'), value: 45, color: '#8C8C8C' },
     { name: translate('กำลังดำเนินการ', 'In Progress'), value: 30, color: '#13C2C2' },
     { name: translate('ส่งกลับแก้ไข', 'Returned for Revision'), value: 15, color: '#FF4D4F' },
-    { name: translate('เสร็จสิ้น', 'Completed'), value: 10, color: '#52C41A' }
+    { name: translate('เสร็จสิ้น', 'Completed'), value: 10, color: '#03BC77' }
 ];
 
 // Mock data for table - will be translated in component
@@ -95,13 +97,14 @@ const getTableData = (translate: (th: string, en: string) => string) => [
         academicYear: '2568',
         requestType: 'คำร้องขอลงทะเบียนเรียน',
         status: 'เสร็จสิ้น',
-        statusColor: '#52C41A'
+        statusColor: '#03BC77'
     }
 ];
 
 const Dashboard: React.FC = () => {
     const { user } = useAuth();
     const { translate } = useTranslate();
+    const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize] = useState(5);
     const [loading, setLoading] = useState(true);
@@ -246,7 +249,7 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center">
-                    <span className="text-sm font-normal" style={{ color: '#006C68' }}>{translate('ลำดับ', 'NO')}</span>
+                    <span className="text-sm font-normal text-teal-700">{translate('ลำดับ', 'NO')}</span>
                 </Flex>
             ),
             dataIndex: 'no',
@@ -257,8 +260,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span className="text-sm font-normal" style={{ color: '#006C68' }}>{translate('วันที่เอกสาร', 'Document Date')}</span>
-                    <UpOutlined className="text-xs" style={{ color: '#02542D' }} />
+                    <span className="text-sm font-normal text-teal-700">{translate('วันที่เอกสาร', 'Document Date')}</span>
+                    <UpOutlined className="text-xs text-green-800" />
                 </Flex>
             ),
             dataIndex: 'documentDate',
@@ -269,8 +272,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span className="text-sm font-normal" style={{ color: '#006C68' }}>{translate('เทอม', 'Semester')}</span>
-                    <UpOutlined className="text-xs" style={{ color: '#02542D' }} />
+                    <span className="text-sm font-normal text-teal-700">{translate('เทอม', 'Semester')}</span>
+                    <UpOutlined className="text-xs text-green-800" />
                 </Flex>
             ),
             dataIndex: 'term',
@@ -282,8 +285,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span className="text-sm font-normal" style={{ color: '#006C68' }}>{translate('ปีการศึกษา', 'Academic Year')}</span>
-                    <UpOutlined className="text-xs" style={{ color: '#02542D' }} />
+                    <span className="text-sm font-normal text-teal-700">{translate('ปีการศึกษา', 'Academic Year')}</span>
+                    <UpOutlined className="text-xs text-green-800" />
                 </Flex>
             ),
             dataIndex: 'academicYear',
@@ -294,8 +297,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span className="text-sm font-normal" style={{ color: '#006C68' }}>{translate('ประเภทคำร้อง', 'Request Type')}</span>
-                    <UpOutlined className="text-xs" style={{ color: '#02542D' }} />
+                    <span className="text-sm font-normal text-teal-700">{translate('ประเภทคำร้อง', 'Request Type')}</span>
+                    <UpOutlined className="text-xs text-green-800" />
                 </Flex>
             ),
             dataIndex: 'requestType',
@@ -307,8 +310,8 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center" gap={4}>
-                    <span className="text-sm font-normal" style={{ color: '#006C68' }}>{translate('สถานะคำร้อง', 'Status')}</span>
-                    <UpOutlined className="text-xs" style={{ color: '#02542D' }} />
+                    <span className="text-sm font-normal text-teal-700">{translate('สถานะคำร้อง', 'Status')}</span>
+                    <UpOutlined className="text-xs text-green-800" />
                 </Flex>
             ),
             dataIndex: 'status',
@@ -337,7 +340,7 @@ const Dashboard: React.FC = () => {
 
                 return (
                     <Button
-                        className="rounded-2xl w-36 h-7 text-xs font-normal px-3 cursor-default"
+                        className="rounded-2xl w-36 h-8 text-xs font-normal px-3 cursor-default text-white"
                         style={{
                             backgroundColor: statusColor,
                             borderColor: statusColor,
@@ -353,7 +356,7 @@ const Dashboard: React.FC = () => {
         {
             title: (
                 <Flex align="center" justify="center">
-                    <span className="text-sm font-normal" style={{ color: '#006C68' }}>{translate('ดำเนินการ', 'Action')}</span>
+                    <span className="text-sm font-normal text-teal-700">{translate('ดำเนินการ', 'Action')}</span>
                 </Flex>
             ),
             key: 'action',
@@ -363,7 +366,7 @@ const Dashboard: React.FC = () => {
                 <Button
                     type="primary"
                     icon={<EditOutlined />}
-                    className="rounded w-28 h-10"
+                    className="rounded w-28 h-8"
                     style={{ backgroundColor: '#17A2B8', borderColor: '#17A2B8', boxShadow: 'none' }}
                 >
                     {translate('View', 'View')}
@@ -380,9 +383,9 @@ const Dashboard: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="bg-gray-100" style={{ paddingTop: '0px', paddingBottom: '10px', paddingLeft: '10px', paddingRight: '10px' }}>
+            <div className="bg-gray-100 pt-0 pb-3 px-3">
                 <div className="max-w-7xl mx-auto">
-                    <Card className="shadow-sm">
+                    <Card>
                         <div className="text-center py-12">
                             <Spin size="large" />
                             <div className="mt-4 text-gray-600">กำลังโหลดข้อมูล...</div>
@@ -394,14 +397,14 @@ const Dashboard: React.FC = () => {
     }
 
     return (
-        <div className="bg-gray-100" style={{ paddingTop: '0px', paddingBottom: '10px', paddingLeft: '10px', paddingRight: '10px' }}>
-            <div className="max-w-7xl mx-auto flex flex-col gap-2.5">
+        <div className="bg-gray-100 pt-0 pb-3 px-3">
+            <div className="max-w-7xl mx-auto flex flex-col gap-3">
                 {/* First Section - Dashboard Content */}
-                <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="bg-white rounded-lg p-6">
                     {/* Header inside Card */}
                     <Flex align="center" justify="space-between" className="mb-8">
                         <Flex align="center">
-                            <UnorderedListOutlined className="mr-3 text-lg" />
+                            <UnorderedListOutlined className="text-lg text-black mr-3" />
                             <span className="text-lg font-normal text-black">{translate('แดชบอร์ด', 'Dashboard')}</span>
                         </Flex>
                     </Flex>
@@ -449,7 +452,7 @@ const Dashboard: React.FC = () => {
                         {/* Right Side - Filters */}
                         <Col xs={24} lg={12}>
                             <div className="p-5">
-                                <Flex vertical gap={5} className="w-full max-w-md">
+                                <Flex vertical gap={4} className="w-full max-w-md">
                                     {renderIreCalendar(translate("เดือน", "Month"), "month", "MM", "MM")}
                                     <IreSelect
                                         label={translate("เทอม", "Semester")}
@@ -475,18 +478,18 @@ const Dashboard: React.FC = () => {
                 </div>
 
                 {/* Second Section - Table Section */}
-                <div className="bg-white rounded-lg shadow-sm">
+                <div className="bg-white rounded-lg">
                     <div className="p-5">
                         {/* Create Request Button - Only for Students */}
                         {isStudent && (
-                            <div className="mb-2.5">
+                            <div className="mb-3">
                                 <Flex justify="flex-end">
                                     <Button
                                         type="primary"
-                                        size="large"
                                         icon={<PlusOutlined />}
-                                        className="rounded-md w-40 h-38 shadow-none"
+                                        className="rounded-md w-40"
                                         style={{ backgroundColor: '#339966', borderColor: '#339966', boxShadow: 'none' }}
+                                        onClick={() => navigate('/irst07')}
                                     >
                                         {translate('สร้างคำร้อง', 'Create Request')}
                                         <DownOutlined className="text-xs ml-2" />
@@ -503,27 +506,7 @@ const Dashboard: React.FC = () => {
                                 pagination={false}
                                 size="middle"
                                 loading={loading}
-                                rowClassName={() => 'table-row-custom'}
                                 className="border-0"
-                                style={{
-                                    backgroundColor: '#FFFFFF',
-                                    '--table-header-bg': '#BAE2CF',
-                                    '--table-header-text': '#006C68',
-                                    '--table-header-icon': '#02542D'
-                                } as React.CSSProperties}
-                                components={{
-                                    header: {
-                                        cell: (props: any) => (
-                                            <th {...props} style={{
-                                                backgroundColor: '#BAE2CF',
-                                                color: '#006C68',
-                                                border: 'none'
-                                            }}>
-                                                {props.children}
-                                            </th>
-                                        )
-                                    }
-                                }}
                             />
                         </div>
 

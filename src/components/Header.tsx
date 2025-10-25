@@ -70,7 +70,6 @@ const Header: React.FC = () => {
         <div className="bg-gray-100" style={{ marginTop: '10px', marginBottom: '10px', paddingLeft: '10px', paddingRight: '10px' }}>
             <div className="max-w-7xl mx-auto">
                 <Card
-                    className="shadow-sm"
                     style={{
                         height: '60px',
                         borderRadius: '8px'
