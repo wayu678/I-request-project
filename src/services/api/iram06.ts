@@ -51,7 +51,7 @@ export const useIram06Service = () => {
             try {
                 console.log('[start][saveMasterValueHeaderPost] request: ', request);
 
-                const response = await fetch('http://localhost:8080/api/iram06/save-master-value-header', {
+                const response = await fetch('/api/iram06/save-master-value-header', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -77,7 +77,7 @@ export const useIram06Service = () => {
             try {
                 console.log('[start][saveMasterValueDetailPost] request: ', request);
 
-                const response = await fetch('http://localhost:8080/api/iram06/save-master-value-detail', {
+                const response = await fetch('/api/iram06/save-master-value-detail', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -106,7 +106,7 @@ export const useIram06Service = () => {
                 const queryParams = new URLSearchParams();
                 if (request.masterValueCode) queryParams.append('masterValueCode', request.masterValueCode);
 
-                const response = await fetch(`http://localhost:8080/api/iram06/find-master-value-header?${queryParams}`, {
+                const response = await fetch(`/api/iram06/find-master-value-header?${queryParams}`, {
                     method: 'GET',
                     credentials: 'include'
                 });
@@ -132,7 +132,7 @@ export const useIram06Service = () => {
                 if (request.masterValueDetailCode) queryParams.append('masterValueDetailCode', request.masterValueDetailCode);
                 if (request.masterValueHeaderId) queryParams.append('masterValueHeaderId', request.masterValueHeaderId.toString());
 
-                const response = await fetch(`http://localhost:8080/api/iram06/find-master-value-detail?${queryParams}`, {
+                const response = await fetch(`/api/iram06/find-master-value-detail?${queryParams}`, {
                     method: 'GET',
                     credentials: 'include'
                 });
@@ -157,7 +157,7 @@ export const useIram06Service = () => {
                 const queryParams = new URLSearchParams();
                 queryParams.append('masterValueHeaderId', request.masterValueHeaderId.toString());
 
-                const response = await fetch(`http://localhost:8080/api/iram06/find-master-value-details-by-header?${queryParams}`, {
+                const response = await fetch(`/api/iram06/find-master-value-details-by-header?${queryParams}`, {
                     method: 'GET',
                     credentials: 'include'
                 });

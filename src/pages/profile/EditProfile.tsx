@@ -86,12 +86,12 @@ const EditProfile = () => {
 
 
     return (
-        <div className="profile-container">
-            <div className="profile-content-wrapper">
+        <div className="min-h-screen bg-gray-100 p-6">
+            <div className="max-w-7xl mx-auto">
                 {/* Edit Form */}
-                <Card className="profile-card">
+                <Card className="shadow-sm mb-6">
                     {/* Header inside Card */}
-                    <Flex align="center" justify="space-between" style={{ marginBottom: '30px' }}>
+                    <Flex align="center" justify="space-between" className="mb-8">
                         <Flex align="center">
                             <div className="flex items-center mr-3">
                                 <div className="flex flex-col mr-1.5">
@@ -111,12 +111,12 @@ const EditProfile = () => {
                             type="text"
                             icon={<LogoutOutlined />}
                             onClick={() => navigate('/login')}
-                            className="profile-logout-btn"
+                            className="text-red-600 hover:text-red-700"
                         >
                             {translate('ออกจากระบบ', 'Logout')}
                         </Button>
                     </Flex>
-                    <div className="profile-grid">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                         {/* Left Column - Personal and Academic Information */}
                         <Col xs={24} lg={12}>
                             <div className="space-y-6">
@@ -370,11 +370,11 @@ const EditProfile = () => {
                 </Card >
 
                 {/* Action Buttons outside Card */}
-                < div className="profile-actions" >
+                <div className="flex justify-end gap-3">
                     <Button
                         size="large"
                         onClick={handleCancel}
-                        className="profile-btn profile-btn-cancel"
+                        className="bg-white text-green-600 border-green-600 hover:bg-green-50 hover:border-green-700 rounded-lg px-8 py-2 font-medium transition-all duration-200"
                     >
                         {translate('Cancel', 'Cancel')}
                     </Button>
@@ -382,13 +382,13 @@ const EditProfile = () => {
                         size="large"
                         loading={isLoading}
                         onClick={handleSave}
-                        className="profile-btn profile-btn-save"
+                        className="bg-green-600 text-white border-green-600 hover:bg-green-700 hover:border-green-700 rounded-lg px-8 py-2 font-medium transition-all duration-200"
                     >
                         {translate('Save', 'Save')}
                     </Button>
-                </div >
-            </div >
-        </div >
+                </div>
+            </div>
+        </div>
     );
 };
 

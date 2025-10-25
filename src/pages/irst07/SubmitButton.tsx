@@ -50,7 +50,7 @@ const SubmitButton = ({ formData }: SubmitButtonProps) => {
       console.log("Processed data for API:", processedData);
 
       // ส่งข้อมูลไปยัง API เพื่อบันทึกลงฐานข้อมูล
-      const response = await fetch('http://localhost:8080/api/irst07/create-request-post', {
+      const response = await fetch('/api/irst07/create-request-post', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -114,7 +114,7 @@ const SubmitButton = ({ formData }: SubmitButtonProps) => {
       console.log("Processed data for API:", processedData);
 
       // ส่งข้อมูลไปยัง API เพื่อบันทึกลงฐานข้อมูล
-      const response = await fetch('http://localhost:8080/api/irst07/create-request-post', {
+      const response = await fetch('/api/irst07/create-request-post', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

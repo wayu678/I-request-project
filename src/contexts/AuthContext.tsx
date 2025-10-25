@@ -41,16 +41,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const getCurrentUser = async (): Promise<User | null> => {
         try {
-            const response = await fetch('http://localhost:8080/api/auth/current-user', {
-                method: 'GET',
-                credentials: 'include'
-            });
+            // Mock data for development
+            const mockUser: User = {
+                id: 1,
+                username: 'testuser',
+                email: 'test@example.com',
+                roleCode: 'STUDENT',
+                campusCode: 'BANGKOK'
+            };
 
-            if (response.ok) {
-                const userData = await response.json();
-                return userData;
-            }
-            return null;
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            return mockUser;
         } catch (error) {
             console.error('Error getting current user:', error);
             return null;
@@ -80,7 +83,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         try {
             setIsLoading(true);
 
-            const response = await fetch('http://localhost:8080/api/auth/login', {
+            const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -107,7 +110,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const logout = async (): Promise<void> => {
         try {
-            await fetch('http://localhost:8080/api/auth/logout', {
+            await fetch('/api/auth/logout', {
                 method: 'POST',
                 credentials: 'include' // ส่ง cookies อัตโนมัติ
             });

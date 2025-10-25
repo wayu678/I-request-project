@@ -58,7 +58,7 @@ const Profile = () => {
             setLoading(true);
             console.log('📋 Profile: Loading profile data via API...');
 
-            const response = await fetch('http://localhost:8080/api/user/profile', {
+            const response = await fetch('/api/user/profile', {
                 method: 'GET',
                 credentials: 'include' // ส่ง cookies อัตโนมัติ
             });
@@ -87,7 +87,7 @@ const Profile = () => {
         try {
             console.log('🚪 Profile: Starting logout...');
 
-            await fetch('http://localhost:8080/api/auth/logout', {
+            await fetch('/api/auth/logout', {
                 method: 'POST',
                 credentials: 'include' // ส่ง cookies อัตโนมัติ
             });
@@ -103,7 +103,7 @@ const Profile = () => {
 
     if (loading) {
         return (
-            <div className="profile-loading-container">
+            <div className="min-h-screen bg-gray-100 p-6 flex items-center justify-center">
                 <Spin size="large" />
             </div>
         );
@@ -111,14 +111,14 @@ const Profile = () => {
 
     if (!profileData) {
         return (
-            <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
-                <Card>
+            <div className="min-h-screen bg-gray-100 p-6 flex items-center justify-center">
+                <Card className="shadow-sm">
                     <div className="text-center">
                         <div className="text-lg text-gray-700 mb-4">{translate('ไม่สามารถโหลดข้อมูล Profile ได้', 'Unable to load Profile data')}</div>
                         <Button
                             type="primary"
                             onClick={loadProfileData}
-                            className="profile-btn profile-btn-primary profile-retry-btn"
+                            className="bg-blue-600 border-blue-600 hover:bg-blue-700 hover:border-blue-700"
                         >
                             {translate('ลองใหม่', 'Try Again')}
                         </Button>
@@ -129,12 +129,12 @@ const Profile = () => {
     }
 
     return (
-        <div className="profile-container">
-            <div className="profile-content-wrapper">
+        <div className="min-h-screen bg-gray-100 p-6">
+            <div className="max-w-7xl mx-auto">
                 {/* Profile Content */}
-                <Card className="profile-card">
+                <Card className="shadow-sm mb-6">
                     {/* Header inside Card */}
-                    <Flex align="center" justify="space-between" style={{ marginBottom: '30px' }}>
+                    <Flex align="center" justify="space-between" className="mb-8">
                         <Flex align="center">
                             <div className="flex items-center mr-3">
                                 <div className="flex flex-col mr-1.5">
@@ -148,18 +148,18 @@ const Profile = () => {
                                     <div className="w-2 h-0.5 bg-black"></div>
                                 </div>
                             </div>
-                            <span className="text-lg font-normal text-black" style={{ fontWeight: 'normal', fontSize: '18px' }}>{translate('โปรไฟล์', 'Profile')}</span>
+                            <span className="text-lg font-normal text-black">{translate('โปรไฟล์', 'Profile')}</span>
                         </Flex>
                         <Button
                             type="text"
                             icon={<LogoutOutlined />}
                             onClick={handleLogout}
-                            className="profile-logout-btn"
+                            className="text-red-600 hover:text-red-700"
                         >
                             {translate('ออกจากระบบ', 'Logout')}
                         </Button>
                     </Flex>
-                    <div className="profile-grid">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                         {/* Left Column - Personal and Academic Information */}
                         <Col xs={24} lg={12}>
                             <div className="space-y-6">
@@ -400,11 +400,11 @@ const Profile = () => {
                 </Card>
 
                 {/* Edit Button outside Card */}
-                <div className="profile-actions">
+                <div className="flex justify-end">
                     <Button
                         size="large"
                         onClick={handleEditAll}
-                        className="profile-btn profile-btn-edit"
+                        className="bg-white text-cyan-600 border-cyan-600 hover:bg-cyan-50 hover:border-cyan-700 rounded-lg px-8 py-2 font-medium transition-all duration-200"
                     >
                         {translate('แก้ไขทั้งหมด', 'Edit All')}
                     </Button>

@@ -3,7 +3,7 @@ import { authService } from '../auth/auth.service';
 
 // สร้าง axios instance
 export const apiClient = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: '/api',
   timeout: 10000,
 });
 

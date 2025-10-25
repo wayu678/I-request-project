@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
-export * from './AuthenticationApi';
+export * from './AUTHENTICATIONApi';
 export * from './IRST05GeneralRequestApi';
-export * from './IRST07PostponeTuitionFeePaymentRequestApi';
-export * from './StudentManagementApi';
-export * from './UserManagementApi';
+export * from './IRST07POSTPONETUITIONFEEPAYMENTREQUESTApi';
+export * from './STUDENTMANAGEMENTApi';
+export * from './USERMANAGEMENTApi';

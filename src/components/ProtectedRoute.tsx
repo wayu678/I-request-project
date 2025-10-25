@@ -18,7 +18,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     const checkAuth = async () => {
         try {
             // ตรวจสอบจาก cookies โดยการเรียก API
-            const response = await fetch('http://localhost:8080/api/auth/current-user', {
+            const response = await fetch('/api/auth/current-user', {
                 method: 'GET',
                 credentials: 'include' // ส่ง cookies อัตโนมัติ
             });

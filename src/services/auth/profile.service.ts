@@ -41,7 +41,7 @@ class ProfileService {
         try {
             console.log('📋 ProfileService: Loading profile data via API...');
 
-            const response = await fetch('http://localhost:8080/api/user/profile', {
+            const response = await fetch('/api/user/profile', {
                 method: 'GET',
                 credentials: 'include' // ส่ง cookies อัตโนมัติ
             });
@@ -65,7 +65,7 @@ class ProfileService {
         try {
             console.log('💾 ProfileService: Saving profile data via API...');
 
-            const response = await fetch('http://localhost:8080/api/user/profile', {
+            const response = await fetch('/api/user/profile', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

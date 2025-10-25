@@ -45,7 +45,7 @@ const PostponeTuitionFormPage = ({ onFormChange, studentData }: PostponeTuitionF
     // ดึงข้อมูล user จาก JWT token
     const fetchCurrentUser = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/auth/current-user', {
+        const response = await fetch('/api/auth/current-user', {
           method: 'GET',
           credentials: 'include'
         });
