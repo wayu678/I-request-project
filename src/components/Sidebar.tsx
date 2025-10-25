@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Avatar } from 'antd';
+import { Avatar, Spin } from 'antd';
 import {
     PieChartOutlined,
     FileTextOutlined,
@@ -8,6 +8,7 @@ import {
     UpOutlined
 } from '@ant-design/icons';
 import { useTranslate } from '../provider/hooks/translate.hook';
+import { useAuth } from '../contexts/AuthContext';
 
 interface MenuItem {
     key: string;
@@ -20,7 +21,8 @@ interface MenuItem {
 const Sidebar: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { translate } = useTranslate();
+    const { translate, language } = useTranslate();
+    const { user, isLoading, error } = useAuth();
     const [expandedMenus, setExpandedMenus] = useState<string[]>(['create-request']);
 
     const menuItems: MenuItem[] = [
@@ -82,6 +84,61 @@ const Sidebar: React.FC = () => {
         return children.some(child => isMenuActive(child.path));
     };
 
+    // Helper functions สำหรับการแสดงชื่อและ role
+    const getUserDisplayName = (): string => {
+        if (!user) {
+            return translate('นายสมมติ นามสกุล', 'Mr. Sample Lastname');
+        }
+
+        // ใช้ชื่อจริงจาก API หรือ fallback เป็น username
+        const displayName = language === 'TH'
+            ? (user.fullNameTH || user.username)
+            : (user.fullNameEN || user.username);
+
+        return displayName || translate('นายสมมติ นามสกุล', 'Mr. Sample Lastname');
+    };
+
+    const getUserRoleDescription = (): string => {
+        if (!user) {
+            return translate('นิสิตปัจจุบัน', 'Current Student');
+        }
+
+        // ใช้ role description จาก API หรือ fallback เป็น default
+        const roleDescription = language === 'TH'
+            ? (user.roleDescriptionTH || getDefaultRoleDescription(user.roleCode, 'TH'))
+            : (user.roleDescriptionEN || getDefaultRoleDescription(user.roleCode, 'EN'));
+
+        return roleDescription || translate('นิสิตปัจจุบัน', 'Current Student');
+    };
+
+    const getDefaultRoleDescription = (roleCode: string, lang: 'TH' | 'EN'): string => {
+        const roleMap = {
+            'STUDENT': {
+                TH: 'นิสิตปัจจุบัน',
+                EN: 'Current Student'
+            },
+            'ADMIN': {
+                TH: 'ผู้ดูแลระบบ',
+                EN: 'Administrator'
+            },
+            'STAFF': {
+                TH: 'เจ้าหน้าที่',
+                EN: 'Staff'
+            },
+            'FACULTY': {
+                TH: 'อาจารย์',
+                EN: 'Faculty'
+            },
+            'APPROVER': {
+                TH: 'ผู้อนุมัติ',
+                EN: 'Approver'
+            }
+        };
+
+        const role = roleMap[roleCode as keyof typeof roleMap];
+        return role ? role[lang] : roleCode;
+    };
+
     return (
         <div className="h-screen text-white flex flex-col fixed left-0 top-0 z-50 shadow-lg font-sans w-70" style={{ backgroundColor: '#2F3337' }}>
             {/* User Profile Section */}
@@ -92,12 +149,32 @@ const Sidebar: React.FC = () => {
                     className="flex-shrink-0"
                 />
                 <div className="flex-1">
-                    <div className="font-normal leading-tight mb-1 text-sm" style={{ color: '#22C488', fontSize: '14px' }}>
-                        {translate('นายสมมติ นามสกุล', 'Mr. Sample Lastname')}
-                    </div>
-                    <div className="leading-tight font-normal text-xs" style={{ color: '#FFFFFF', fontSize: '10px' }}>
-                        {translate('นิสิตปัจจุบัน', 'Current Student')}
-                    </div>
+                    {isLoading ? (
+                        <div className="flex items-center gap-2">
+                            <Spin size="small" />
+                            <span className="text-xs text-gray-400">
+                                {translate('กำลังโหลด...', 'Loading...')}
+                            </span>
+                        </div>
+                    ) : error ? (
+                        <div className="flex flex-col">
+                            <div className="text-xs text-red-400 mb-1">
+                                {translate('เกิดข้อผิดพลาด', 'Error occurred')}
+                            </div>
+                            <div className="text-xs text-gray-400">
+                                {translate('ไม่สามารถโหลดข้อมูลผู้ใช้ได้', 'Cannot load user data')}
+                            </div>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="font-normal leading-tight mb-1 text-sm" style={{ color: '#22C488', fontSize: '14px' }}>
+                                {getUserDisplayName()}
+                            </div>
+                            <div className="leading-tight font-normal text-xs" style={{ color: '#FFFFFF', fontSize: '10px' }}>
+                                {getUserRoleDescription()}
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
 
