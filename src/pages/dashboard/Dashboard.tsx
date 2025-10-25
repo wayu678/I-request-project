@@ -23,6 +23,7 @@ import {
     UserOutlined,
     CheckCircleOutlined,
     CalendarOutlined,
+
 } from '@ant-design/icons';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import {
@@ -105,7 +106,7 @@ const Dashboard: React.FC = () => {
     const [pageSize] = useState(5);
     const [loading, setLoading] = useState(true);
 
-    // สร้างฟังก์ชันสำหรับข้อมูล default ที่สวยงาม
+    // สร้างฟังก์ชันสำหรับข้อมูล default 
     const getDefaultChartData = (translate: (th: string, en: string) => string): DashboardSummaryItem[] => [
         { name: translate('ร่าง', 'Draft'), value: 1, color: '#989898' },
         { name: translate('กำลังดำเนินการ', 'In Progress'), value: 1, color: '#17A2B8' },
@@ -400,18 +401,7 @@ const Dashboard: React.FC = () => {
                     {/* Header inside Card */}
                     <Flex align="center" justify="space-between" className="mb-8">
                         <Flex align="center">
-                            <div className="flex items-center mr-3">
-                                <div className="flex flex-col mr-1.5">
-                                    <div className="w-0.5 h-0.5 bg-black mb-0.5"></div>
-                                    <div className="w-0.5 h-0.5 bg-black mb-0.5"></div>
-                                    <div className="w-0.5 h-0.5 bg-black"></div>
-                                </div>
-                                <div className="flex flex-col">
-                                    <div className="w-2 h-0.5 bg-black mb-0.5"></div>
-                                    <div className="w-2 h-0.5 bg-black mb-0.5"></div>
-                                    <div className="w-2 h-0.5 bg-black"></div>
-                                </div>
-                            </div>
+                            <UnorderedListOutlined className="mr-3 text-lg" />
                             <span className="text-lg font-normal text-black">{translate('แดชบอร์ด', 'Dashboard')}</span>
                         </Flex>
                     </Flex>
