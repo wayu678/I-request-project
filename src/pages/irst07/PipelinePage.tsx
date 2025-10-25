@@ -24,8 +24,8 @@ const PipelinePage = ({ currentStep = 0 }: PipelinePageProps) => {
     ]
 
     return (
-        <div className="w-full flex justify-center">
-            <Card className="w-full max-w-6xl px-6 py-4">
+        <div className="bg-white rounded-lg">
+            <div className="p-5">
                 <Row>
                     <Col span={24}>
                         <Steps
@@ -41,7 +41,7 @@ const PipelinePage = ({ currentStep = 0 }: PipelinePageProps) => {
                         />
                     </Col>
                 </Row>
-            </Card>
+            </div>
         </div>
     )
 }

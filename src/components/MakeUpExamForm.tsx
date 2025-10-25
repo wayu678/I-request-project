@@ -233,7 +233,16 @@ const MakeUpExamForm: React.FC<MakeUpExamFormProps> = ({ onSubmit }) => {
                     name="documents"
                 >
                     <Upload {...uploadProps}>
-                        <Button icon={<UploadOutlined />} className="bg-green-500 text-white border-green-500 hover:bg-green-600">
+                        <Button
+                            icon={<UploadOutlined />}
+                            style={{
+                                backgroundColor: '#339966',
+                                borderColor: '#339966',
+                                color: 'white',
+                                height: '38px'
+                            }}
+                            className="hover:bg-[#2d8555]"
+                        >
                             + Choose
                         </Button>
                     </Upload>

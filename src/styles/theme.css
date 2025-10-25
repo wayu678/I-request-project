@@ -1,0 +1,124 @@
+/* CSS Variables for consistent theming */
+:root {
+  --primary-color: #339966;
+  --primary-hover: #2d8555;
+  --primary-light: #f0f9f4;
+  --border-color: #99CCB3;
+  --border-focus: rgba(153, 204, 179, 0.2);
+  --text-primary: #000000;
+  --text-secondary: rgba(0, 0, 0, 0.25);
+  --text-error: #ff4d4f;
+  --bg-white: #ffffff;
+  --bg-gray: #f2f2f2;
+  --bg-gray-light: #f5f5f5;
+  --table-header-bg: #bae2cf;
+  --table-header-text: #006c68;
+  --table-header-icon: #02542d;
+  --table-border: #bae2cf;
+}
+
+/* Base styles */
+* {
+  font-family: "Sarabun", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-inline-size: 320px;
+  min-block-size: 100vh;
+  background-color: var(--bg-gray);
+}
+
+/* Button styles */
+.btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+}
+
+.btn-outline {
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+  background-color: var(--bg-white) !important;
+}
+
+.btn-outline:hover {
+  background-color: var(--primary-light) !important;
+}
+
+/* Form styles */
+.form-input {
+  border-color: var(--border-color) !important;
+  background-color: var(--bg-white) !important;
+}
+
+.form-input:hover,
+.form-input:focus {
+  border-color: var(--border-color) !important;
+  box-shadow: 0 0 0 2px var(--border-focus) !important;
+}
+
+/* Table styles */
+.table-header {
+  background-color: var(--table-header-bg) !important;
+  border: none !important;
+}
+
+.table-header th {
+  background-color: var(--table-header-bg) !important;
+  color: var(--table-header-text) !important;
+  border: none !important;
+}
+
+.table-header th .anticon {
+  color: var(--table-header-icon) !important;
+}
+
+.table-body tr:nth-child(odd) {
+  background-color: var(--bg-gray-light) !important;
+}
+
+.table-body tr:nth-child(even) {
+  background-color: var(--bg-white) !important;
+}
+
+.table-body td {
+  border-bottom: 1px solid var(--table-border) !important;
+  background-color: inherit !important;
+}
+
+/* Status colors */
+.status-draft { color: #989898; }
+.status-progress { color: #17a2b8; }
+.status-revision { color: #ff3b30; }
+.status-cancelled { color: #ff9d00; }
+.status-completed { color: #03bc77; }
+
+/* Utility classes */
+.text-error { color: var(--text-error); }
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.bg-primary { background-color: var(--primary-color); }
+.bg-white { background-color: var(--bg-white); }
+
+/* Required field marker */
+.is-required::after {
+  content: " *";
+  color: var(--text-error);
+}
+
+/* Login background */
+.login-bg {
+  background-image: url("https://f.tpkcdn.com/images-720/b9bd86edddd99b27b95cf3896ff2517f.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}

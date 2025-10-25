@@ -70,6 +70,10 @@ const Sidebar: React.FC = () => {
 
     const isMenuActive = (path?: string) => {
         if (!path) return false;
+        // สำหรับ irst07 ให้ตรวจสอบทั้ง /irst07 และ /irst07/detail
+        if (path === '/irst07') {
+            return location.pathname === '/irst07' || location.pathname === '/irst07/detail';
+        }
         return location.pathname === path;
     };
 

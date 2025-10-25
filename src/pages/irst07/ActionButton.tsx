@@ -1,0 +1,178 @@
+import { message } from "antd";
+import { useNavigate } from "react-router-dom";
+import { useTranslate } from "../../provider/hooks/translate.hook";
+import { useState } from "react";
+import type { PostponeTuitionFormData } from "../../services/api/postponeTuitionService";
+import { processPostponeTuitionData, validateRequiredFields } from "../../utils/dataProcessor";
+
+interface ActionButtonProps {
+    formData?: Partial<PostponeTuitionFormData>;
+    studentData?: any;
+    mode: "save" | "submit";
+}
+
+const ActionButton = ({ formData, studentData, mode }: ActionButtonProps) => {
+    const navigate = useNavigate();
+    const { translate } = useTranslate();
+    const [loading, setLoading] = useState(false);
+
+    // ฟังก์ชันบันทึกข้อมูลนิสิต (หน้าแรก)
+    const handleSaveStudentData = async () => {
+        try {
+            setLoading(true);
+            console.log("Save student data:", studentData);
+
+            if (!studentData) {
+                message.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+                return;
+            }
+
+            const requiredFields = ['studentName', 'studentId', 'faculty', 'major', 'phoneNumber', 'email'];
+            const missingFields = requiredFields.filter(field => !studentData[field]);
+
+            if (missingFields.length > 0) {
+                message.error(`กรุณากรอกข้อมูลให้ครบถ้วน: ${missingFields.join(', ')}`);
+                return;
+            }
+
+            localStorage.setItem('studentData', JSON.stringify(studentData));
+            console.log('Student data saved to localStorage:', studentData);
+
+            message.success("บันทึกข้อมูลนิสิตเรียบร้อย");
+            navigate("/irst07/detail");
+        } catch (error) {
+            console.error('Error saving data:', error);
+            message.error("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // ฟังก์ชันร่วมสำหรับบันทึกและส่งคำร้อง
+    const handleRequest = async (action: 'save' | 'submit') => {
+        try {
+            setLoading(true);
+            console.log(`${action === 'save' ? 'Saving' : 'Submitting'} form data:`, formData);
+
+            // โหลดข้อมูลจาก localStorage
+            const savedStudentData = localStorage.getItem('studentData');
+            let combinedData = { ...formData };
+
+            if (savedStudentData) {
+                const studentData = JSON.parse(savedStudentData);
+                console.log('Loaded student data from localStorage:', studentData);
+                combinedData = {
+                    ...formData,
+                    studentCode: formData?.studentCode || studentData.studentId || '',
+                };
+            }
+
+            console.log("Combined data:", combinedData);
+
+            // ตรวจสอบข้อมูล
+            const missingFields = validateRequiredFields(combinedData);
+            console.log("Missing fields:", missingFields);
+
+            if (missingFields.length > 0) {
+                message.error(translate(`กรุณากรอกข้อมูลให้ครบถ้วน: ${missingFields.join(', ')}`, "Please fill in all required fields"));
+                return;
+            }
+
+            // ประมวลผลข้อมูล
+            const processedData = processPostponeTuitionData(combinedData);
+            console.log("Processed data for API:", processedData);
+
+            // ส่งข้อมูลไปยัง API
+            const response = await fetch('/api/irst07/create-request-post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    postponeTuitionFee: processedData
+                })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log(`Request ${action}ed successfully:`, result);
+
+                const successMessage = action === 'save'
+                    ? translate("บันทึกคำร้องสำเร็จ", "Saved successfully")
+                    : translate("ส่งข้อมูลเรียบร้อย", "Submit successfully");
+                message.success(successMessage);
+            } else {
+                const error = await response.json();
+                console.error(`Error ${action}ing request:`, error);
+
+                const errorMessage = action === 'save'
+                    ? translate(`บันทึกคำร้องไม่สำเร็จ: ${error.message || 'Unknown error'}`, "Save failed")
+                    : translate(`ส่งข้อมูลไม่สำเร็จ: ${error.message || 'Unknown error'}`, "Submit failed");
+                message.error(errorMessage);
+            }
+        } catch (error) {
+            console.error(`Error ${action}ing request:`, error);
+
+            const errorMessage = action === 'save'
+                ? translate("เกิดข้อผิดพลาดในการบันทึกคำร้อง", "Save error")
+                : translate("เกิดข้อผิดพลาดในการส่งข้อมูล", "Submit error");
+            message.error(errorMessage);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // กำหนดการทำงานตามโหมด
+    const handleAction = () => {
+        if (mode === "save") {
+            if (studentData) {
+                handleSaveStudentData();
+            } else if (formData) {
+                handleRequest('save');
+            }
+        } else if (mode === "submit") {
+            handleRequest('submit');
+        }
+    };
+
+    // สร้างปุ่มตามโหมด
+    const renderButton = (buttonMode: 'save' | 'submit', onClick: () => void, variant: 'primary' | 'outline') => {
+        const isPrimary = variant === 'primary';
+        const buttonClass = isPrimary
+            ? "h-[38px] w-[106px] rounded-lg bg-[#339966] border border-[#339966] text-white font-medium hover:bg-[#2d8555] transition-colors flex items-center justify-center"
+            : "h-[38px] w-[106px] rounded-lg border border-[#339966] text-[#339966] bg-white font-medium hover:bg-[#f0f9f4] transition-colors flex items-center justify-center";
+
+        return (
+            <button
+                onClick={onClick}
+                disabled={loading}
+                className={buttonClass}
+            >
+                {loading ? "Loading..." : translate(
+                    buttonMode === 'save' ? "บันทึก" : "ส่ง",
+                    buttonMode === 'save' ? "Save" : "Submit"
+                )}
+            </button>
+        );
+    };
+
+    // แสดงปุ่มตามโหมด
+    if (mode === "save") {
+        return (
+            <div className="flex justify-end">
+                {renderButton('save', handleAction, 'primary')}
+            </div>
+        );
+    }
+
+    // โหมด submit แสดงปุ่ม 2 ปุ่ม
+    return (
+        <div className="flex justify-end gap-3">
+            {renderButton('save', () => handleRequest('save'), 'outline')}
+            {renderButton('submit', () => handleRequest('submit'), 'primary')}
+        </div>
+    );
+};
+
+export default ActionButton;

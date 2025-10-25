@@ -1,89 +1,24 @@
-import { Button, Card } from "antd"
-import { useNavigate } from "react-router-dom"
-import { useTranslate } from "../../provider/hooks/translate.hook"
-import { LANGUAGE } from "../../constants/common"
-import { HomeOutlined, ArrowRightOutlined } from "@ant-design/icons"
+import { useState } from "react"
 import PipelinePage from "./PipelinePage"
 import StudentForm from "./StudentForm"
-import SaveButton from "./SaveButton"
-import { useState } from "react"
+import ActionButton from "./ActionButton"
 
 const RequestForPostponeTuitionandFeePayments = () => {
-    const navigate = useNavigate()
-    const { language, setLanguage, translate } = useTranslate()
-
     // State สำหรับเก็บข้อมูลจากฟอร์ม
     const [studentData, setStudentData] = useState<any>(null)
 
-    const onLanguageSwitch = (newLanguage: typeof LANGUAGE[keyof typeof LANGUAGE]) => {
-        try {
-            setLanguage(newLanguage)
-        } catch (error: any) {
-            console.error("Language switch error:", error)
-        }
-    }
-
-    const breadcrumbItems = [
-        { label: <HomeOutlined className="text-green-600" /> },
-        { label: "/", className: "text-gray-400" },
-        { label: translate("สร้างคำร้อง", "Create Request") },
-        { label: "/", className: "text-gray-400" },
-        {
-            label: translate(
-                "คําร้องขอผ่อนผันค่าธรรมเนียมการศึกษา",
-                "Request for Postpone Tuition and Fee Payments"
-            ),
-            className: "text-green-600 font-medium"
-        }
-    ]
-
     return (
-        <div className="w-full py-6 flex flex-col items-center gap-4">
-            {/* Header */}
-            <Card className="w-full max-w-6xl">
-                <div className="flex justify-between items-center">
-                    {/* Breadcrumb */}
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                        {breadcrumbItems.map((item, index) => (
-                            <span key={index} className={item.className || ""}>
-                                {item.label}
-                            </span>
-                        ))}
-                    </div>
+        <div className="bg-gray-100 pt-0 pb-3 px-3">
+            <div className="max-w-7xl mx-auto flex flex-col gap-3">
+                {/* PipelinePage */}
+                <PipelinePage currentStep={0} />
 
-                    {/* Language Selector */}
-                    <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-1 text-sm">
-                            <Button
-                                type={language === LANGUAGE.TH ? "link" : "text"}
-                                onClick={() => onLanguageSwitch(LANGUAGE.TH)}
-                            >
-                                {LANGUAGE.TH}
-                            </Button>
-                            /
-                            <Button
-                                type={language === LANGUAGE.EN ? "link" : "text"}
-                                onClick={() => onLanguageSwitch(LANGUAGE.EN)}
-                            >
-                                {LANGUAGE.EN}
-                            </Button>
-                        </div>
-                        <ArrowRightOutlined
-                            className="text-gray-400 cursor-pointer hover:text-gray-600"
-                            onClick={() => navigate("/demo")}
-                        />
-                    </div>
-                </div>
-            </Card>
+                {/* StudentForm */}
+                <StudentForm onFormChange={setStudentData} />
 
-            {/* PipelinePage */}
-            <PipelinePage currentStep={0} />
-
-            {/* StudentForm */}
-            <StudentForm onFormChange={setStudentData} />
-
-            {/* SaveButton */}
-            <SaveButton studentData={studentData} />
+                {/* ActionButton */}
+                <ActionButton studentData={studentData} mode="save" />
+            </div>
         </div>
     )
 }

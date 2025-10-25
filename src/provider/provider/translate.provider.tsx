@@ -15,11 +15,23 @@ export interface TranslateContextType {
 }
 
 const TranslateProvider = ({ children }: { children: React.ReactNode }) => {
-    const [language, setLanguage] = useState<LANGUAGE>(localStorage.getItem('lang') as LANGUAGE || LANGUAGE.TH);
+    // บังคับให้เริ่มต้นด้วยภาษาไทยเสมอ โดยไม่สนใจ localStorage
+    const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.TH);
 
     useEffect(() => {
+        // ตรวจสอบว่า localStorage มีค่า 'EN' หรือไม่ ถ้ามีให้ล้างออก
+        const storedLang = localStorage.getItem('lang');
+        if (storedLang === 'EN') {
+            localStorage.removeItem('lang');
+        }
+        // บังคับให้เริ่มต้นด้วยภาษาไทยเสมอ
+        localStorage.setItem('lang', LANGUAGE.TH);
+    }, []);
+
+    useEffect(() => {
+        // อัปเดต localStorage เมื่อมีการเปลี่ยนภาษา
         localStorage.setItem('lang', language);
-    }, [setLanguage]);
+    }, [language]);
 
     const translate = (th: string, en: string) => {
         return language.toUpperCase() === LANGUAGE.TH ? th : en
