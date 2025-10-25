@@ -28,5 +28,14 @@ export const processPostponeTuitionData = (formData: Partial<PostponeTuitionForm
  */
 export const validateRequiredFields = (formData: Partial<PostponeTuitionFormData>): string[] => {
     const requiredFields = ['semesterCode', 'academicYear', 'feeAmount', 'hasOutstandingDept', 'cause', 'expectedPayDate', 'studentCode', 'parentPhone'];
-    return requiredFields.filter(field => !formData[field as keyof PostponeTuitionFormData]);
+    const missingFields = requiredFields.filter(field => !formData[field as keyof PostponeTuitionFormData]);
+    
+    // ถ้าเลือก "มีหนี้ค้างชำระ" ให้ตรวจสอบฟิลด์เพิ่มเติม
+    if (formData.hasOutstandingDept === "yes") {
+        const debtRequiredFields = ['deptSemesterCode', 'deptAmount', 'deptAcademicYear'];
+        const debtMissingFields = debtRequiredFields.filter(field => !formData[field as keyof PostponeTuitionFormData]);
+        missingFields.push(...debtMissingFields);
+    }
+    
+    return missingFields;
 };

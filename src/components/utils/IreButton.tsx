@@ -15,6 +15,11 @@ interface IreButtonProps {
     icon?: ReactNode;
     onClick?: () => void;
     widthFull?: boolean;
+    height?: string | number;
+    width?: string | number;
+    loading?: boolean;
+    className?: string;
+    style?: React.CSSProperties;
 }
 
 const IreButton = ({
@@ -27,18 +32,46 @@ const IreButton = ({
     htmlType = "button",
     icon,
     onClick,
-    widthFull = false
+    widthFull = false,
+    height,
+    width,
+    loading = false,
+    className = "",
+    style = {}
 }: IreButtonProps) => {
+    // แปลง color เป็น type สำหรับ Antd Button
+    const getButtonType = () => {
+        if (color === "green") return "primary";
+        if (color === "red") return "primary";
+        return "default";
+    };
+
+    const buttonStyle = {
+        ...style,
+        ...(height && {
+            height: `${height}px`,
+            minHeight: `${height}px`,
+            maxHeight: `${height}px`,
+            lineHeight: `${height}px`
+        }),
+        ...(width && {
+            width: `${width}px`,
+            minWidth: `${width}px`,
+            maxWidth: `${width}px`
+        })
+    };
+
     return (
         <Button
-            color={color === "default" ? undefined : color}
-            variant={variant}
+            type={getButtonType()}
             size={size}
             block={block}
             disabled={disabled}
             htmlType={htmlType}
             icon={icon}
-            className={`${widthFull ? "w-full" : ""}`}
+            loading={loading}
+            className={`${widthFull ? "w-full" : ""} ${className}`}
+            style={buttonStyle}
             onClick={onClick}
         >
             {label}

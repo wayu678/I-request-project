@@ -30,8 +30,8 @@ const IreCalendar = ({
 
     return (
         <>
-            <Flex vertical className={`gap-1 ${widthFull ? "w-full" : ""}`}>
-                <label className={`w-full text-md ${isRequired ? "is-required" : ""}`}>
+            <Flex vertical className={`gap-2 ${widthFull ? "w-full" : ""}`}>
+                <label className={`w-full text-md ${isRequired ? "is-required" : ""}`} style={{ color: '#000000' }}>
                     {label}
                 </label>
                 <DatePicker

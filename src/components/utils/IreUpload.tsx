@@ -47,8 +47,8 @@ const IreUpload = ({
 
     return (
         <>
-            <Flex vertical className={`gap-1 ${widthFull ? "w-full" : ""}`}>
-                <label className={`w-full text-md ${isRequired ? "is-required" : ""}`}>
+            <Flex vertical className={`gap-2 ${widthFull ? "w-full" : ""}`}>
+                <label className={`w-full text-md ${isRequired ? "is-required" : ""}`} style={{ color: '#000000' }}>
                     {label}
                 </label>
                 <div className="flex items-center gap-4">
@@ -62,7 +62,17 @@ const IreUpload = ({
                         accept={accept}
                         maxCount={maxCount}
                     >
-                        <Button color="green" type="default" icon={<PlusOutlined />}>Choose</Button>
+                        <Button
+                            style={{
+                                backgroundColor: '#339966',
+                                borderColor: '#339966',
+                                color: 'white',
+                                height: '38px'
+                            }}
+                            icon={<PlusOutlined />}
+                        >
+                            Choose
+                        </Button>
                     </Upload>
                     {currentFile && (
                         previewUrl ? (

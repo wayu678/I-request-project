@@ -35,7 +35,7 @@ const IreSelect = ({
     return (
         <>
             <Flex vertical className={`gap-1.5 ${widthFull ? "w-full" : ""}`}>
-                <label className={`w-full text-md ${isRequired ? "is-required" : ""}`}>
+                <label className={`w-full text-md ${isRequired ? "is-required" : ""}`} style={{ color: '#000000' }}>
                     {label}
                 </label>
                 <Select

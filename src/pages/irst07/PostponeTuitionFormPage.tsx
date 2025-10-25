@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslate } from "../../provider/hooks/translate.hook";
-import { Row, Col, Input, Card, Radio, DatePicker, Flex } from "antd";
-import { CalendarOutlined } from "@ant-design/icons";
-
-const { TextArea } = Input;
+import { Row, Col } from "antd";
+import { useForm } from "react-hook-form";
+import { IreTextbox, IreTextarea, IreRadioButton, IreCalendar, IreUpload } from "../../components/utils";
 
 interface PostponeTuitionFormPageProps {
   onFormChange: (data: any) => void;
@@ -12,19 +11,24 @@ interface PostponeTuitionFormPageProps {
 
 const PostponeTuitionFormPage = ({ onFormChange, studentData }: PostponeTuitionFormPageProps) => {
   const { translate } = useTranslate();
+  const [hasOutstandingDebt, setHasOutstandingDebt] = useState("no");
 
-  const [formData, setFormData] = useState({
-    semesterCode: "",
-    academicYear: null as any,
-    feeAmount: "",
-    hasOutstandingDept: "",
-    deptSemesterCode: "",
-    deptAcademicYear: null as any,
-    deptAmount: "",
-    cause: "",
-    expectedPayDate: null as any,
-    studentCode: "", // จะถูกเติมจาก JWT token
-    parentPhone: ""
+  const formContext = useForm({
+    defaultValues: {
+      semesterCode: "1", // ต้น
+      academicYear: null,
+      feeAmount: "",
+      hasOutstandingDept: "no", // ไม่มีหนี้ค้างชำระในภาคการศึกษาที่แล้ว
+      cause: "",
+      expectedPayDate: null,
+      studentCode: "",
+      parentPhone: "",
+      guardianConsentFile: null,
+      // ฟิลด์เพิ่มเติมสำหรับหนี้ค้างชำระ
+      deptSemesterCode: "1", // ภาคสำหรับหนี้ค้างชำระ
+      deptAmount: "", // จำนวนเงินหนี้ค้างชำระ
+      deptAcademicYear: null // ปีการศึกษาสำหรับหนี้ค้างชำระ
+    }
   });
 
   // ดึงข้อมูล user จาก JWT token และ localStorage เมื่อ component mount
@@ -36,10 +40,7 @@ const PostponeTuitionFormPage = ({ onFormChange, studentData }: PostponeTuitionF
       console.log('Loaded student data from localStorage:', studentData);
 
       // เติมข้อมูลจากหน้าแรก
-      setFormData(prev => ({
-        ...prev,
-        studentCode: studentData.studentId || '', // ใช้ studentId จากหน้าแรก
-      }));
+      formContext.setValue('studentCode', studentData.studentId || '');
     }
 
     // ดึงข้อมูล user จาก JWT token
@@ -55,10 +56,10 @@ const PostponeTuitionFormPage = ({ onFormChange, studentData }: PostponeTuitionF
           console.log('Current user data:', userData);
 
           // เติมข้อมูล student จาก JWT token (ถ้ามี)
-          setFormData(prev => ({
-            ...prev,
-            studentCode: prev.studentCode || userData.studentCode || userData.username || '',
-          }));
+          const currentStudentCode = formContext.getValues('studentCode');
+          if (!currentStudentCode) {
+            formContext.setValue('studentCode', userData.studentCode || userData.username || '');
+          }
         } else {
           console.log('Failed to fetch current user data');
         }
@@ -70,143 +71,196 @@ const PostponeTuitionFormPage = ({ onFormChange, studentData }: PostponeTuitionF
     fetchCurrentUser();
   }, []);
 
+  // ติดตามการเปลี่ยนแปลงของฟิลด์หนี้ค้างชำระ
+  useEffect(() => {
+    const subscription = formContext.watch((value) => {
+      if (value.hasOutstandingDept !== hasOutstandingDebt) {
+        setHasOutstandingDebt(value.hasOutstandingDept);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [formContext.watch, hasOutstandingDebt]);
+
   // ส่ง formData ขึ้น parent ทุกครั้งที่เปลี่ยน
   useEffect(() => {
-    onFormChange(formData);
-  }, [formData, onFormChange]);
-
-  const handleChange = (field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
-
-  const renderInputField = (label: string, field: string, placeholder: string, disabled = false) => (
-    <Flex vertical gap="middle" className="w-full">
-      <span className="text-sm font-medium text-gray-700">{label} <span className="text-red-500">*</span></span>
-      <Input
-        placeholder={placeholder}
-        size="large"
-        disabled={disabled}
-        value={(formData as any)[field]}
-        onChange={e => handleChange(field, e.target.value)}
-      />
-    </Flex>
-  );
-
-  const renderTextAreaField = (label: string, field: string, placeholder: string) => (
-    <Flex vertical gap="middle" className="w-full">
-      <span className="text-sm font-medium text-gray-700">{label} <span className="text-red-500">*</span></span>
-      <TextArea
-        placeholder={placeholder}
-        rows={3}
-        size="large"
-        value={(formData as any)[field]}
-        onChange={e => handleChange(field, e.target.value)}
-      />
-    </Flex>
-  );
-
-  const renderRadioField = (label: string, field: string, options: { value: string; text: string }[], vertical = false) => (
-    <Flex vertical gap="middle" className="w-full">
-      <span className="text-sm font-medium text-gray-700">{label} <span className="text-red-500">*</span></span>
-      <Radio.Group
-        className={vertical ? "flex flex-col gap-2" : "flex gap-6"}
-        size="large"
-        value={(formData as any)[field]}
-        onChange={e => handleChange(field, e.target.value)}
-      >
-        {options.map(opt => (
-          <Radio key={opt.value} value={opt.value}>{opt.text}</Radio>
-        ))}
-      </Radio.Group>
-    </Flex>
-  );
-
-  const renderDatePickerField = (label: string, field: string, placeholder: string, format: string, picker?: "year") => (
-    <Flex vertical gap="middle" className="w-full">
-      <span className="text-sm font-medium text-gray-700">{label} <span className="text-red-500">*</span></span>
-      <DatePicker
-        placeholder={placeholder}
-        format={format}
-        picker={picker}
-        suffixIcon={<CalendarOutlined />}
-        size="large"
-        value={(formData as any)[field]}
-        onChange={date => handleChange(field, date)}
-      />
-    </Flex>
-  );
+    const subscription = formContext.watch((value) => {
+      onFormChange(value);
+    });
+    return () => subscription.unsubscribe();
+  }, [formContext.watch, onFormChange]);
 
   return (
-    <Flex justify="center" align="start" className="w-full mb-6">
-      <Card className="w-full max-w-6xl">
-        <Row gutter={[24, 12]}>
-          <Col span={12}>
-            <div className="text-sm font-medium text-gray-700">
+    <div className="bg-white rounded-lg">
+      <div className="p-5">
+        <Row gutter={[24, 16]}>
+          {/* หัวข้อหลัก */}
+          <Col span={24}>
+            <div className="text-sm font-medium text-black mb-1">
               {translate("มีความประสงค์ขอผ่อนผันค่าธรรมเนียมการศึกษา", "Request for postpone tuition and fee payments")}
             </div>
           </Col>
 
-          <Col span={12}></Col>
-
+          {/* แถวที่ 1: ภาค และ ปีการศึกษา */}
           <Col span={12}>
-            {renderRadioField(translate("ภาค", "Semester"), "semesterCode", [
-              { value: "1", text: translate("ต้น", "First") },
-              { value: "2", text: translate("ปลาย", "Second") },
-              { value: "3", text: translate("ฤดูร้อน", "Summer") },
-            ])}
+            <IreRadioButton
+              label={translate("ภาค", "Semester")}
+              formContext={formContext}
+              registerName={formContext.register('semesterCode')}
+              options={[
+                { label: translate("ต้น", "First"), value: "1" },
+                { label: translate("ปลาย", "Second"), value: "2" },
+                { label: translate("ฤดูร้อน", "Summer"), value: "3" },
+              ]}
+              isRequired={true}
+            />
           </Col>
           <Col span={12}>
-            {renderDatePickerField(translate("ปีการศึกษา", "Academic Year"), "academicYear", "YYYY", "YYYY", "year")}
+            <IreCalendar
+              label={translate("ปีการศึกษา", "Academic Year")}
+              formContext={formContext}
+              registerName={formContext.register('academicYear')}
+              placeholder="YYYY"
+              format="YYYY"
+              picker="year"
+              widthFull={true}
+              isRequired={true}
+            />
           </Col>
 
+          {/* แถวที่ 2: จำนวนเงิน */}
           <Col span={12}>
-            {renderInputField(translate("จำนวนเงิน", "Amount"), "feeAmount", translate("จำนวนเงิน", "Amount"))}
-          </Col>
-
-          <Col span={12}></Col>
-
-          <Col span={12}>
-            {renderRadioField(translate("หนี้ค้างชำระ", "Payment Proof"), "hasOutstandingDept", [
-              { value: "no", text: translate("ไม่มีหนี้ค้างชำระในภาคการศึกษาที่แล้ว", "No proof") },
-              { value: "yes", text: translate("มีหนี้ค้างชำระในภาคการศึกษาที่แล้ว", "Has proof") },
-            ], true)}
-          </Col>
-
-          <Col span={12}></Col>
-
-          <Col span={12}>
-            {renderRadioField(translate("ภาค", "Semester"), "deptSemesterCode", [
-              { value: "1", text: translate("ต้น", "First") },
-              { value: "2", text: translate("ปลาย", "Second") },
-              { value: "3", text: translate("ฤดูร้อน", "Summer") },
-            ])}
+            <IreTextbox
+              label={translate("จำนวนเงิน", "Amount")}
+              formContext={formContext}
+              registerName={formContext.register('feeAmount')}
+              placeholder={translate("จำนวนเงิน", "Amount")}
+              isRequired={true}
+              formatType="currency"
+            />
           </Col>
           <Col span={12}>
-            {renderDatePickerField(translate("ปีการศึกษา", "Academic Year"), "deptAcademicYear", "YYYY", "YYYY", "year")}
+            <div></div>
           </Col>
 
+          {/* แถวที่ 3: หนี้ค้างชำระ */}
           <Col span={12}>
-            {renderInputField(translate("จำนวนเงิน", "Amount"), "deptAmount", translate("จำนวนเงิน", "Amount"))}
+            <IreRadioButton
+              label={translate("หนี้ค้างชำระ", "Outstanding Debt")}
+              formContext={formContext}
+              registerName={formContext.register('hasOutstandingDept')}
+              options={[
+                { label: translate("ไม่มีหนี้ค้างชำระในภาคการศึกษาที่แล้ว", "No outstanding debt from the previous semester"), value: "no" },
+                { label: translate("มีหนี้ค้างชำระในภาคการศึกษาที่แล้ว", "Has outstanding debt from the previous semester"), value: "yes" },
+              ]}
+              direction="vertical"
+              isRequired={true}
+            />
+          </Col>
+          <Col span={12}>
+            <div></div>
           </Col>
 
-          <Col span={12}></Col>
+          {/* ฟิลด์เพิ่มเติมสำหรับหนี้ค้างชำระ - แสดงเฉพาะเมื่อเลือก "มีหนี้ค้างชำระ" */}
+          {hasOutstandingDebt === "yes" && (
+            <>
+              {/* แถวที่ 4: ภาค และ ปีการศึกษาสำหรับหนี้ค้างชำระ */}
+              <Col span={12}>
+                <IreRadioButton
+                  label={translate("ภาค", "Term")}
+                  formContext={formContext}
+                  registerName={formContext.register('deptSemesterCode')}
+                  options={[
+                    { label: translate("ต้น", "First"), value: "1" },
+                    { label: translate("ปลาย", "Second"), value: "2" },
+                    { label: translate("ฤดูร้อน", "Summer"), value: "3" },
+                  ]}
+                  isRequired={true}
+                />
+              </Col>
+              <Col span={12}>
+                <IreCalendar
+                  label={translate("ปีการศึกษา", "Academic Year")}
+                  formContext={formContext}
+                  registerName={formContext.register('deptAcademicYear')}
+                  placeholder="YYYY"
+                  format="YYYY"
+                  picker="year"
+                  widthFull={true}
+                  isRequired={true}
+                />
+              </Col>
 
+              {/* แถวที่ 5: จำนวนเงินสำหรับหนี้ค้างชำระ และ ว่าง */}
+              <Col span={12}>
+                <IreTextbox
+                  label={translate("จำนวนเงิน", "Amount")}
+                  formContext={formContext}
+                  registerName={formContext.register('deptAmount')}
+                  placeholder={translate("จำนวน", "Amount")}
+                  isRequired={true}
+                  formatType="currency"
+                />
+              </Col>
+              <Col span={12}>
+                <div></div>
+              </Col>
+            </>
+          )}
+
+          {/* แถวที่ 4: เนื่องจาก และ วันที่คาดว่าจะชำระ */}
           <Col span={12}>
-            {renderTextAreaField(translate("เนื่องจาก", "Reason"), "cause", translate("เนื่องจาก", "Reason"))}
+            <IreTextbox
+              label={translate("เนื่องจาก", "Reason")}
+              formContext={formContext}
+              registerName={formContext.register('cause')}
+              placeholder={translate("เนื่องจาก", "Reason")}
+              isRequired={true}
+            />
           </Col>
           <Col span={12}>
-            {renderDatePickerField(translate("โดยคาดว่าจะชำระเงินได้ในวันที่", "Expected Payment Date"), "expectedPayDate", "DD/MM/YYYY", "DD/MM/YYYY")}
+            <IreCalendar
+              label={translate("โดยคาดว่าจะชำระเงินได้ในวันที่", "Expected Payment Date")}
+              formContext={formContext}
+              registerName={formContext.register('expectedPayDate')}
+              placeholder="DD/MM/YYYY"
+              format="DD/MM/YYYY"
+              widthFull={true}
+              isRequired={true}
+            />
           </Col>
 
+          {/* แถวที่ 5: หมายเลขโทรศัพท์ผู้ปกครอง */}
           <Col span={12}>
-            {renderInputField(translate("รหัสนิสิต", "Student Code"), "studentCode", "64XXXXXXXX", true)}
+            <IreTextbox
+              label={translate("หมายเลขโทรศัพท์ผู้ปกครอง", "Guardian's Phone Number")}
+              formContext={formContext}
+              registerName={formContext.register('parentPhone')}
+              placeholder="099-999-9999"
+              isRequired={false}
+              formatType="phone"
+            />
           </Col>
           <Col span={12}>
-            {renderInputField(translate("หมายเลขโทรศัพท์ผู้ปกครอง", "Parent Phone Number"), "parentPhone", "099-999-9999")}
+            <div></div>
+          </Col>
+
+          {/* แถวที่ 6: แนบหนังสือคำยินยอมผู้ปกครอง */}
+          <Col span={12}>
+            <IreUpload
+              label={translate("แนบหนังสือคำยินยอมผู้ปกครอง", "Attach Guardian's Consent Letter")}
+              formContext={formContext}
+              registerName={formContext.register('guardianConsentFile')}
+              accept=".pdf,.jpg,.jpeg,.png"
+              maxSize={5}
+              isRequired={false}
+            />
+          </Col>
+          <Col span={12}>
+            <div></div>
           </Col>
         </Row>
-      </Card>
-    </Flex>
+      </div>
+    </div>
   );
 };
 
