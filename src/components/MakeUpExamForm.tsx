@@ -23,7 +23,13 @@ const MakeUpExamForm: React.FC<MakeUpExamFormProps> = ({ onSubmit }) => {
 
     const uploadProps = {
         beforeUpload: (file: File) => {
-            setFileList([file]);
+            const uploadFile = {
+                uid: Math.random().toString(36).substr(2, 9),
+                name: file.name,
+                status: 'done' as const,
+                originFileObj: file as any,
+            };
+            setFileList([uploadFile as any]);
             return false;
         },
         fileList,

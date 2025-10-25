@@ -61,7 +61,7 @@ const IreSelect = ({
                         selector: {
                             borderColor: '#99CCB3'
                         }
-                    }}
+                    } as any}
                 />
                 {
                     errorMessage && (

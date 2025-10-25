@@ -10,6 +10,7 @@ export default defineConfig({
     tailwindcss(),
   ],
   server: {
+    port: 8000,
     proxy: {
       '/api': {
         target: 'http://localhost:8080',

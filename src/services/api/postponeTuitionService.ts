@@ -1,10 +1,10 @@
-import { IRST07PostponeTuitionFeePaymentRequestApi } from '../generated-api/apis/IRST07PostponeTuitionFeePaymentRequestApi';
+import { IRST07PostponeTuitionFeePaymentRequestApi } from '../generated-api/apis/IRST07POSTPONETUITIONFEEPAYMENTREQUESTApi';
 import type { PostponeTuitionFee } from '../generated-api/models';
 import { Configuration } from '../generated-api/runtime';
 
 // สร้าง configuration สำหรับ API
 const configuration = new Configuration({
-    basePath: 'http://localhost:8080/api', // เพิ่ม /api prefix ตาม backend routes
+    basePath: '/api', // ใช้ proxy แทนการระบุ URL เต็ม
     credentials: 'include' // ✅ เพิ่ม credentials เพื่อส่ง cookies
 });
 

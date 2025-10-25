@@ -75,11 +75,13 @@ const Header: React.FC = () => {
                         height: '60px',
                         borderRadius: '8px'
                     }}
-                    bodyStyle={{
-                        padding: '12px 24px',
-                        height: '100%',
-                        display: 'flex',
-                        alignItems: 'center'
+                    styles={{
+                        body: {
+                            padding: '12px 24px',
+                            height: '100%',
+                            display: 'flex',
+                            alignItems: 'center'
+                        }
                     }}
                 >
                     <Flex align="center" justify="space-between" style={{ width: '100%' }}>
@@ -88,7 +90,7 @@ const Header: React.FC = () => {
                             {/* Home Icon */}
                             <button
                                 onClick={() => navigate('/')}
-                                className="text-gray-600 hover:text-gray-800 transition-colors"
+                                className="text-black hover:text-gray-800 transition-colors"
                             >
                                 <HomeOutlined className="w-5 h-5" />
                             </button>
@@ -98,15 +100,15 @@ const Header: React.FC = () => {
                                 <React.Fragment key={index}>
                                     {/* Separator */}
                                     {index > 0 && (
-                                        <span className="text-gray-400 mx-2">&gt;</span>
+                                        <span className="text-black mx-2">&gt;</span>
                                     )}
 
                                     {/* Breadcrumb Item */}
                                     <button
                                         onClick={() => navigate(item.path)}
                                         className={`text-sm transition-colors ${index === breadcrumbItems.length - 1
-                                            ? 'text-gray-900 font-medium'
-                                            : 'text-gray-600 hover:text-gray-800'
+                                            ? 'text-black font-medium'
+                                            : 'text-black hover:text-gray-800'
                                             }`}
                                     >
                                         {item.label}
@@ -122,11 +124,11 @@ const Header: React.FC = () => {
                                 onClick={handleLanguageSwitch}
                                 className="flex items-center space-x-1 text-sm font-medium transition-colors"
                             >
-                                <span className={language === 'TH' ? 'text-green-600' : 'text-gray-400'}>
+                                <span className={language === 'TH' ? 'text-black' : 'text-black'} style={{ color: language === 'TH' ? '#339966' : '#000000' }}>
                                     TH
                                 </span>
-                                <span className="text-gray-400">/</span>
-                                <span className={language === 'EN' ? 'text-green-600' : 'text-gray-400'}>
+                                <span className="text-black">/</span>
+                                <span className={language === 'EN' ? 'text-black' : 'text-black'} style={{ color: language === 'EN' ? '#339966' : '#000000' }}>
                                     EN
                                 </span>
                             </button>
@@ -134,7 +136,7 @@ const Header: React.FC = () => {
                             {/* Logout Icon */}
                             <button
                                 onClick={handleLogout}
-                                className="text-gray-600 hover:text-gray-800 transition-colors"
+                                className="text-black hover:text-gray-800 transition-colors"
                                 title={translate('ออกจากระบบ', 'Logout')}
                             >
                                 <LogoutOutlined className="w-5 h-5" />
