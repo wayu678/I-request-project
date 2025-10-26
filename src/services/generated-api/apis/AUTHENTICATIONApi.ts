@@ -24,6 +24,7 @@ import type {
   UserLoginResponse,
   UserRegisterRequest,
   UserRegisterResponse,
+  UserResponse,
 } from '../models/index';
 import {
     AuthChangePasswordRequestFromJSON,
@@ -44,6 +45,8 @@ import {
     UserRegisterRequestToJSON,
     UserRegisterResponseFromJSON,
     UserRegisterResponseToJSON,
+    UserResponseFromJSON,
+    UserResponseToJSON,
 } from '../models/index';
 
 export interface AuthChangePasswordOperationRequest {
@@ -86,6 +89,19 @@ export interface AuthenticationApiInterface {
      * เปลี่ยนรหัสผ่าน
      */
     authChangePassword(requestParameters: AuthChangePasswordOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeleteUser200Response>;
+
+    /**
+     * ตรวจสอบสถานะการเข้าสู่ระบบและข้อมูลผู้ใช้ปัจจุบัน
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApiInterface
+     */
+    getCurrentUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserResponse>>;
+
+    /**
+     * ตรวจสอบสถานะการเข้าสู่ระบบและข้อมูลผู้ใช้ปัจจุบัน
+     */
+    getCurrentUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserResponse>;
 
     /**
      * เข้าสู่ระบบ
@@ -186,6 +202,35 @@ export class AuthenticationApi extends runtime.BaseAPI implements Authentication
      */
     async authChangePassword(requestParameters: AuthChangePasswordOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DeleteUser200Response> {
         const response = await this.authChangePasswordRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * ตรวจสอบสถานะการเข้าสู่ระบบและข้อมูลผู้ใช้ปัจจุบัน
+     */
+    async getCurrentUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserResponse>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/auth/current-user`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * ตรวจสอบสถานะการเข้าสู่ระบบและข้อมูลผู้ใช้ปัจจุบัน
+     */
+    async getCurrentUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserResponse> {
+        const response = await this.getCurrentUserRaw(initOverrides);
         return await response.value();
     }
 

@@ -36,6 +36,12 @@ export interface CreateUserResponse {
      * @type {string}
      * @memberof CreateUserResponse
      */
+    password: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateUserResponse
+     */
     message: string;
     /**
      * 
@@ -51,6 +57,7 @@ export interface CreateUserResponse {
 export function instanceOfCreateUserResponse(value: object): value is CreateUserResponse {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('username' in value) || value['username'] === undefined) return false;
+    if (!('password' in value) || value['password'] === undefined) return false;
     if (!('message' in value) || value['message'] === undefined) return false;
     if (!('success' in value) || value['success'] === undefined) return false;
     return true;
@@ -68,6 +75,7 @@ export function CreateUserResponseFromJSONTyped(json: any, ignoreDiscriminator: 
         
         'id': json['id'],
         'username': json['username'],
+        'password': json['password'],
         'message': json['message'],
         'success': json['success'],
     };
@@ -86,6 +94,7 @@ export function CreateUserResponseToJSONTyped(value?: CreateUserResponse | null,
         
         'id': value['id'],
         'username': value['username'],
+        'password': value['password'],
         'message': value['message'],
         'success': value['success'],
     };

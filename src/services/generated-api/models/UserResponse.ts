@@ -91,6 +91,36 @@ export interface UserResponse {
      * @memberof UserResponse
      */
     updatedAt?: Date;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
+    fullNameTH?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
+    fullNameEN?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
+    roleDescriptionTH?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
+    roleDescriptionEN?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
+    studentCode?: string;
 }
 
 /**
@@ -122,6 +152,11 @@ export function UserResponseFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'email': json['email'] == null ? undefined : json['email'],
         'createdAt': json['createdAt'] == null ? undefined : (new Date(json['createdAt'])),
         'updatedAt': json['updatedAt'] == null ? undefined : (new Date(json['updatedAt'])),
+        'fullNameTH': json['fullNameTH'] == null ? undefined : json['fullNameTH'],
+        'fullNameEN': json['fullNameEN'] == null ? undefined : json['fullNameEN'],
+        'roleDescriptionTH': json['roleDescriptionTH'] == null ? undefined : json['roleDescriptionTH'],
+        'roleDescriptionEN': json['roleDescriptionEN'] == null ? undefined : json['roleDescriptionEN'],
+        'studentCode': json['studentCode'] == null ? undefined : json['studentCode'],
     };
 }
 
@@ -148,6 +183,11 @@ export function UserResponseToJSONTyped(value?: UserResponse | null, ignoreDiscr
         'email': value['email'],
         'createdAt': value['createdAt'] == null ? undefined : ((value['createdAt']).toISOString()),
         'updatedAt': value['updatedAt'] == null ? undefined : ((value['updatedAt']).toISOString()),
+        'fullNameTH': value['fullNameTH'],
+        'fullNameEN': value['fullNameEN'],
+        'roleDescriptionTH': value['roleDescriptionTH'],
+        'roleDescriptionEN': value['roleDescriptionEN'],
+        'studentCode': value['studentCode'],
     };
 }
 

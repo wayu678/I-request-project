@@ -1,4 +1,4 @@
-import { IRST07PostponeTuitionFeePaymentRequestApi } from '../generated-api/apis/IRST07POSTPONETUITIONFEEPAYMENTREQUESTApi';
+import { Irst07PostponeTuitionFeePaymentRequestApi } from '../generated-api/apis/IRST07PostponeTuitionFeePaymentRequestApi';
 import type { PostponeTuitionFee } from '../generated-api/models';
 import { Configuration } from '../generated-api/runtime';
 
@@ -9,7 +9,7 @@ const configuration = new Configuration({
 });
 
 // สร้าง API instance
-const postponeTuitionApi = new IRST07PostponeTuitionFeePaymentRequestApi(configuration);
+const postponeTuitionApi = new Irst07PostponeTuitionFeePaymentRequestApi(configuration);
 
 export interface PostponeTuitionFormData {
     // ข้อมูลจาก PostponeTuitionFormPage
