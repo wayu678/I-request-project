@@ -3,6 +3,7 @@ apis/DashboardApi.ts
 apis/IRAM06MasterValueManagementApi.ts
 apis/IRST05GeneralRequestApi.ts
 apis/Irst07PostponeTuitionFeePaymentRequestApi.ts
+apis/RequestTypeManagementApi.ts
 apis/StudentManagementApi.ts
 apis/TestApi.ts
 apis/UserManagementApi.ts
@@ -23,6 +24,7 @@ models/DeleteUser200Response.ts
 models/ExportStudentsData200Response.ts
 models/GeneralRequestRequest.ts
 models/GetAllUsersResponse.ts
+models/GetRequestTypesResponse.ts
 models/ImportStudentsData200Response.ts
 models/ImportStudentsDataRequest.ts
 models/LogoutRequest.ts
@@ -31,6 +33,7 @@ models/MasterValueHeaderResponse.ts
 models/PostponeTuitionFee.ts
 models/RefreshTokenRequest.ts
 models/RefreshTokenResponse.ts
+models/RequestTypeResponse.ts
 models/SaveMasterValueDetailPostRequest.ts
 models/SaveMasterValueHeaderPostRequest.ts
 models/StudentResponse.ts

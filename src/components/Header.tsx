@@ -53,6 +53,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                 case 'createRequest':
                     label = translate('คำร้องทั่วไป', 'General Request');
                     break;
+                case 'master-request-type':
+                    label = translate('จัดการประเภทคำร้อง', 'Manage Request Type');
+                    break;
                 default:
                     label = segment.charAt(0).toUpperCase() + segment.slice(1);
             }
