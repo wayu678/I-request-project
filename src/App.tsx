@@ -17,6 +17,7 @@ import MakeUpExamForm from "./components/MakeUpExamForm";
 import { Demo } from "./pages/demo";
 import CreateRequest from "./pages/demo/createRequest";
 import { Dashboard } from "./pages/dashboard";
+import { ManageRequestType } from "./pages/manageRequestType";
 
 const App = () => {
   return (
@@ -74,6 +75,11 @@ const App = () => {
         <Route path="/demo/transfer-credits" element={
           <MainTemplate>
             <CreateRequest />
+          </MainTemplate>
+        } />
+        <Route path="/demo/master-request-type" element={
+          <MainTemplate>
+            <ManageRequestType />
           </MainTemplate>
         } />
 

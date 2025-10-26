@@ -1,4 +1,4 @@
-import { Irst07PostponeTuitionFeePaymentRequestApi } from '../generated-api/apis/IRST07PostponeTuitionFeePaymentRequestApi';
+import { Irst07PostponeTuitionFeePaymentRequestApi, type CreatePostponeTuitionRequestPostOperationRequest } from '../generated-api/apis/IRST07PostponeTuitionFeePaymentRequestApi';
 import type { PostponeTuitionFee } from '../generated-api/models';
 import { Configuration } from '../generated-api/runtime';
 
@@ -59,7 +59,9 @@ export const postponeTuitionService = {
             console.log('Sending postpone tuition request:', postponeTuitionFee);
 
             const response = await postponeTuitionApi.createPostponeTuitionRequestPost({
-                postponeTuitionFee: postponeTuitionFee
+                createPostponeTuitionRequestPostRequest: {
+                    postponeTuitionFee: postponeTuitionFee
+                }
             });
 
             return response;
