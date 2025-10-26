@@ -1,5 +1,6 @@
 import React from 'react';
-import { Table, Button, Pagination, Flex } from 'antd';
+import { Table, Button, Pagination, Flex, Dropdown } from 'antd';
+import type { MenuProps } from 'antd';
 import { EditOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { useTranslate } from '../../provider/hooks/translate.hook';
 
@@ -30,6 +31,12 @@ const ManageRequestTypeTable: React.FC<ManageRequestTypeTableProps> = ({
     onPageChange
 }) => {
     const { translate } = useTranslate();
+
+    // Handler for dropdown menu items
+    const handleMenuClick = (e: { key: string }, record: RequestTypeRow) => {
+        console.log('Menu clicked:', e.key, record);
+        // TODO: Implement menu actions
+    };
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -126,24 +133,44 @@ const ManageRequestTypeTable: React.FC<ManageRequestTypeTableProps> = ({
             key: 'action',
             width: 120,
             align: 'center' as const,
-            render: () => (
-                <Flex gap={8} justify="center">
-                    <Button
-                        type="primary"
-                        icon={<EditOutlined />}
-                        className="rounded w-8 h-8 p-0"
-                        style={{ backgroundColor: '#17A2B8', borderColor: '#17A2B8', boxShadow: 'none' }}
-                    />
-                    <Button
-                        type="primary"
-                        className="rounded w-16 h-8 text-xs"
-                        style={{ backgroundColor: '#007bff', borderColor: '#007bff', boxShadow: 'none' }}
+            render: (_: any, record: RequestTypeRow) => {
+                // Create dropdown menu items
+                const menuItems: MenuProps['items'] = [
+                    {
+                        key: 'view',
+                        label: translate('ดูรายละเอียด', 'View Details'),
+                    },
+                    {
+                        key: 'edit',
+                        label: translate('แก้ไข', 'Edit'),
+                    },
+                    {
+                        key: 'delete',
+                        label: translate('ลบ', 'Delete'),
+                        danger: true,
+                    },
+                ];
+
+                return (
+                    <Dropdown
+                        menu={{
+                            items: menuItems,
+                            onClick: (e) => handleMenuClick(e, record)
+                        }}
+                        trigger={['click']}
                     >
-                        {translate('View', 'View')}
-                        <DownOutlined className="text-xs ml-1" />
-                    </Button>
-                </Flex>
-            ),
+                        <Button
+                            type="primary"
+                            icon={<EditOutlined />}
+                            className="rounded w-28 h-8"
+                            style={{ backgroundColor: '#17A2B8', borderColor: '#17A2B8', boxShadow: 'none' }}
+                        >
+                            {translate('View', 'View')}
+                            <DownOutlined className="text-xs ml-1" />
+                        </Button>
+                    </Dropdown>
+                );
+            },
         },
     ];
 
