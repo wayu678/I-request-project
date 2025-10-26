@@ -1,11 +1,11 @@
-import { AuthenticationApi } from "../generated-api/apis/AUTHENTICATIONApi";
+import { AuthenticationApi } from "../generated-api/apis/AuthenticationApi";
 import { Configuration } from "../generated-api/runtime";
 import type { UserLoginRequest } from "../generated-api/models/UserLoginRequest";
 import type { UserLoginResponse } from "../generated-api/models/UserLoginResponse";
 
 const authApiClient = new AuthenticationApi(new Configuration({
     basePath: '/api',
-    credentials: 'include', 
+    credentials: 'include',
 }));
 
 export const useAuthService = () => {

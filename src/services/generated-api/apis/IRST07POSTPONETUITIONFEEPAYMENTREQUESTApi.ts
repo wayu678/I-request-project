@@ -15,51 +15,51 @@
 
 import * as runtime from '../runtime';
 import type {
-  PostponeTuitionFee,
+  CreatePostponeTuitionRequestPostRequest,
 } from '../models/index';
 import {
-    PostponeTuitionFeeFromJSON,
-    PostponeTuitionFeeToJSON,
+    CreatePostponeTuitionRequestPostRequestFromJSON,
+    CreatePostponeTuitionRequestPostRequestToJSON,
 } from '../models/index';
 
-export interface CreatePostponeTuitionRequestPostRequest {
-    postponeTuitionFee: PostponeTuitionFee;
+export interface CreatePostponeTuitionRequestPostOperationRequest {
+    createPostponeTuitionRequestPostRequest: CreatePostponeTuitionRequestPostRequest;
 }
 
 /**
- * IRST07PostponeTuitionFeePaymentRequestApi - interface
+ * Irst07PostponeTuitionFeePaymentRequestApi - interface
  * 
  * @export
- * @interface IRST07PostponeTuitionFeePaymentRequestApiInterface
+ * @interface Irst07PostponeTuitionFeePaymentRequestApiInterface
  */
-export interface IRST07PostponeTuitionFeePaymentRequestApiInterface {
+export interface Irst07PostponeTuitionFeePaymentRequestApiInterface {
     /**
      * 
-     * @param {PostponeTuitionFee} postponeTuitionFee 
+     * @param {CreatePostponeTuitionRequestPostRequest} createPostponeTuitionRequestPostRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof IRST07PostponeTuitionFeePaymentRequestApiInterface
+     * @memberof Irst07PostponeTuitionFeePaymentRequestApiInterface
      */
-    createPostponeTuitionRequestPostRaw(requestParameters: CreatePostponeTuitionRequestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
+    createPostponeTuitionRequestPostRaw(requestParameters: CreatePostponeTuitionRequestPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
 
     /**
      */
-    createPostponeTuitionRequestPost(requestParameters: CreatePostponeTuitionRequestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
+    createPostponeTuitionRequestPost(requestParameters: CreatePostponeTuitionRequestPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
 
 }
 
 /**
  * 
  */
-export class IRST07PostponeTuitionFeePaymentRequestApi extends runtime.BaseAPI implements IRST07PostponeTuitionFeePaymentRequestApiInterface {
+export class Irst07PostponeTuitionFeePaymentRequestApi extends runtime.BaseAPI implements Irst07PostponeTuitionFeePaymentRequestApiInterface {
 
     /**
      */
-    async createPostponeTuitionRequestPostRaw(requestParameters: CreatePostponeTuitionRequestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
-        if (requestParameters['postponeTuitionFee'] == null) {
+    async createPostponeTuitionRequestPostRaw(requestParameters: CreatePostponeTuitionRequestPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+        if (requestParameters['createPostponeTuitionRequestPostRequest'] == null) {
             throw new runtime.RequiredError(
-                'postponeTuitionFee',
-                'Required parameter "postponeTuitionFee" was null or undefined when calling createPostponeTuitionRequestPost().'
+                'createPostponeTuitionRequestPostRequest',
+                'Required parameter "createPostponeTuitionRequestPostRequest" was null or undefined when calling createPostponeTuitionRequestPost().'
             );
         }
 
@@ -77,7 +77,7 @@ export class IRST07PostponeTuitionFeePaymentRequestApi extends runtime.BaseAPI i
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: PostponeTuitionFeeToJSON(requestParameters['postponeTuitionFee']),
+            body: CreatePostponeTuitionRequestPostRequestToJSON(requestParameters['createPostponeTuitionRequestPostRequest']),
         }, initOverrides);
 
         if (this.isJsonMime(response.headers.get('content-type'))) {
@@ -89,7 +89,7 @@ export class IRST07PostponeTuitionFeePaymentRequestApi extends runtime.BaseAPI i
 
     /**
      */
-    async createPostponeTuitionRequestPost(requestParameters: CreatePostponeTuitionRequestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+    async createPostponeTuitionRequestPost(requestParameters: CreatePostponeTuitionRequestPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
         const response = await this.createPostponeTuitionRequestPostRaw(requestParameters, initOverrides);
         return await response.value();
     }

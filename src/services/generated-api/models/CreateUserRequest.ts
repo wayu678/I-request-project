@@ -30,7 +30,7 @@ export interface CreateUserRequest {
      * @type {string}
      * @memberof CreateUserRequest
      */
-    passwordHashed: string;
+    password: string;
     /**
      * 
      * @type {string}
@@ -86,7 +86,7 @@ export interface CreateUserRequest {
  */
 export function instanceOfCreateUserRequest(value: object): value is CreateUserRequest {
     if (!('username' in value) || value['username'] === undefined) return false;
-    if (!('passwordHashed' in value) || value['passwordHashed'] === undefined) return false;
+    if (!('password' in value) || value['password'] === undefined) return false;
     if (!('roleCode' in value) || value['roleCode'] === undefined) return false;
     if (!('campusCode' in value) || value['campusCode'] === undefined) return false;
     return true;
@@ -103,7 +103,7 @@ export function CreateUserRequestFromJSONTyped(json: any, ignoreDiscriminator: b
     return {
         
         'username': json['username'],
-        'passwordHashed': json['passwordHashed'],
+        'password': json['password'],
         'roleCode': json['roleCode'],
         'campusCode': json['campusCode'],
         'facultyCode': json['facultyCode'] == null ? undefined : json['facultyCode'],
@@ -127,7 +127,7 @@ export function CreateUserRequestToJSONTyped(value?: CreateUserRequest | null, i
     return {
         
         'username': value['username'],
-        'passwordHashed': value['passwordHashed'],
+        'password': value['password'],
         'roleCode': value['roleCode'],
         'campusCode': value['campusCode'],
         'facultyCode': value['facultyCode'],
