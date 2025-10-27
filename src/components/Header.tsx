@@ -78,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
     };
 
     return (
-        <div className="bg-gray-100 p-2 lg:p-4">
+        <div className="px-2 lg:px-4 pt-2 lg:pt-4 pb-0">
             <div className="max-w-7xl mx-auto">
                 <Card
                     style={{
