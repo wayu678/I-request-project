@@ -15,6 +15,8 @@ import {
 import MakeUpExamForm from "./components/MakeUpExamForm";
 
 import { Dashboard } from "./pages/dashboard";
+import ManageAccount from "./pages/manageAccount";
+import { ManageRequestType } from "./pages/manageRequestType";
 
 const App = () => {
   return (
@@ -65,10 +67,29 @@ const App = () => {
           </ProtectedRoute>
         } />
 
+        {/* Master Data Routes */}
+        <Route path="/demo/master-account" element={
+          <ProtectedRoute>
+            <MainTemplate>
+              <ManageAccount />
+            </MainTemplate>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/demo/master-request-type" element={
+          <ProtectedRoute>
+            <MainTemplate>
+              <ManageRequestType />
+            </MainTemplate>
+          </ProtectedRoute>
+        } />
+
         <Route path="*" element={
-          <MainTemplate>
-            <NotFound />
-          </MainTemplate>
+          <ProtectedRoute>
+            <MainTemplate>
+              <NotFound />
+            </MainTemplate>
+          </ProtectedRoute>
         } />
       </Routes>
     </AuthProvider>

@@ -1,12 +1,11 @@
 import { Button, Card, Flex, Image, Row, message } from "antd"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslate } from "../../provider/hooks/translate.hook";
 import { LANGUAGE, LOGIN_TYPE } from "../../constants/common";
 import { useForm } from "react-hook-form";
 import { IreTextbox } from "../../components/utils";
 import { useAuthService } from "../../services/api/auth";
-import { useAuth } from "../../contexts/AuthContext";
 
 
 interface SignInForm {
@@ -22,16 +21,6 @@ const Login = () => {
     const { language, setLanguage, translate } = useTranslate();
     const { login } = useAuthService();
 
-    // เพิ่ม: ใช้ useAuth เพื่อเช็คสถานะ authentication
-    const { user, isLoading } = useAuth();
-
-    // เพิ่ม: useEffect เพื่อเช็คและ redirect เมื่อ user login แล้ว
-    useEffect(() => {
-        if (!isLoading && user) {
-            // ถ้า user login แล้ว ให้ redirect ไปหน้า dashboard
-            navigate('/dashboard', { replace: true });
-        }
-    }, [user, isLoading, navigate]);
 
     const signInForm = useForm<SignInForm>();
 

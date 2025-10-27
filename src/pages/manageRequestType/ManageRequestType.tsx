@@ -29,7 +29,7 @@ const ManageRequestType: React.FC = () => {
     // ตั้งค่า initial data
     useEffect(() => {
         loadRequestTypeData();
-    }, []);
+    }, [currentPage]);
 
     const loadRequestTypeData = async () => {
         try {
@@ -64,7 +64,6 @@ const ManageRequestType: React.FC = () => {
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
-        loadRequestTypeData();
     };
 
     if (loading) {
