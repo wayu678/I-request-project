@@ -8,7 +8,7 @@ const RequestForPostponeTuitionandFeePaymentsDetail = () => {
   const [formData, setFormData] = useState<Partial<PostponeTuitionFormData>>({}) // เก็บข้อมูล form
 
   return (
-    <div className="bg-gray-100 pt-0 pb-3 px-3">
+    <div className="bg-gray-100 px-4 pt-[10px] pb-4 lg:px-6 lg:pt-[10px] lg:pb-6 min-h-screen">
       <div className="max-w-7xl mx-auto flex flex-col gap-3">
         {/* PipelinePage */}
         <PipelinePage currentStep={1} />

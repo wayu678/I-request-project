@@ -123,7 +123,7 @@ const Dashboard: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="bg-gray-100 pt-0 pb-3 px-3">
+            <div className="bg-gray-100 px-4 pt-[10px] pb-4 lg:px-6 lg:pt-[10px] lg:pb-6 min-h-screen">
                 <div className="max-w-7xl mx-auto">
                     <Card>
                         <div className="text-center py-12">
@@ -137,7 +137,7 @@ const Dashboard: React.FC = () => {
     }
 
     return (
-        <div className="bg-gray-100 pt-0 pb-3 px-3">
+        <div className="bg-gray-100 px-4 pt-[10px] pb-4 lg:px-6 lg:pt-[10px] lg:pb-6 min-h-screen">
             <div className="max-w-7xl mx-auto flex flex-col gap-3">
                 {/* First Section - Dashboard Content */}
                 <div className="bg-white rounded-lg p-6">

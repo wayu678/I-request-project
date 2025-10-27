@@ -15,7 +15,7 @@ const MainTemplate: React.FC<MainTemplateProps> = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
-        <div className="flex min-h-screen bg-gray-50">
+        <div className="flex min-h-screen bg-gray-100">
             {/* Mobile Overlay */}
             {sidebarOpen && (
                 <div
@@ -36,7 +36,7 @@ const MainTemplate: React.FC<MainTemplateProps> = ({ children }) => {
                 <Header onMenuClick={() => setSidebarOpen(true)} />
 
                 {/* Page Content - เนื้อหาหลัก */}
-                <main className="flex-1 p-4 lg:p-6 overflow-auto">
+                <main className="flex-1 overflow-auto">
                     {children}
                 </main>
             </div>

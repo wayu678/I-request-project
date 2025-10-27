@@ -86,7 +86,7 @@ const EditProfile = () => {
 
 
     return (
-        <div className="min-h-screen bg-gray-100 p-6">
+        <div className="bg-gray-100 px-4 pt-[10px] pb-4 lg:px-6 lg:pt-[10px] lg:pb-6 min-h-screen">
             <div className="max-w-7xl mx-auto">
                 {/* Edit Form */}
                 <Card className="shadow-sm mb-6">
