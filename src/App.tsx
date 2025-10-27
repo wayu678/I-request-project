@@ -14,11 +14,7 @@ import {
 
 import MakeUpExamForm from "./components/MakeUpExamForm";
 
-import { Demo } from "./pages/demo";
-import CreateRequest from "./pages/demo/createRequest";
 import { Dashboard } from "./pages/dashboard";
-import { ManageRequestType } from "./pages/manageRequestType";
-import { default as ManageAccount } from "./pages/manageAccount";
 
 const App = () => {
   return (
@@ -27,87 +23,8 @@ const App = () => {
         {/* Routes without MainTemplate (no sidebar/header) - เฉพาะหน้า login */}
         <Route path="/login" element={<Login />} />
 
-        {/* หน้าแรก - redirect ไป login อัตโนมัติ */}
+        {/* Redirect root to login */}
         <Route path="/" element={<Navigate to="/login" replace />} />
-
-        {/* Protected Routes with MainTemplate - Demo Pages */}
-        <Route path="/demo" element={
-          <ProtectedRoute>
-            <MainTemplate>
-              <Demo />
-            </MainTemplate>
-          </ProtectedRoute>
-        } />
-        <Route path="/demo/createRequest" element={
-          <ProtectedRoute>
-            <MainTemplate>
-              <CreateRequest />
-            </MainTemplate>
-          </ProtectedRoute>
-        } />
-        <Route path="/demo/general-request" element={
-          <ProtectedRoute>
-            <MainTemplate>
-              <CreateRequest />
-            </MainTemplate>
-          </ProtectedRoute>
-        } />
-        <Route path="/demo/registration-request" element={
-          <ProtectedRoute>
-            <MainTemplate>
-              <CreateRequest />
-            </MainTemplate>
-          </ProtectedRoute>
-        } />
-        <Route path="/demo/leave-absence" element={
-          <ProtectedRoute>
-            <MainTemplate>
-              <CreateRequest />
-            </MainTemplate>
-          </ProtectedRoute>
-        } />
-        <Route path="/demo/resignation" element={
-          <ProtectedRoute>
-            <MainTemplate>
-              <CreateRequest />
-            </MainTemplate>
-          </ProtectedRoute>
-        } />
-        <Route path="/demo/change-faculty" element={
-          <ProtectedRoute>
-            <MainTemplate>
-              <CreateRequest />
-            </MainTemplate>
-          </ProtectedRoute>
-        } />
-        <Route path="/demo/change-program" element={
-          <ProtectedRoute>
-            <MainTemplate>
-              <CreateRequest />
-            </MainTemplate>
-          </ProtectedRoute>
-        } />
-        <Route path="/demo/transfer-credits" element={
-          <ProtectedRoute>
-            <MainTemplate>
-              <CreateRequest />
-            </MainTemplate>
-          </ProtectedRoute>
-        } />
-        <Route path="/demo/master-request-type" element={
-          <ProtectedRoute>
-            <MainTemplate>
-              <ManageRequestType />
-            </MainTemplate>
-          </ProtectedRoute>
-        } />
-        <Route path="/demo/master-account" element={
-          <ProtectedRoute>
-            <MainTemplate>
-              <ManageAccount />
-            </MainTemplate>
-          </ProtectedRoute>
-        } />
 
         <Route path="/dashboard" element={
           <ProtectedRoute>
