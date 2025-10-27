@@ -19,7 +19,7 @@ interface RequestTypeRow {
 }
 
 const ManageRequestType: React.FC = () => {
-    const { translate, language } = useTranslate();
+    const { translate } = useTranslate();
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize] = useState(10);
@@ -30,11 +30,6 @@ const ManageRequestType: React.FC = () => {
     useEffect(() => {
         loadRequestTypeData();
     }, []);
-
-    // Reload data when language changes
-    useEffect(() => {
-        loadRequestTypeData();
-    }, [language]);
 
     const loadRequestTypeData = async () => {
         try {
@@ -50,8 +45,7 @@ const ManageRequestType: React.FC = () => {
                 key: item.uuid || item.id?.toString() || '',
                 no: (currentPage - 1) * pageSize + index + 1,
                 requestCode: item.code || '',
-                // ใช้ translate function เพื่อเลือก nameTh หรือ nameEn ตามภาษาปัจจุบัน
-                requestName: translate(item.nameTh || '', item.nameEn || ''),
+                requestName: item.nameTh || '',
                 status: item.status === 'Y' ? 'ACTIVE' : 'INACTIVE',
                 statusColor: item.status === 'Y' ? '#28a745' : '#dc3545',
                 uuid: item.uuid
