@@ -18,6 +18,7 @@ import { Demo } from "./pages/demo";
 import CreateRequest from "./pages/demo/createRequest";
 import { Dashboard } from "./pages/dashboard";
 import { ManageRequestType } from "./pages/manageRequestType";
+import { default as ManageAccount } from "./pages/manageAccount";
 
 const App = () => {
   return (
@@ -97,6 +98,13 @@ const App = () => {
           <ProtectedRoute>
             <MainTemplate>
               <ManageRequestType />
+            </MainTemplate>
+          </ProtectedRoute>
+        } />
+        <Route path="/demo/master-account" element={
+          <ProtectedRoute>
+            <MainTemplate>
+              <ManageAccount />
             </MainTemplate>
           </ProtectedRoute>
         } />
