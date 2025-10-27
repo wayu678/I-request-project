@@ -48,13 +48,21 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                     label = translate('คําร้องขอผ่อนผันค่าธรรมเนียมการศึกษา', 'Request for Postpone Tuition Fee Payment');
                     break;
                 case 'demo':
-                    label = translate('สร้างคำร้อง', 'Create Request');
+                    // ตรวจสอบว่าเป็น master data หรือไม่
+                    if (pathSegments[index + 1] === 'master-account' || pathSegments[index + 1] === 'master-request-type' || pathSegments[index + 1] === 'master-value') {
+                        label = translate('ข้อมูลหลัก', 'Master Data');
+                    } else {
+                        label = translate('สร้างคำร้อง', 'Create Request');
+                    }
                     break;
                 case 'createRequest':
                     label = translate('คำร้องทั่วไป', 'General Request');
                     break;
                 case 'master-request-type':
                     label = translate('จัดการประเภทคำร้อง', 'Manage Request Type');
+                    break;
+                case 'master-account':
+                    label = translate('กำหนดผู้ใช้งาน', 'Manage Account');
                     break;
                 default:
                     label = segment.charAt(0).toUpperCase() + segment.slice(1);
