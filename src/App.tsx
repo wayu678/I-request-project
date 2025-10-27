@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MainTemplate from "./layout";
@@ -26,61 +26,79 @@ const App = () => {
         {/* Routes without MainTemplate (no sidebar/header) - เฉพาะหน้า login */}
         <Route path="/login" element={<Login />} />
 
-        {/* Routes with MainTemplate (with sidebar/header) - ทุกหน้ายกเว้น login */}
-        <Route path="/" element={
-          <MainTemplate>
-            <Demo />
-          </MainTemplate>
-        } />
+        {/* หน้าแรก - redirect ไป login อัตโนมัติ */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+
+        {/* Protected Routes with MainTemplate - Demo Pages */}
         <Route path="/demo" element={
-          <MainTemplate>
-            <Demo />
-          </MainTemplate>
+          <ProtectedRoute>
+            <MainTemplate>
+              <Demo />
+            </MainTemplate>
+          </ProtectedRoute>
         } />
         <Route path="/demo/createRequest" element={
-          <MainTemplate>
-            <CreateRequest />
-          </MainTemplate>
+          <ProtectedRoute>
+            <MainTemplate>
+              <CreateRequest />
+            </MainTemplate>
+          </ProtectedRoute>
         } />
         <Route path="/demo/general-request" element={
-          <MainTemplate>
-            <CreateRequest />
-          </MainTemplate>
+          <ProtectedRoute>
+            <MainTemplate>
+              <CreateRequest />
+            </MainTemplate>
+          </ProtectedRoute>
         } />
         <Route path="/demo/registration-request" element={
-          <MainTemplate>
-            <CreateRequest />
-          </MainTemplate>
+          <ProtectedRoute>
+            <MainTemplate>
+              <CreateRequest />
+            </MainTemplate>
+          </ProtectedRoute>
         } />
         <Route path="/demo/leave-absence" element={
-          <MainTemplate>
-            <CreateRequest />
-          </MainTemplate>
+          <ProtectedRoute>
+            <MainTemplate>
+              <CreateRequest />
+            </MainTemplate>
+          </ProtectedRoute>
         } />
         <Route path="/demo/resignation" element={
-          <MainTemplate>
-            <CreateRequest />
-          </MainTemplate>
+          <ProtectedRoute>
+            <MainTemplate>
+              <CreateRequest />
+            </MainTemplate>
+          </ProtectedRoute>
         } />
         <Route path="/demo/change-faculty" element={
-          <MainTemplate>
-            <CreateRequest />
-          </MainTemplate>
+          <ProtectedRoute>
+            <MainTemplate>
+              <CreateRequest />
+            </MainTemplate>
+          </ProtectedRoute>
         } />
         <Route path="/demo/change-program" element={
-          <MainTemplate>
-            <CreateRequest />
-          </MainTemplate>
+          <ProtectedRoute>
+            <MainTemplate>
+              <CreateRequest />
+            </MainTemplate>
+          </ProtectedRoute>
         } />
         <Route path="/demo/transfer-credits" element={
-          <MainTemplate>
-            <CreateRequest />
-          </MainTemplate>
+          <ProtectedRoute>
+            <MainTemplate>
+              <CreateRequest />
+            </MainTemplate>
+          </ProtectedRoute>
         } />
         <Route path="/demo/master-request-type" element={
-          <MainTemplate>
-            <ManageRequestType />
-          </MainTemplate>
+          <ProtectedRoute>
+            <MainTemplate>
+              <ManageRequestType />
+            </MainTemplate>
+          </ProtectedRoute>
         } />
 
         <Route path="/dashboard" element={
@@ -91,9 +109,11 @@ const App = () => {
           </ProtectedRoute>
         } />
         <Route path="/make-up-exam" element={
-          <MainTemplate>
-            <MakeUpExamForm />
-          </MainTemplate>
+          <ProtectedRoute>
+            <MainTemplate>
+              <MakeUpExamForm />
+            </MainTemplate>
+          </ProtectedRoute>
         } />
 
         {/* Protected Routes with MainTemplate */}
