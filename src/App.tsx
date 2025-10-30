@@ -17,6 +17,7 @@ import MakeUpExamForm from "./components/MakeUpExamForm";
 import { Dashboard } from "./pages/dashboard";
 import ManageAccount from "./pages/manageAccount";
 import { ManageRequestType } from "./pages/manageRequestType";
+import { ManageMasterValue } from "./pages/manageMasterValue";
 
 const App = () => {
   return (
@@ -80,6 +81,14 @@ const App = () => {
           <ProtectedRoute>
             <MainTemplate>
               <ManageRequestType />
+            </MainTemplate>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/demo/master-value" element={
+          <ProtectedRoute>
+            <MainTemplate>
+              <ManageMasterValue />
             </MainTemplate>
           </ProtectedRoute>
         } />

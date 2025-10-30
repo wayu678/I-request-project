@@ -41,13 +41,47 @@ const IreButton = ({
 }: IreButtonProps) => {
     // แปลง color เป็น type สำหรับ Antd Button
     const getButtonType = () => {
+        // ใช้ default เมื่อเป็น outlined เพื่อไม่ให้สี primary ของ Antd ทับสไตล์กำหนดเอง
+        if (variant === "outlined" || variant === "text") return "default";
         if (color === "green") return "primary";
         if (color === "red") return "primary";
         return "default";
     };
 
+    const greenColor = "#339966";
+    const redColor = "#dc3545";
+
+    const variantStyle: React.CSSProperties = (() => {
+        if (color === "green") {
+            if (variant === "outlined") {
+                return {
+                    backgroundColor: "transparent",
+                    borderColor: greenColor,
+                    color: greenColor
+                };
+            }
+            if (variant === "text") {
+                return { backgroundColor: "transparent", borderColor: "transparent", color: greenColor };
+            }
+            // solid
+            return { backgroundColor: greenColor, borderColor: greenColor, color: "#fff" };
+        }
+        if (color === "red") {
+            if (variant === "outlined") {
+                return { backgroundColor: "transparent", borderColor: redColor, color: redColor };
+            }
+            if (variant === "text") {
+                return { backgroundColor: "transparent", borderColor: "transparent", color: redColor };
+            }
+            return { backgroundColor: redColor, borderColor: redColor, color: "#fff" };
+        }
+        return {};
+    })();
+
     const buttonStyle = {
+        ...variantStyle,
         ...style,
+        boxShadow: 'none',
         ...(height && {
             height: `${height}px`,
             minHeight: `${height}px`,
@@ -70,7 +104,7 @@ const IreButton = ({
             htmlType={htmlType}
             icon={icon}
             loading={loading}
-            className={`${widthFull ? "w-full" : ""} ${className}`}
+            className={`${widthFull ? "w-full" : ""} rounded ${className}`}
             style={buttonStyle}
             onClick={onClick}
         >

@@ -101,6 +101,16 @@ const ManageAccountTable: React.FC<ManageAccountTableProps> = ({
             key: 'roleDescription',
             width: 150,
             align: 'center' as const,
+            render: (_: any, record: UserRow) => {
+                const text = record.roleCode === 'ADMIN'
+                    ? translate('ผู้ดูแลระบบ', 'Administrator')
+                    : record.roleCode === 'STAFF'
+                        ? translate('เจ้าหน้าที่', 'Staff')
+                        : record.roleCode === 'STUDENT'
+                            ? translate('นิสิต', 'Student')
+                            : record.roleDescription;
+                return <span className="text-sm text-gray-900">{text}</span>;
+            }
         },
         {
             title: (
@@ -114,19 +124,11 @@ const ManageAccountTable: React.FC<ManageAccountTableProps> = ({
             width: 120,
             align: 'center' as const,
             render: (status: string) => {
-                const statusColor = getStatusColor(status);
+                const isActive = status === 'ACTIVE';
                 return (
-                    <Button
-                        className="rounded-2xl w-24 h-8 text-xs font-normal px-3 cursor-default text-white"
-                        style={{
-                            backgroundColor: statusColor,
-                            borderColor: statusColor,
-                            color: '#fff'
-                        }}
-                        disabled
-                    >
+                    <span className={`text-sm ${isActive ? 'text-gray-900' : 'text-gray-500'}`}>
                         {translateStatus(status)}
-                    </Button>
+                    </span>
                 );
             },
         },
@@ -181,7 +183,7 @@ const ManageAccountTable: React.FC<ManageAccountTableProps> = ({
 
     return (
         <div className="bg-white rounded-lg">
-            <div className="p-5">
+            <div className="px-5 pt-3">
                 <div className="overflow-x-auto">
                     <Table
                         columns={columns}
@@ -239,4 +241,3 @@ const ManageAccountTable: React.FC<ManageAccountTableProps> = ({
 };
 
 export default ManageAccountTable;
-

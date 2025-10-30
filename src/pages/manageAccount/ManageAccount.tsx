@@ -31,7 +31,7 @@ const ManageAccount: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [usersData, setUsersData] = useState<UserRow[]>([]);
     const [totalCount, setTotalCount] = useState(0);
-    const pageSize = 10;
+    const pageSize = 5;
 
     // ฟังก์ชันดึงข้อมูลจาก API
     const fetchUsers = async () => {
@@ -42,8 +42,10 @@ const ManageAccount: React.FC = () => {
                 pageSize: pageSize
             });
 
-            // แปลงข้อมูลจาก API เป็นรูปแบบที่ใช้ใน component
-            const transformedData: UserRow[] = response.users.map((user: UserResponse, index: number) => ({
+            // กรองเฉพาะบทบาทที่อนุญาต และแปลงข้อมูลจาก API เป็นรูปแบบที่ใช้ใน component
+            const allowedRoles = new Set(['ADMIN', 'STAFF']);
+            const filteredUsers = response.users.filter((user: UserResponse) => allowedRoles.has(user.roleCode || ''));
+            const transformedData: UserRow[] = filteredUsers.map((user: UserResponse, index: number) => ({
                 key: user.id?.toString() || '',
                 no: (currentPage - 1) * pageSize + index + 1,
                 id: user.id || 0,
@@ -55,7 +57,8 @@ const ManageAccount: React.FC = () => {
             }));
 
             setUsersData(transformedData);
-            setTotalCount(response.totalCount);
+            // ใช้ totalCount จาก API หากมี เพื่อความถูกต้องของจำนวนทั้งหมด
+            setTotalCount(response.totalCount ?? filteredUsers.length);
         } catch (error) {
             console.error('Error fetching users:', error);
             message.error(translate('ไม่สามารถโหลดข้อมูลได้', 'Cannot load data'));
@@ -78,6 +81,12 @@ const ManageAccount: React.FC = () => {
         return matchesUsername && matchesRole && matchesStatus;
     });
 
+    // แบ่งหน้าแบบ client-side เพื่อแก้ปัญหาที่หน้า 1 และ 2 แสดงข้อมูลเหมือนกัน
+    const paginatedData = filteredData.slice(
+        (currentPage - 1) * pageSize,
+        currentPage * pageSize
+    );
+
     const handleUsernameChange = (value: string) => {
         setUsernameFilter(value);
         setCurrentPage(1);
@@ -94,7 +103,9 @@ const ManageAccount: React.FC = () => {
     };
 
     const handlePageChange = (page: number) => {
-        setCurrentPage(page);
+        if (page !== currentPage) {
+            setCurrentPage(page);
+        }
     };
 
     const handleAddClick = () => {
@@ -120,8 +131,8 @@ const ManageAccount: React.FC = () => {
     };
 
     return (
-        <div className="bg-gray-100 pt-0 pb-3 px-3">
-            <div className="max-w-7xl mx-auto flex flex-col gap-3">
+        <div className="bg-gray-100 px-4 pt-[10px] pb-4 lg:px-6 lg:pt-[10px] lg:pb-6 min-h-screen">
+            <div className="max-w-7xl mx-auto flex flex-col">
                 <div className="bg-white rounded-lg p-5">
                     <ManageAccountFilters
                         usernameFilter={usernameFilter}
@@ -134,10 +145,10 @@ const ManageAccount: React.FC = () => {
                     />
 
                     <ManageAccountTable
-                        tableData={filteredData}
+                        tableData={paginatedData}
                         loading={loading}
                         currentPage={currentPage}
-                        total={totalCount}
+                        total={filteredData.length}
                         pageSize={pageSize}
                         onPageChange={handlePageChange}
                         onEdit={handleEditClick}
@@ -156,4 +167,3 @@ const ManageAccount: React.FC = () => {
 };
 
 export default ManageAccount;
-

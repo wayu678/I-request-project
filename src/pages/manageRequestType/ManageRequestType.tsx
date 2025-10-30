@@ -22,7 +22,7 @@ const ManageRequestType: React.FC = () => {
     const { translate } = useTranslate();
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize] = useState(10);
+    const [pageSize] = useState(5);
     const [tableData, setTableData] = useState<RequestTypeRow[]>([]);
     const [total, setTotal] = useState(0);
 
@@ -63,36 +63,40 @@ const ManageRequestType: React.FC = () => {
     };
 
     const handlePageChange = (page: number) => {
-        setCurrentPage(page);
+        if (page !== currentPage) {
+            setCurrentPage(page);
+        }
     };
 
     if (loading) {
         return (
-            <div className="bg-gray-100 pt-0 pb-3 px-3">
-                <div className="max-w-7xl mx-auto">
-                    <Card>
+            <div className="bg-gray-100 px-4 pt-[10px] pb-4 lg:px-6 lg:pt-[10px] lg:pb-6 min-h-screen">
+                <div className="max-w-7xl mx-auto flex flex-col">
+                    <div className="bg-white rounded-lg p-5">
                         <div className="text-center py-12">
                             <Spin size="large" />
                             <div className="mt-4 text-gray-600">กำลังโหลดข้อมูล...</div>
                         </div>
-                    </Card>
+                    </div>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="bg-gray-100 pt-0 pb-3 px-3">
-            <div className="max-w-7xl mx-auto flex flex-col gap-3">
-                {/* Table Section */}
-                <ManageRequestTypeTable
-                    tableData={tableData}
-                    loading={loading}
-                    currentPage={currentPage}
-                    total={total}
-                    pageSize={pageSize}
-                    onPageChange={handlePageChange}
-                />
+        <div className="bg-gray-100 px-4 pt-[10px] pb-4 lg:px-6 lg:pt-[10px] lg:pb-6 min-h-screen">
+            <div className="max-w-7xl mx-auto flex flex-col">
+                <div className="bg-white rounded-lg p-5">
+                    {/* Table Section */}
+                    <ManageRequestTypeTable
+                        tableData={tableData}
+                        loading={loading}
+                        currentPage={currentPage}
+                        total={total}
+                        pageSize={pageSize}
+                        onPageChange={handlePageChange}
+                    />
+                </div>
             </div>
         </div>
     );
