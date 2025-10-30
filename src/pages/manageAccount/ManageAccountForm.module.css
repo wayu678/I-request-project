@@ -1,0 +1,22 @@
+.hideAntdRequiredBefore :global(.ant-form-item .ant-form-item-label > label.ant-form-item-required)::before {
+  display: none !important;
+}
+
+.checkboxGreen :global(.ant-checkbox .ant-checkbox-inner) {
+  border-color: #339966;
+}
+
+.checkboxGreen :global(.ant-checkbox:hover .ant-checkbox-inner) {
+  border-color: #339966;
+}
+
+.checkboxGreen :global(.ant-checkbox-checked .ant-checkbox-inner) {
+  background-color: #339966;
+  border-color: #339966;
+}
+
+.checkboxGreen :global(.ant-checkbox-checked::after) {
+  border-color: #339966;
+}
+
+

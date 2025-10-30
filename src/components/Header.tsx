@@ -64,6 +64,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                 case 'master-account':
                     label = translate('กำหนดผู้ใช้งาน', 'Manage Account');
                     break;
+                case 'master-value':
+                    label = translate('กำหนดค่าหลัก', 'Manage Master Value');
+                    break;
                 default:
                     label = segment.charAt(0).toUpperCase() + segment.slice(1);
             }

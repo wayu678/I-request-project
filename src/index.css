@@ -639,3 +639,47 @@ html body div#root .ant-flex .ant-upload button {
   accent-color: #339966 !important;
 }
 
+/* Pagination - remove active box around current page number */
+.ant-pagination-item-active {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.ant-pagination-item a {
+  outline: none !important;
+  cursor: pointer !important;
+}
+.ant-pagination-item:focus,
+.ant-pagination-item:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.ant-pagination-item-active a {
+  color: inherit !important;
+  cursor: pointer !important;
+}
+
+/* Pagination hover/press feedback without border box */
+.ant-pagination-item:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+  border-color: transparent !important;
+}
+
+.ant-pagination-item:active {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+  border-color: transparent !important;
+}
+
+.ant-pagination-item-active:hover,
+.ant-pagination-item-active:active {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+  border-color: transparent !important;
+}
+
+/* Hide only AntD tooltip/help icons; keep required asterisks visible */
+.ant-form-item-tooltip,
+.ant-form-item-label .anticon {
+  display: none !important;
+}
+
+/* Remove custom asterisk styling for trailing required star */

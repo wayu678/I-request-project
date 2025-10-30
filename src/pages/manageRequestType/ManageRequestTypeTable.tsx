@@ -52,7 +52,7 @@ const ManageRequestTypeTable: React.FC<ManageRequestTypeTableProps> = ({
     const translateStatus = (status: string) => {
         switch (status) {
             case 'ACTIVE':
-                return translate('เปิดใช้งาน', 'Active');
+                return translate('ใช้งาน', 'Active');
             case 'INACTIVE':
                 return translate('ปิดใช้งาน', 'Inactive');
             default:
@@ -108,19 +108,11 @@ const ManageRequestTypeTable: React.FC<ManageRequestTypeTableProps> = ({
             width: 120,
             align: 'center' as const,
             render: (status: string) => {
-                const statusColor = getStatusColor(status);
+                const isActive = status === 'ACTIVE';
                 return (
-                    <Button
-                        className="rounded-2xl w-24 h-8 text-xs font-normal px-3 cursor-default text-white"
-                        style={{
-                            backgroundColor: statusColor,
-                            borderColor: statusColor,
-                            color: '#fff'
-                        }}
-                        disabled
-                    >
+                    <span className={`text-sm ${isActive ? 'text-gray-900' : 'text-gray-500'}`}>
                         {translateStatus(status)}
-                    </Button>
+                    </span>
                 );
             },
         },
@@ -176,7 +168,7 @@ const ManageRequestTypeTable: React.FC<ManageRequestTypeTableProps> = ({
 
     return (
         <div className="bg-white rounded-lg">
-            <div className="p-5">
+            <div className="px-5 pt-3">
 
                 {/* Table */}
                 <div className="overflow-x-auto">

@@ -31,8 +31,8 @@ const ManageAccountFilters: React.FC<ManageAccountFiltersProps> = ({
     const formContext = useForm({
         defaultValues: {
             username: usernameFilter,
-            role: roleFilter || '',
-            status: statusFilter || ''
+            role: roleFilter ?? undefined,
+            status: statusFilter ?? undefined
         }
     });
 
@@ -41,11 +41,11 @@ const ManageAccountFilters: React.FC<ManageAccountFiltersProps> = ({
     }, [usernameFilter, formContext]);
 
     useEffect(() => {
-        formContext.setValue('role', roleFilter || '');
+        formContext.setValue('role', roleFilter ?? undefined);
     }, [roleFilter, formContext]);
 
     useEffect(() => {
-        formContext.setValue('status', statusFilter || '');
+        formContext.setValue('status', statusFilter ?? undefined);
     }, [statusFilter, formContext]);
 
     const roleOptions = useMemo(() => [
@@ -91,7 +91,6 @@ const ManageAccountFilters: React.FC<ManageAccountFiltersProps> = ({
                         registerName={formContext.register('username')}
                     />
                 </Col>
-
                 <Col span={12}>
                     <IreSelect
                         label={translate('บทบาท', 'Role')}
@@ -115,14 +114,18 @@ const ManageAccountFilters: React.FC<ManageAccountFiltersProps> = ({
                 </Col>
             </Row>
 
-            <div className="flex justify-end">
-                <IreButton
-                    label={translate('เพิ่ม', 'Add')}
-                    color="green"
-                    size="large"
-                    icon={<PlusOutlined />}
+            <div className="flex justify-end pr-5">
+                <button
                     onClick={onAddClick}
-                />
+                    type="button"
+                    className="flex items-center gap-2 justify-center rounded-lg font-medium shadow-sm text-white"
+                    style={{ backgroundColor: '#339966', borderColor: '#339966', width: '80px', height: '40px' }}
+                    onMouseOver={e => (e.currentTarget.style.backgroundColor = '#287a4e')}
+                    onMouseOut={e => (e.currentTarget.style.backgroundColor = '#339966')}
+                >
+                    <span style={{ fontSize: '1.25em' }}>+</span>
+                    {translate('เพิ่ม', 'Add')}
+                </button>
             </div>
         </>
     );

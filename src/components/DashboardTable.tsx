@@ -39,7 +39,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({
     const navigate = useNavigate();
     const { translateStatus, translateSemester, translateRequestType } = createTranslationFunctions(translate);
 
-    const isStudent = user?.roleCode === 'STUDENT';
+    const canCreateRequest = user?.roleCode === 'STUDENT' || user?.roleCode === 'STAFF';
 
     const columns = [
         {
@@ -157,8 +157,8 @@ const DashboardTable: React.FC<DashboardTableProps> = ({
     return (
         <div className="bg-white rounded-lg">
             <div className="p-5">
-                {/* Create Request Button - Only for Students */}
-                {isStudent && (
+                {/* Create Request Button - Visible for Student and Staff */}
+                {canCreateRequest && (
                     <div className="mb-3">
                         <Flex justify="flex-end">
                             <Button
