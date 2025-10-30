@@ -18,6 +18,7 @@ import { Dashboard } from "./pages/dashboard";
 import ManageAccount from "./pages/manageAccount";
 import { ManageRequestType } from "./pages/manageRequestType";
 import { ManageMasterValue } from "./pages/manageMasterValue";
+import GeneralRequestRoutes from "./pages/requests/irst05";
 
 const App = () => {
   return (
@@ -53,7 +54,15 @@ const App = () => {
           </ProtectedRoute>
         } />
 
-        <Route path="/irst07" element={
+        <Route path="/irst05/*" element={
+          <ProtectedRoute>
+            <MainTemplate>
+              <GeneralRequestRoutes />
+            </MainTemplate>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/irst07/postpone-tuition-and-fee-payments" element={
           <ProtectedRoute>
             <MainTemplate>
               <RequestForPostponeTuitionandFeePayments />

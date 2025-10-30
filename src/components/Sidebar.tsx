@@ -21,10 +21,9 @@ interface MenuItem {
 
 interface SidebarProps {
     isOpen: boolean;
-    onClose: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const { translate, language } = useTranslate();
@@ -65,7 +64,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             label: translate('สร้างคำร้อง', 'Create Request'),
             icon: <FileTextOutlined className="text-base" />,
             children: [
-                { key: 'general-request', label: translate('คำร้องทั่วไป', 'General Request'), path: '/demo/general-request' },
+                { key: 'general-request', label: translate('คำร้องทั่วไป', 'General Request'), path: '/irst05/general-request' },
                 { key: 'registration-request', label: translate('คำร้องขอลงทะเบียนเรียน', 'Request for Registration'), path: '/demo/registration-request' },
                 { key: 'postpone-tuition', label: translate('คําร้องขอผ่อนผันค่าธรรมเนียมการศึกษา', 'Request for Postpone Tuition and Fee Payments'), path: '/irst07' },
                 { key: 'leave-absence', label: translate('คำร้องขอลาพักการศึกษา', 'Request for Leave of Absence'), path: '/demo/leave-absence' },
@@ -99,8 +98,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             if (parentKey && !expandedMenus.includes(parentKey)) {
                 setExpandedMenus(prev => [...prev, parentKey]);
             }
-            // ปิด sidebar บน mobile เมื่อเลือกเมนู
-            onClose();
         }
     };
 
@@ -171,18 +168,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
     return (
         <div className={`h-screen text-white flex flex-col fixed left-0 top-0 z-50 shadow-lg font-sans w-70 lg:w-70 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`} style={{ backgroundColor: '#2F3337' }}>
-            {/* Mobile Close Button */}
-            <div className="lg:hidden flex justify-end p-4">
-                <button
-                    onClick={onClose}
-                    className="text-white hover:text-gray-300 transition-colors"
-                >
-                    <CloseOutlined className="text-xl" />
-                </button>
-            </div>
-
             {/* User Profile Section */}
-            <div className="w-75 h-18 p-5 flex items-center gap-4">
+            <div className="w-full p-5 flex items-center gap-4">
                 <Avatar
                     size={44}
                     src="/profile.jpg"

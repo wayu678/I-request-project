@@ -8,6 +8,7 @@ import IreUpload from "./IreUpload";
 import IreButton from "./IreButton";
 import IreDisplayField from "./IreDisplayField";
 import IreRadioButton from "./IreRadioButton";
+import IreFormsGroupButton from "./IreFormsGroupButton";
 
 export {
     IreTextbox,
@@ -19,5 +20,6 @@ export {
     IreUpload,
     IreButton,
     IreDisplayField,
-    IreRadioButton
+    IreRadioButton,
+    IreFormsGroupButton
 };

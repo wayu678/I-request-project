@@ -16,65 +16,65 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface GeneralRequestRequest
+ * @interface GeneralRequestResponse
  */
-export interface GeneralRequestRequest {
+export interface GeneralRequestResponse {
     /**
      * 
      * @type {string}
-     * @memberof GeneralRequestRequest
+     * @memberof GeneralRequestResponse
      */
     headerUuid?: string;
     /**
      * 
      * @type {string}
-     * @memberof GeneralRequestRequest
+     * @memberof GeneralRequestResponse
      */
     studentName?: string;
     /**
      * 
      * @type {string}
-     * @memberof GeneralRequestRequest
+     * @memberof GeneralRequestResponse
      */
     studentCode?: string;
     /**
      * 
      * @type {string}
-     * @memberof GeneralRequestRequest
+     * @memberof GeneralRequestResponse
      */
     facultyCode?: string;
     /**
      * 
      * @type {string}
-     * @memberof GeneralRequestRequest
+     * @memberof GeneralRequestResponse
      */
     majorCode?: string;
     /**
      * 
      * @type {string}
-     * @memberof GeneralRequestRequest
+     * @memberof GeneralRequestResponse
      */
     email?: string;
     /**
      * 
      * @type {string}
-     * @memberof GeneralRequestRequest
+     * @memberof GeneralRequestResponse
      */
     phone?: string;
 }
 
 /**
- * Check if a given object implements the GeneralRequestRequest interface.
+ * Check if a given object implements the GeneralRequestResponse interface.
  */
-export function instanceOfGeneralRequestRequest(value: object): value is GeneralRequestRequest {
+export function instanceOfGeneralRequestResponse(value: object): value is GeneralRequestResponse {
     return true;
 }
 
-export function GeneralRequestRequestFromJSON(json: any): GeneralRequestRequest {
-    return GeneralRequestRequestFromJSONTyped(json, false);
+export function GeneralRequestResponseFromJSON(json: any): GeneralRequestResponse {
+    return GeneralRequestResponseFromJSONTyped(json, false);
 }
 
-export function GeneralRequestRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): GeneralRequestRequest {
+export function GeneralRequestResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): GeneralRequestResponse {
     if (json == null) {
         return json;
     }
@@ -90,11 +90,11 @@ export function GeneralRequestRequestFromJSONTyped(json: any, ignoreDiscriminato
     };
 }
 
-export function GeneralRequestRequestToJSON(json: any): GeneralRequestRequest {
-    return GeneralRequestRequestToJSONTyped(json, false);
+export function GeneralRequestResponseToJSON(json: any): GeneralRequestResponse {
+    return GeneralRequestResponseToJSONTyped(json, false);
 }
 
-export function GeneralRequestRequestToJSONTyped(value?: GeneralRequestRequest | null, ignoreDiscriminator: boolean = false): any {
+export function GeneralRequestResponseToJSONTyped(value?: GeneralRequestResponse | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }
