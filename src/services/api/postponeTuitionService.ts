@@ -1,4 +1,4 @@
-import { Irst07PostponeTuitionFeePaymentRequestApi, type CreatePostponeTuitionRequestPostOperationRequest } from '../generated-api/apis/Irst07PostponeTuitionFeePaymentRequestApi';
+import { Irst07PostponeTuitionFeePaymentRequestApi, type CreatePostponeTuitionRequestPostOperationRequest } from '../generated-api/apis/IRST07POSTPONETUITIONFEEPAYMENTREQUESTApi';
 import type { PostponeTuitionFee } from '../generated-api/models';
 import { Configuration } from '../generated-api/runtime';
 

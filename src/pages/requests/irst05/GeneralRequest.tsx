@@ -197,7 +197,10 @@ const GeneralRequest = () => {
                                         registerName={generalRequestForm.register("studentName")}
                                         placeholder={translate("กรอกชื่อนิสิต", "Enter Student Name")}
                                         isRequired={true}
+<<<<<<< HEAD
                                         formatType="textOnly"
+=======
+>>>>>>> cb819bd (irst05)
                                     // rules={[{ required: translate("กรุณากรอกชื่อนิสิต", "Please enter student name") }]}
                                     />
                                 </Col>
@@ -208,7 +211,10 @@ const GeneralRequest = () => {
                                         registerName={generalRequestForm.register("studentId")}
                                         placeholder={translate("กรอกรหัสนิสิต", "Enter Student ID")}
                                         isRequired={true}
+<<<<<<< HEAD
                                         formatType="studentId"
+=======
+>>>>>>> cb819bd (irst05)
                                     // rules={[{ required: translate("กรุณากรอกรหัสนิสิต", "Please enter student ID") }]}
                                     />
                                 </Col>
@@ -219,7 +225,10 @@ const GeneralRequest = () => {
                                         registerName={generalRequestForm.register("faculty")}
                                         placeholder={translate("กรอกคณะ", "Enter Faculty")}
                                         isRequired={true}
+<<<<<<< HEAD
                                         formatType="textOnly"
+=======
+>>>>>>> cb819bd (irst05)
                                     // rules={[{ required: translate("กรุณากรอกคณะ", "Please enter faculty") }]}
                                     />
                                 </Col>
@@ -230,7 +239,10 @@ const GeneralRequest = () => {
                                         registerName={generalRequestForm.register("major")}
                                         placeholder={translate("กรอกสาขา", "Enter Major")}
                                         isRequired={true}
+<<<<<<< HEAD
                                         formatType="textOnly"
+=======
+>>>>>>> cb819bd (irst05)
                                     // rules={[{ required: translate("กรุณากรอกสาขา", "Please enter major") }]}
                                     />
                                 </Col>
@@ -241,7 +253,10 @@ const GeneralRequest = () => {
                                         registerName={generalRequestForm.register("email")}
                                         placeholder={translate("กรอกอีเมล์", "Enter Email")}
                                         isRequired={true}
+<<<<<<< HEAD
                                         formatType="email"
+=======
+>>>>>>> cb819bd (irst05)
                                     // rules={[{ required: translate("กรุณากรอกอีเมล์", "Please enter email") }]}
                                     />
                                 </Col>

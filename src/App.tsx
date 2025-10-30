@@ -18,8 +18,13 @@ import MakeUpExamForm from "./components/MakeUpExamForm";
 import { Dashboard } from "./pages/dashboard";
 import ManageAccount from "./pages/manageAccount";
 import { ManageRequestType } from "./pages/manageRequestType";
+<<<<<<< HEAD
 import { ManageMasterValue } from "./pages/manageMasterValue";
 import GeneralRequestRoutes from "./pages/requests/irst05";
+=======
+import GeneralRequestRoutes from "./pages/requests/irst05";
+import ManageMasterValue from "./pages/manageMasterValue/ManageMasterValue";
+>>>>>>> cb819bd (irst05)
 
 const App = () => {
   return (
@@ -111,7 +116,7 @@ const App = () => {
         } />
 
         <Route path="*" element={
-          <ProtectedRoute>
+          <ProtectedRoute> 
             <MainTemplate>
               <NotFound />
             </MainTemplate>
