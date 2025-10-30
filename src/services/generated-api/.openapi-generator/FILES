@@ -22,7 +22,10 @@ models/DashboardSummaryItem.ts
 models/DashboardTableItem.ts
 models/DeleteUser200Response.ts
 models/ExportStudentsData200Response.ts
+models/GeneralRequestDetailRequest.ts
+models/GeneralRequestDetailResponse.ts
 models/GeneralRequestRequest.ts
+models/GeneralRequestResponse.ts
 models/GetAllUsersResponse.ts
 models/GetRequestTypesResponse.ts
 models/ImportStudentsData200Response.ts

@@ -15,15 +15,52 @@
 
 import * as runtime from '../runtime';
 import type {
+  GeneralRequestDetailRequest,
+  GeneralRequestDetailResponse,
   GeneralRequestRequest,
+  GeneralRequestResponse,
 } from '../models/index';
 import {
+    GeneralRequestDetailRequestFromJSON,
+    GeneralRequestDetailRequestToJSON,
+    GeneralRequestDetailResponseFromJSON,
+    GeneralRequestDetailResponseToJSON,
     GeneralRequestRequestFromJSON,
     GeneralRequestRequestToJSON,
+    GeneralRequestResponseFromJSON,
+    GeneralRequestResponseToJSON,
 } from '../models/index';
 
-export interface CreateRequestPostRequest {
+export interface ApproveGeneralRequestByHeaderUuidPutRequest {
+    headerUuid: string;
+}
+
+export interface CancelGeneralRequestByHeaderUuidPutRequest {
+    headerUuid: string;
+}
+
+export interface CreateGeneralRequestPostRequest {
     generalRequestRequest: GeneralRequestRequest;
+}
+
+export interface FindGeneralRequestByHeaderUuidGetRequest {
+    headerUuid: string;
+}
+
+export interface FindGeneralRequestDetailByHeaderUuidGetRequest {
+    headerUuid: string;
+}
+
+export interface RejectGeneralRequestByHeaderUuidPutRequest {
+    headerUuid: string;
+}
+
+export interface SendApproveGeneralRequestByHeaderUuidPutRequest {
+    headerUuid: string;
+}
+
+export interface UpdateGeneralRequestDetailByUuidPutRequest {
+    generalRequestDetailRequest: GeneralRequestDetailRequest;
 }
 
 /**
@@ -34,17 +71,116 @@ export interface CreateRequestPostRequest {
  */
 export interface IRST05GeneralRequestApiInterface {
     /**
-     * 
+     * อนุมัติคำร้องทั่วไปตาม UUID
+     * @param {string} headerUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IRST05GeneralRequestApiInterface
+     */
+    approveGeneralRequestByHeaderUuidPutRaw(requestParameters: ApproveGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestResponse>>;
+
+    /**
+     * อนุมัติคำร้องทั่วไปตาม UUID
+     */
+    approveGeneralRequestByHeaderUuidPut(requestParameters: ApproveGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestResponse>;
+
+    /**
+     * ยกเลิกคำร้องทั่วไปตาม UUID
+     * @param {string} headerUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IRST05GeneralRequestApiInterface
+     */
+    cancelGeneralRequestByHeaderUuidPutRaw(requestParameters: CancelGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestResponse>>;
+
+    /**
+     * ยกเลิกคำร้องทั่วไปตาม UUID
+     */
+    cancelGeneralRequestByHeaderUuidPut(requestParameters: CancelGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestResponse>;
+
+    /**
+     * สร้างคำร้องทั่วไป
      * @param {GeneralRequestRequest} generalRequestRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof IRST05GeneralRequestApiInterface
      */
-    createRequestPostRaw(requestParameters: CreateRequestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
+    createGeneralRequestPostRaw(requestParameters: CreateGeneralRequestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestResponse>>;
 
     /**
+     * สร้างคำร้องทั่วไป
      */
-    createRequestPost(requestParameters: CreateRequestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
+    createGeneralRequestPost(requestParameters: CreateGeneralRequestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestResponse>;
+
+    /**
+     * ค้นหาคำร้องทั่วไปตาม UUID
+     * @param {string} headerUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IRST05GeneralRequestApiInterface
+     */
+    findGeneralRequestByHeaderUuidGetRaw(requestParameters: FindGeneralRequestByHeaderUuidGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestResponse>>;
+
+    /**
+     * ค้นหาคำร้องทั่วไปตาม UUID
+     */
+    findGeneralRequestByHeaderUuidGet(requestParameters: FindGeneralRequestByHeaderUuidGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestResponse>;
+
+    /**
+     * ค้นหารายละเอียดคำร้องทั่วไปตาม UUID
+     * @param {string} headerUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IRST05GeneralRequestApiInterface
+     */
+    findGeneralRequestDetailByHeaderUuidGetRaw(requestParameters: FindGeneralRequestDetailByHeaderUuidGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestDetailResponse>>;
+
+    /**
+     * ค้นหารายละเอียดคำร้องทั่วไปตาม UUID
+     */
+    findGeneralRequestDetailByHeaderUuidGet(requestParameters: FindGeneralRequestDetailByHeaderUuidGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestDetailResponse>;
+
+    /**
+     * ไม่อนุมัติคำร้องทั่วไปตาม UUID
+     * @param {string} headerUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IRST05GeneralRequestApiInterface
+     */
+    rejectGeneralRequestByHeaderUuidPutRaw(requestParameters: RejectGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestResponse>>;
+
+    /**
+     * ไม่อนุมัติคำร้องทั่วไปตาม UUID
+     */
+    rejectGeneralRequestByHeaderUuidPut(requestParameters: RejectGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestResponse>;
+
+    /**
+     * ส่งอนุมัติคำร้องทั่วไปตาม UUID
+     * @param {string} headerUuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IRST05GeneralRequestApiInterface
+     */
+    sendApproveGeneralRequestByHeaderUuidPutRaw(requestParameters: SendApproveGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestResponse>>;
+
+    /**
+     * ส่งอนุมัติคำร้องทั่วไปตาม UUID
+     */
+    sendApproveGeneralRequestByHeaderUuidPut(requestParameters: SendApproveGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestResponse>;
+
+    /**
+     * อัพเดตคำร้องทั่วไปตาม UUID
+     * @param {GeneralRequestDetailRequest} generalRequestDetailRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof IRST05GeneralRequestApiInterface
+     */
+    updateGeneralRequestDetailByUuidPutRaw(requestParameters: UpdateGeneralRequestDetailByUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestResponse>>;
+
+    /**
+     * อัพเดตคำร้องทั่วไปตาม UUID
+     */
+    updateGeneralRequestDetailByUuidPut(requestParameters: UpdateGeneralRequestDetailByUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestResponse>;
 
 }
 
@@ -54,12 +190,93 @@ export interface IRST05GeneralRequestApiInterface {
 export class IRST05GeneralRequestApi extends runtime.BaseAPI implements IRST05GeneralRequestApiInterface {
 
     /**
+     * อนุมัติคำร้องทั่วไปตาม UUID
      */
-    async createRequestPostRaw(requestParameters: CreateRequestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+    async approveGeneralRequestByHeaderUuidPutRaw(requestParameters: ApproveGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestResponse>> {
+        if (requestParameters['headerUuid'] == null) {
+            throw new runtime.RequiredError(
+                'headerUuid',
+                'Required parameter "headerUuid" was null or undefined when calling approveGeneralRequestByHeaderUuidPut().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['headerUuid'] != null) {
+            queryParameters['headerUuid'] = requestParameters['headerUuid'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/irst05/approve-general-request-by-header-uuid-put`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GeneralRequestResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * อนุมัติคำร้องทั่วไปตาม UUID
+     */
+    async approveGeneralRequestByHeaderUuidPut(requestParameters: ApproveGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestResponse> {
+        const response = await this.approveGeneralRequestByHeaderUuidPutRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * ยกเลิกคำร้องทั่วไปตาม UUID
+     */
+    async cancelGeneralRequestByHeaderUuidPutRaw(requestParameters: CancelGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestResponse>> {
+        if (requestParameters['headerUuid'] == null) {
+            throw new runtime.RequiredError(
+                'headerUuid',
+                'Required parameter "headerUuid" was null or undefined when calling cancelGeneralRequestByHeaderUuidPut().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['headerUuid'] != null) {
+            queryParameters['headerUuid'] = requestParameters['headerUuid'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/irst05/cancel-general-request-by-header-uuid-put`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GeneralRequestResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * ยกเลิกคำร้องทั่วไปตาม UUID
+     */
+    async cancelGeneralRequestByHeaderUuidPut(requestParameters: CancelGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestResponse> {
+        const response = await this.cancelGeneralRequestByHeaderUuidPutRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * สร้างคำร้องทั่วไป
+     */
+    async createGeneralRequestPostRaw(requestParameters: CreateGeneralRequestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestResponse>> {
         if (requestParameters['generalRequestRequest'] == null) {
             throw new runtime.RequiredError(
                 'generalRequestRequest',
-                'Required parameter "generalRequestRequest" was null or undefined when calling createRequestPost().'
+                'Required parameter "generalRequestRequest" was null or undefined when calling createGeneralRequestPost().'
             );
         }
 
@@ -70,7 +287,7 @@ export class IRST05GeneralRequestApi extends runtime.BaseAPI implements IRST05Ge
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/irst05/create-request-post`;
+        let urlPath = `/irst05/create-general-request-post`;
 
         const response = await this.request({
             path: urlPath,
@@ -80,17 +297,213 @@ export class IRST05GeneralRequestApi extends runtime.BaseAPI implements IRST05Ge
             body: GeneralRequestRequestToJSON(requestParameters['generalRequestRequest']),
         }, initOverrides);
 
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<any>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
+        return new runtime.JSONApiResponse(response, (jsonValue) => GeneralRequestResponseFromJSON(jsonValue));
     }
 
     /**
+     * สร้างคำร้องทั่วไป
      */
-    async createRequestPost(requestParameters: CreateRequestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
-        const response = await this.createRequestPostRaw(requestParameters, initOverrides);
+    async createGeneralRequestPost(requestParameters: CreateGeneralRequestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestResponse> {
+        const response = await this.createGeneralRequestPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * ค้นหาคำร้องทั่วไปตาม UUID
+     */
+    async findGeneralRequestByHeaderUuidGetRaw(requestParameters: FindGeneralRequestByHeaderUuidGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestResponse>> {
+        if (requestParameters['headerUuid'] == null) {
+            throw new runtime.RequiredError(
+                'headerUuid',
+                'Required parameter "headerUuid" was null or undefined when calling findGeneralRequestByHeaderUuidGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['headerUuid'] != null) {
+            queryParameters['headerUuid'] = requestParameters['headerUuid'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/irst05/find-general-request-by-header-uuid-get`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GeneralRequestResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * ค้นหาคำร้องทั่วไปตาม UUID
+     */
+    async findGeneralRequestByHeaderUuidGet(requestParameters: FindGeneralRequestByHeaderUuidGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestResponse> {
+        const response = await this.findGeneralRequestByHeaderUuidGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * ค้นหารายละเอียดคำร้องทั่วไปตาม UUID
+     */
+    async findGeneralRequestDetailByHeaderUuidGetRaw(requestParameters: FindGeneralRequestDetailByHeaderUuidGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestDetailResponse>> {
+        if (requestParameters['headerUuid'] == null) {
+            throw new runtime.RequiredError(
+                'headerUuid',
+                'Required parameter "headerUuid" was null or undefined when calling findGeneralRequestDetailByHeaderUuidGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['headerUuid'] != null) {
+            queryParameters['headerUuid'] = requestParameters['headerUuid'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/irst05/find-general-request-detail-by-header-uuid-get`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GeneralRequestDetailResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * ค้นหารายละเอียดคำร้องทั่วไปตาม UUID
+     */
+    async findGeneralRequestDetailByHeaderUuidGet(requestParameters: FindGeneralRequestDetailByHeaderUuidGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestDetailResponse> {
+        const response = await this.findGeneralRequestDetailByHeaderUuidGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * ไม่อนุมัติคำร้องทั่วไปตาม UUID
+     */
+    async rejectGeneralRequestByHeaderUuidPutRaw(requestParameters: RejectGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestResponse>> {
+        if (requestParameters['headerUuid'] == null) {
+            throw new runtime.RequiredError(
+                'headerUuid',
+                'Required parameter "headerUuid" was null or undefined when calling rejectGeneralRequestByHeaderUuidPut().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['headerUuid'] != null) {
+            queryParameters['headerUuid'] = requestParameters['headerUuid'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/irst05/reject-general-request-by-header-uuid-put`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GeneralRequestResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * ไม่อนุมัติคำร้องทั่วไปตาม UUID
+     */
+    async rejectGeneralRequestByHeaderUuidPut(requestParameters: RejectGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestResponse> {
+        const response = await this.rejectGeneralRequestByHeaderUuidPutRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * ส่งอนุมัติคำร้องทั่วไปตาม UUID
+     */
+    async sendApproveGeneralRequestByHeaderUuidPutRaw(requestParameters: SendApproveGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestResponse>> {
+        if (requestParameters['headerUuid'] == null) {
+            throw new runtime.RequiredError(
+                'headerUuid',
+                'Required parameter "headerUuid" was null or undefined when calling sendApproveGeneralRequestByHeaderUuidPut().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['headerUuid'] != null) {
+            queryParameters['headerUuid'] = requestParameters['headerUuid'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/irst05/send-approve-general-request-by-header-uuid-put`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GeneralRequestResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * ส่งอนุมัติคำร้องทั่วไปตาม UUID
+     */
+    async sendApproveGeneralRequestByHeaderUuidPut(requestParameters: SendApproveGeneralRequestByHeaderUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestResponse> {
+        const response = await this.sendApproveGeneralRequestByHeaderUuidPutRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * อัพเดตคำร้องทั่วไปตาม UUID
+     */
+    async updateGeneralRequestDetailByUuidPutRaw(requestParameters: UpdateGeneralRequestDetailByUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GeneralRequestResponse>> {
+        if (requestParameters['generalRequestDetailRequest'] == null) {
+            throw new runtime.RequiredError(
+                'generalRequestDetailRequest',
+                'Required parameter "generalRequestDetailRequest" was null or undefined when calling updateGeneralRequestDetailByUuidPut().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/irst05/update-general-request-detail-by-uuid-put`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: GeneralRequestDetailRequestToJSON(requestParameters['generalRequestDetailRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GeneralRequestResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * อัพเดตคำร้องทั่วไปตาม UUID
+     */
+    async updateGeneralRequestDetailByUuidPut(requestParameters: UpdateGeneralRequestDetailByUuidPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GeneralRequestResponse> {
+        const response = await this.updateGeneralRequestDetailByUuidPutRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
