@@ -26,6 +26,14 @@ export interface CreatePostponeTuitionRequestPostOperationRequest {
     createPostponeTuitionRequestPostRequest: CreatePostponeTuitionRequestPostRequest;
 }
 
+export interface GetPostponeTuitionFeePdfRequest {
+    uuid: string;
+}
+
+export interface GetRequestByUuidRequest {
+    uuid: string;
+}
+
 /**
  * Irst07PostponeTuitionFeePaymentRequestApi - interface
  * 
@@ -45,6 +53,32 @@ export interface Irst07PostponeTuitionFeePaymentRequestApiInterface {
     /**
      */
     createPostponeTuitionRequestPost(requestParameters: CreatePostponeTuitionRequestPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
+
+    /**
+     * 
+     * @param {string} uuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof Irst07PostponeTuitionFeePaymentRequestApiInterface
+     */
+    getPostponeTuitionFeePdfRaw(requestParameters: GetPostponeTuitionFeePdfRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
+
+    /**
+     */
+    getPostponeTuitionFeePdf(requestParameters: GetPostponeTuitionFeePdfRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
+
+    /**
+     * 
+     * @param {string} uuid 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof Irst07PostponeTuitionFeePaymentRequestApiInterface
+     */
+    getRequestByUuidRaw(requestParameters: GetRequestByUuidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>>;
+
+    /**
+     */
+    getRequestByUuid(requestParameters: GetRequestByUuidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any>;
 
 }
 
@@ -91,6 +125,84 @@ export class Irst07PostponeTuitionFeePaymentRequestApi extends runtime.BaseAPI i
      */
     async createPostponeTuitionRequestPost(requestParameters: CreatePostponeTuitionRequestPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
         const response = await this.createPostponeTuitionRequestPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async getPostponeTuitionFeePdfRaw(requestParameters: GetPostponeTuitionFeePdfRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+        if (requestParameters['uuid'] == null) {
+            throw new runtime.RequiredError(
+                'uuid',
+                'Required parameter "uuid" was null or undefined when calling getPostponeTuitionFeePdf().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/irst07/pdf/{uuid}`;
+        urlPath = urlPath.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters['uuid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<string>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
+    }
+
+    /**
+     */
+    async getPostponeTuitionFeePdf(requestParameters: GetPostponeTuitionFeePdfRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.getPostponeTuitionFeePdfRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async getRequestByUuidRaw(requestParameters: GetRequestByUuidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<any>> {
+        if (requestParameters['uuid'] == null) {
+            throw new runtime.RequiredError(
+                'uuid',
+                'Required parameter "uuid" was null or undefined when calling getRequestByUuid().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/irst07/get-request-by-uuid/{uuid}`;
+        urlPath = urlPath.replace(`{${"uuid"}}`, encodeURIComponent(String(requestParameters['uuid'])));
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<any>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
+    }
+
+    /**
+     */
+    async getRequestByUuid(requestParameters: GetRequestByUuidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<any> {
+        const response = await this.getRequestByUuidRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

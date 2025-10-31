@@ -35,6 +35,7 @@ interface DashboardRow {
     requestType: string;
     status: string;
     statusColor?: string;
+    headerUuid?: string;
 }
 
 const Dashboard: React.FC = () => {

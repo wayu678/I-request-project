@@ -1,10 +1,11 @@
 import React from 'react';
-import { Table, Button, Pagination, Flex } from 'antd';
+import { Table, Button, Pagination, Flex, Dropdown } from 'antd';
 import { EditOutlined, DownOutlined, UpOutlined, PlusOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useTranslate } from '../provider/hooks/translate.hook';
 import { useAuth } from '../contexts/AuthContext';
 import { createTranslationFunctions, getStatusColor } from '../utils/dashboardUtils';
+import { previewPostponePdf } from '../services/pdfClient';
 
 interface DashboardRow {
     key: string;
@@ -15,6 +16,7 @@ interface DashboardRow {
     requestType: string;
     status: string;
     statusColor?: string;
+    headerUuid?: string;
 }
 
 interface DashboardTableProps {
@@ -140,17 +142,32 @@ const DashboardTable: React.FC<DashboardTableProps> = ({
             key: 'action',
             width: 120,
             align: 'center' as const,
-            render: () => (
-                <Button
-                    type="primary"
-                    icon={<EditOutlined />}
-                    className="rounded w-28 h-8"
-                    style={{ backgroundColor: '#17A2B8', borderColor: '#17A2B8', boxShadow: 'none' }}
-                >
-                    {translate('View', 'View')}
-                    <DownOutlined className="text-xs ml-1" />
-                </Button>
-            ),
+            render: (_: any, row: DashboardRow) => {
+                const items = [
+                    {
+                        key: 'preview',
+                        label: translate('พรีวิว PDF', 'Preview PDF'),
+                        onClick: async () => {
+                            if (!row?.headerUuid) return;
+                            await previewPostponePdf(row.headerUuid);
+                        },
+                        disabled: !row?.headerUuid,
+                    },
+                ];
+                return (
+                    <Dropdown menu={{ items }} trigger={['click']}>
+                        <Button
+                            type="primary"
+                            icon={<EditOutlined />}
+                            className="rounded w-28 h-8"
+                            style={{ backgroundColor: '#17A2B8', borderColor: '#17A2B8', boxShadow: 'none' }}
+                        >
+                            {translate('View', 'View')}
+                            <DownOutlined className="text-xs ml-1" />
+                        </Button>
+                    </Dropdown>
+                );
+            },
         },
     ];
 

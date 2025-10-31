@@ -15,6 +15,7 @@ export type DashboardRow = {
     requestType: string;
     status: string;
     statusColor?: string;
+    headerUuid?: string;
 };
 
 // เรียกใช้ API จริงจาก backend แทน mock data
@@ -26,7 +27,7 @@ export async function fetchDashboardSummary(params?: {
 }): Promise<DashboardSummaryItem[]> {
     try {
         console.log('[Dashboard API] Fetching summary with params:', params);
-        
+
         // สร้าง query parameters
         const queryParams = new URLSearchParams();
         if (params?.month) queryParams.append('month', params.month.toString());
@@ -36,9 +37,9 @@ export async function fetchDashboardSummary(params?: {
 
         const queryString = queryParams.toString();
         const url = `/api/dashboard/summary${queryString ? `?${queryString}` : ''}`;
-        
+
         console.log('[Dashboard API] Request URL:', url);
-        
+
         const response = await fetch(url, {
             method: 'GET',
             credentials: 'include', // ส่ง cookies อัตโนมัติ
@@ -53,7 +54,7 @@ export async function fetchDashboardSummary(params?: {
 
         const data = await response.json();
         console.log('[Dashboard API] Summary response:', data);
-        
+
         return data;
     } catch (error) {
         console.error('[Dashboard API] Error fetching summary:', error);
@@ -71,7 +72,7 @@ export async function fetchDashboardTable(params: {
 }): Promise<{ items: DashboardRow[]; total: number }> {
     try {
         console.log('[Dashboard API] Fetching table with params:', params);
-        
+
         // สร้าง query parameters
         const queryParams = new URLSearchParams();
         queryParams.append('page', params.page.toString());
@@ -83,9 +84,9 @@ export async function fetchDashboardTable(params: {
 
         const queryString = queryParams.toString();
         const url = `/api/dashboard/requests?${queryString}`;
-        
+
         console.log('[Dashboard API] Request URL:', url);
-        
+
         const response = await fetch(url, {
             method: 'GET',
             credentials: 'include', // ส่ง cookies อัตโนมัติ
@@ -100,7 +101,7 @@ export async function fetchDashboardTable(params: {
 
         const data = await response.json();
         console.log('[Dashboard API] Table response:', data);
-        
+
         return data;
     } catch (error) {
         console.error('[Dashboard API] Error fetching table:', error);

@@ -11,6 +11,7 @@ import {
   RequestForPostponeTuitionandFeePayments,
   RequestForPostponeTuitionandFeePaymentsDetail
 } from "./pages/irst07";
+import PostponeTuitionRequestListPage from "./pages/irst07/PostponeTuitionRequestListPage";
 
 import MakeUpExamForm from "./components/MakeUpExamForm";
 
@@ -73,6 +74,13 @@ const App = () => {
           <ProtectedRoute>
             <MainTemplate>
               <RequestForPostponeTuitionandFeePaymentsDetail />
+            </MainTemplate>
+          </ProtectedRoute>
+        } />
+        <Route path="/irst07/requests" element={
+          <ProtectedRoute>
+            <MainTemplate>
+              <PostponeTuitionRequestListPage />
             </MainTemplate>
           </ProtectedRoute>
         } />
