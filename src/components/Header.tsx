@@ -46,6 +46,11 @@ const Header = ({
             '/irst07/postpone-tuition-and-fee-payments': [
                 { title: translate('สร้างคำร้อง', 'Create Request') },
                 { title: translate('คำร้องขอผ่อนผันค่าธรรมเนียมการศึกษา', 'Request for Postpone Tuition and Fee Payments') }
+            ],
+            '/irst07/postpone-tuition-and-fee-payments/detail': [
+                { title: translate('สร้างคำร้อง', 'Create Request') },
+                { title: translate('คำร้องขอผ่อนผันค่าธรรมเนียมการศึกษา', 'Request for Postpone Tuition and Fee Payments') },
+                { title: translate('แก้ไขข้อมูลคำร้อง', 'Edit Request Information') }
             ]
         };
         const profile = {

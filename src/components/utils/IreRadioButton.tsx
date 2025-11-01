@@ -57,9 +57,13 @@ const IreRadioButton = ({
         </Flex>
       </Radio.Group>
 
-      {errorMessage && (
-        <label className="text-red-500 text-sm">{errorMessage}</label>
-      )}
+      <label className="text-red-500 text-xs min-h-[18px]">
+        {
+          (errorMessage || formContext.formState.errors[registerName.name]?.message) && (
+            <>{errorMessage || String(formContext.formState.errors[registerName.name]?.message)}</>
+          )
+        }
+      </label>
     </Flex>
   );
 };

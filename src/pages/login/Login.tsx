@@ -102,7 +102,7 @@ const Login = () => {
     return (
         <>
             <div className="flex flex-col items-center justify-center h-screen login-bg">
-                <Card className="w-full max-w-[450px] h-full max-h-[600px] shadow-lg">
+                <Card className="w-full max-w-[450px] h-full max-h-fit min-h-[640px] shadow-lg">
                     <Flex className="w-full h-full" vertical gap={15}>
                         <Row className="w-full">
                             <Flex justify="right" align="center" className="w-full h-full">
@@ -147,7 +147,7 @@ const Login = () => {
                         </Row>
                         {
                             loginType === LOGIN_TYPE.ADMIN && (
-                                <>
+                                <Flex vertical>
                                     <Flex vertical className="fade-in">
                                         <IreTextbox
                                             label={translate("ชื่อผู้ใช้งาน", "Username")}
@@ -172,7 +172,7 @@ const Login = () => {
                                             </Button>
                                         </Flex>
                                     </Flex>
-                                </>
+                                </Flex>
                             )
                         }
                         {

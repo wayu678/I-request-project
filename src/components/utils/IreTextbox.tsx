@@ -157,7 +157,7 @@ const IreTextbox = ({
                 <Input
                     size="large"
                     placeholder={placeholder ?? label}
-                    value={formContext.getValues(registerName.name)}
+                    value={formContext.watch(registerName.name) ?? ""}
                     onBlur={handleBlur}
                     onChange={handleChange}
                     status={formContext.formState.errors[registerName.name] ? "error" : undefined}
@@ -172,13 +172,13 @@ const IreTextbox = ({
                         textAlign: formatType === "currency" && formContext.getValues(registerName.name) ? "right" : "left"
                     }}
                 />
-                {
-                    (errorMessage || formContext.formState.errors[registerName.name]?.message) && (
-                        <label className="text-red-500 text-sm">
-                            {errorMessage || String(formContext.formState.errors[registerName.name]?.message)}
-                        </label>
-                    )
-                }
+                <label className="text-red-500 text-xs min-h-[18px]">
+                    {
+                        (errorMessage || formContext.formState.errors[registerName.name]?.message) && (
+                            <>{errorMessage || String(formContext.formState.errors[registerName.name]?.message)}</>
+                        )
+                    }
+                </label>
             </Flex>
 
         </>

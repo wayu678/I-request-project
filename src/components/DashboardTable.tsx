@@ -166,7 +166,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({
                                 icon={<PlusOutlined />}
                                 className="rounded-md w-40"
                                 style={{ backgroundColor: '#339966', borderColor: '#339966', boxShadow: 'none' }}
-                                onClick={() => navigate('/irst07')}
+                                onClick={() => navigate('/irst07/postpone-tuition-and-fee-payments')}
                             >
                                 {translate('สร้างคำร้อง', 'Create Request')}
                                 <DownOutlined className="text-xs ml-2" />
