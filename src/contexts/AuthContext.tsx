@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
+import { useAuthService } from '../services/api/auth';
 
 interface User {
     id: number;
@@ -43,6 +44,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<User | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const authService = useAuthService();
 
     useEffect(() => {
         checkAuth();
@@ -127,17 +129,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setError(null);
             console.log('🔐 Attempting login...');
 
-            const response = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password }),
-                credentials: 'include' // ส่ง cookies อัตโนมัติ
-            });
+            const response = await authService.login({ username, password });
 
-            if (response.ok) {
-                const loginData = await response.json();
+            if (response.success) {
                 console.log('✅ Login successful, fetching user profile...');
 
                 // หลังจาก login สำเร็จ ให้ดึงข้อมูล user profile ใหม่

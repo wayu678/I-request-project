@@ -1,3 +1,4 @@
+.openapi-generator-ignore
 apis/AuthenticationApi.ts
 apis/DashboardApi.ts
 apis/IRAM06MasterValueManagementApi.ts
