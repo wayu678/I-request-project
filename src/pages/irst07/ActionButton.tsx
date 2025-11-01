@@ -40,7 +40,7 @@ const ActionButton = ({ formData, studentData, mode }: ActionButtonProps) => {
             console.log('Student data saved to localStorage:', studentData);
 
             message.success("บันทึกข้อมูลนิสิตเรียบร้อย");
-            navigate("/irst07/detail");
+            navigate("/irst07/postpone-tuition-and-fee-payments/detail");
         } catch (error) {
             console.error('Error saving data:', error);
             message.error("เกิดข้อผิดพลาดในการบันทึกข้อมูล");

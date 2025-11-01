@@ -12,8 +12,8 @@ const PipelinePage = ({ currentStep = 0 }: PipelinePageProps) => {
 
     // กำหนดหน้าเชื่อมต่อของแต่ละ Step
     const stepRoutes = [
-        "/irst07",  // Step 0
-        "/irst07/detail",    // Step 1
+        "/irst07/postpone-tuition-and-fee-payments",  // Step 0
+        "/irst07/postpone-tuition-and-fee-payments/detail",    // Step 1
         "/send-request",    // Step 2
     ]
 

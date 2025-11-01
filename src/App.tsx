@@ -69,7 +69,7 @@ const App = () => {
             </MainTemplate>
           </ProtectedRoute>
         } />
-        <Route path="/irst07/detail" element={
+        <Route path="/irst07/postpone-tuition-and-fee-payments/detail" element={
           <ProtectedRoute>
             <MainTemplate>
               <RequestForPostponeTuitionandFeePaymentsDetail />

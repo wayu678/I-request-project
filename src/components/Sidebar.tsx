@@ -66,7 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
             children: [
                 { key: 'general-request', label: translate('คำร้องทั่วไป', 'General Request'), path: '/irst05/general-request' },
                 { key: 'registration-request', label: translate('คำร้องขอลงทะเบียนเรียน', 'Request for Registration'), path: '/demo/registration-request' },
-                { key: 'postpone-tuition', label: translate('คําร้องขอผ่อนผันค่าธรรมเนียมการศึกษา', 'Request for Postpone Tuition and Fee Payments'), path: '/irst07' },
+                { key: 'postpone-tuition', label: translate('คําร้องขอผ่อนผันค่าธรรมเนียมการศึกษา', 'Request for Postpone Tuition and Fee Payments'), path: '/irst07/postpone-tuition-and-fee-payments' },
                 { key: 'leave-absence', label: translate('คำร้องขอลาพักการศึกษา', 'Request for Leave of Absence'), path: '/demo/leave-absence' },
                 { key: 'resignation', label: translate('คำร้องขอลาออก', 'Request for Resignation'), path: '/demo/resignation' },
                 { key: 'makeup-exam', label: translate('คำร้องขอสอบชดเชย', 'Request for a Make-up Exam'), path: '/make-up-exam' },
@@ -103,9 +103,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
 
     const isMenuActive = (path?: string) => {
         if (!path) return false;
-        // สำหรับ irst07 ให้ตรวจสอบทั้ง /irst07 และ /irst07/detail
-        if (path === '/irst07') {
-            return location.pathname === '/irst07' || location.pathname === '/irst07/detail';
+        // สำหรับ irst07 ให้ตรวจสอบทั้ง /irst07/postpone-tuition-and-fee-payments และ /irst07/postpone-tuition-and-fee-payments/detail
+        if (path === '/irst07/postpone-tuition-and-fee-payments') {
+            return location.pathname === '/irst07/postpone-tuition-and-fee-payments' || location.pathname === '/irst07/postpone-tuition-and-fee-payments/detail';
         }
         return location.pathname === path;
     };

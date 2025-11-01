@@ -32,7 +32,7 @@ const LoginPim = () => {
                 await login(val, pass);
 
                 message.success(translate("เข้าสู่ระบบสำเร็จ", "Login successful"));
-                navigate("/irst07");
+                navigate("/irst07/postpone-tuition-and-fee-payments");
             } else {
                 throw new Error("username and password are required");
             }
@@ -48,7 +48,7 @@ const LoginPim = () => {
 
     const onKuAllLogin = () => {
         console.log('onKuAllLogin');
-        navigate("/irst07");
+        navigate("/irst07/postpone-tuition-and-fee-payments");
     }
 
     const onForgotPassword = () => {
