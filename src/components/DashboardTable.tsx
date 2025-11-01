@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslate } from '../provider/hooks/translate.hook';
 import { useAuth } from '../contexts/AuthContext';
 import { createTranslationFunctions, getStatusColor } from '../utils/dashboardUtils';
-import { previewPostponePdf } from '../services/pdfClient';
+import { previewPostponePdf } from '../services/api/pdfClient';
 
 interface DashboardRow {
     key: string;

@@ -1,11 +1,6 @@
-import { Configuration, ResponseError } from './generated-api/runtime';
-import { Irst07PostponeTuitionFeePaymentRequestApi } from './generated-api/apis/IRST07PostponeTuitionFeePaymentRequestApi';
+import { ResponseError } from '../generated-api/runtime';
+import { postponeTuitionService } from './postponeTuitionService';
 import { message } from 'antd';
-
-const config = new Configuration({
-    basePath: '/api', // เพิ่ม basePath เพื่อให้ API เรียกไปที่ /api
-    credentials: 'include'
-});
 
 export async function getPostponePdfBlobUrl(uuid: string): Promise<string> {
     try {
@@ -13,34 +8,13 @@ export async function getPostponePdfBlobUrl(uuid: string): Promise<string> {
             throw new Error('UUID is required');
         }
 
-        const api = new Irst07PostponeTuitionFeePaymentRequestApi(config);
-        const response = await api.getPostponeTuitionFeePdfRaw({ uuid });
-
-        // ตรวจสอบว่า response มีข้อมูลหรือไม่
-        if (!response || !response.raw) {
-            throw new Error('Invalid response from server');
-        }
-
-        // ใช้ blob() แทน arrayBuffer() เพื่อรองรับ binary data ได้ดีกว่า
-        const blob = await response.raw.blob();
-
-        // ตรวจสอบว่า blob มีข้อมูลหรือไม่
-        if (!blob || blob.size === 0) {
-            throw new Error('PDF file is empty');
-        }
-
-        // ตรวจสอบ content type
-        const contentType = blob.type || response.raw.headers.get('content-type') || '';
-        if (!contentType.includes('application/pdf') && blob.size > 0) {
-            console.warn('[getPostponePdfBlobUrl] Unexpected content type:', contentType);
-            // ไม่ throw error เพราะอาจจะเป็น PDF แม้ content-type ไม่ถูกต้อง
-        }
-
+        // ใช้ API client จาก folder api
+        const blob = await postponeTuitionService.getPostponeTuitionFeePdf(uuid);
         return URL.createObjectURL(blob);
     } catch (error: any) {
         console.error('[getPostponePdfBlobUrl] Error:', error);
 
-        // จัดการกับ ResponseError จาก generated API
+        // จัดการกับ ResponseError
         if (error instanceof ResponseError && error.response) {
             const status = error.response.status;
             const statusText = error.response.statusText;
@@ -115,8 +89,4 @@ export async function previewPostponePdf(uuid: string): Promise<void> {
         throw error;
     }
 }
-
-
-
-
 
