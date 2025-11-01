@@ -1,11 +1,11 @@
-import { Irst07PostponeTuitionFeePaymentRequestApi, type CreatePostponeTuitionRequestPostOperationRequest } from '../generated-api/apis/IRST07POSTPONETUITIONFEEPAYMENTREQUESTApi';
+import { Irst07PostponeTuitionFeePaymentRequestApi, type CreatePostponeTuitionRequestPostOperationRequest } from '../generated-api/apis/Irst07PostponeTuitionFeePaymentRequestApi';
 import type { PostponeTuitionFee } from '../generated-api/models';
 import { Configuration } from '../generated-api/runtime';
 
 // สร้าง configuration สำหรับ API
 const configuration = new Configuration({
     basePath: '/api', // ใช้ proxy แทนการระบุ URL เต็ม
-    credentials: 'include' // ✅ เพิ่ม credentials เพื่อส่ง cookies
+    credentials: 'include'
 });
 
 // สร้าง API instance
@@ -110,6 +110,7 @@ export const postponeTuitionService = {
                 throw new Error('UUID is required');
             }
 
+            // ใช้ API client เพื่อดึง PDF
             const response = await postponeTuitionApi.getPostponeTuitionFeePdfRaw({ uuid });
 
             // ตรวจสอบว่า response มีข้อมูลหรือไม่
@@ -117,8 +118,8 @@ export const postponeTuitionService = {
                 throw new Error('Invalid response from server');
             }
 
-            // ดึง blob จาก response
-            const blob = await response.raw.blob();
+            // ดึง blob จาก response โดยใช้ .value() method
+            const blob = await response.value();
 
             // ตรวจสอบว่า blob มีข้อมูลหรือไม่
             if (!blob || blob.size === 0) {
