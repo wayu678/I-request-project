@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Table, Tag, message, Spin } from 'antd';
 import { useTranslate } from '../../provider/hooks/translate.hook';
-import { fetchDashboardTable, type DashboardRow } from '../../services/api/dashboard';
-// PDF preview feature removed
+import { dashboardService, type DashboardRow } from '../../services/api/dashboard';
+
 
 interface RequestListRow extends DashboardRow {
     headerUuid?: string;
@@ -34,7 +34,7 @@ const PostponeTuitionRequestListPage = () => {
             };
 
             console.log('[PostponeTuitionRequestListPage] Loading requests with params:', params);
-            const result = await fetchDashboardTable(params);
+            const result = await dashboardService.getRequests(params);
             console.log('[PostponeTuitionRequestListPage] API response:', result);
             console.log('[PostponeTuitionRequestListPage] Items count:', result.items?.length || 0);
             console.log('[PostponeTuitionRequestListPage] Total:', result.total);

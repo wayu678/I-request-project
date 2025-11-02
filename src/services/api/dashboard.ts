@@ -1,112 +1,72 @@
-import { apiClient } from './http.interceptor';
+import { DashboardApi } from '../generated-api/apis/DashboardApi';
+import type { GetSummaryRequest, GetRequestsRequest } from '../generated-api/apis/DashboardApi';
+import type {
+    DashboardSummaryItem,
+    DashboardRequestListResponse
+} from '../generated-api/models';
+import { Configuration } from '../generated-api/runtime';
+import { apiConfigurations } from '../ApiConfigurations';
 
-export type DashboardSummaryItem = {
-    name: string;
-    value: number;
-    color?: string;
-};
+export type { DashboardSummaryItem } from '../generated-api/models/DashboardSummaryItem';
+export type { DashboardTableItem as DashboardRow } from '../generated-api/models/DashboardTableItem';
 
-export type DashboardRow = {
-    key: string;
-    no: number;
-    documentDate: string;
-    term: string;
-    academicYear: string;
-    requestType: string;
-    status: string;
-    statusColor?: string;
-    headerUuid?: string;
-};
+const dashboardApi = new DashboardApi(apiConfigurations);
 
-// เรียกใช้ API จริงจาก backend แทน mock data
-export async function fetchDashboardSummary(params?: {
-    month?: number | null;
-    term?: string | null;
-    year?: number | null;
-    requestType?: string | null;
-}): Promise<DashboardSummaryItem[]> {
-    try {
-        console.log('[Dashboard API] Fetching summary with params:', params);
+export const dashboardService = {
+    
+    async getSummary(params?: {
+        month?: number | null;
+        term?: string | null;
+        year?: number | null;
+        requestType?: string | null;
+    }): Promise<DashboardSummaryItem[]> {
+        try {
+            console.log('[start][getSummary] params: ', params);
 
-        // สร้าง query parameters
-        const queryParams = new URLSearchParams();
-        if (params?.month) queryParams.append('month', params.month.toString());
-        if (params?.term) queryParams.append('term', params.term);
-        if (params?.year) queryParams.append('year', params.year.toString());
-        if (params?.requestType) queryParams.append('requestType', params.requestType);
+            const requestParams: GetSummaryRequest = {
+                month: params?.month ?? undefined,
+                term: params?.term ?? undefined,
+                year: params?.year ?? undefined,
+                requestType: params?.requestType ?? undefined
+            };
 
-        const queryString = queryParams.toString();
-        const url = `/api/dashboard/summary${queryString ? `?${queryString}` : ''}`;
+            const response = await dashboardApi.getSummary(requestParams);
+            console.log('[end][getSummary] response: ', response);
 
-        console.log('[Dashboard API] Request URL:', url);
-
-        const response = await fetch(url, {
-            method: 'GET',
-            credentials: 'include', // ส่ง cookies อัตโนมัติ
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            return response;
+        } catch (error: any) {
+            console.error('[error][getSummary]', error);
+            throw error;
         }
+    },
 
-        const data = await response.json();
-        console.log('[Dashboard API] Summary response:', data);
+    async getRequests(params: {
+        page: number;
+        pageSize: number;
+        month?: number | null;
+        term?: string | null;
+        year?: number | null;
+        requestType?: string | null;
+    }): Promise<DashboardRequestListResponse> {
+        try {
+            console.log('[start][getRequests] params: ', params);
 
-        return data;
-    } catch (error) {
-        console.error('[Dashboard API] Error fetching summary:', error);
-        throw error;
-    }
-}
+            const requestParams: GetRequestsRequest = {
+                page: params.page,
+                pageSize: params.pageSize,
+                month: params.month ?? undefined,
+                term: params.term ?? undefined,
+                year: params.year ?? undefined,
+                requestType: params.requestType ?? undefined
+            };
 
-export async function fetchDashboardTable(params: {
-    page: number;
-    pageSize: number;
-    month?: number | null;
-    term?: string | null;
-    year?: number | null;
-    requestType?: string | null;
-}): Promise<{ items: DashboardRow[]; total: number }> {
-    try {
-        console.log('[Dashboard API] Fetching table with params:', params);
+            const response = await dashboardApi.getRequests(requestParams);
+            console.log('[end][getRequests] response: ', response);
 
-        // สร้าง query parameters
-        const queryParams = new URLSearchParams();
-        queryParams.append('page', params.page.toString());
-        queryParams.append('pageSize', params.pageSize.toString());
-        if (params.month) queryParams.append('month', params.month.toString());
-        if (params.term) queryParams.append('term', params.term);
-        if (params.year) queryParams.append('year', params.year.toString());
-        if (params.requestType) queryParams.append('requestType', params.requestType);
-
-        const queryString = queryParams.toString();
-        const url = `/api/dashboard/requests?${queryString}`;
-
-        console.log('[Dashboard API] Request URL:', url);
-
-        const response = await fetch(url, {
-            method: 'GET',
-            credentials: 'include', // ส่ง cookies อัตโนมัติ
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            return response;
+        } catch (error: any) {
+            console.error('[error][getRequests]', error);
+            throw error;
         }
-
-        const data = await response.json();
-        console.log('[Dashboard API] Table response:', data);
-
-        return data;
-    } catch (error) {
-        console.error('[Dashboard API] Error fetching table:', error);
-        throw error;
     }
-}
-
-
+};

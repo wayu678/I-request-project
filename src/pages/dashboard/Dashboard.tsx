@@ -12,7 +12,7 @@ import {
 import {
     UnorderedListOutlined,
 } from '@ant-design/icons';
-import { fetchDashboardSummary, fetchDashboardTable } from '../../services/api/dashboard';
+import { dashboardService } from '../../services/api/dashboard';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTranslate } from '../../provider/hooks/translate.hook';
 import { createDefaultChartData } from '../../utils/dashboardUtils';
@@ -92,7 +92,7 @@ const Dashboard: React.FC = () => {
             };
 
             // ดึงข้อมูล chart summary พร้อม filter
-            const summaryData = await fetchDashboardSummary(filterParams);
+            const summaryData = await dashboardService.getSummary(filterParams);
 
             // ใช้ข้อมูลจริงหรือข้อมูล default ที่สวยงาม
             setChartData(summaryData && summaryData.length > 0 ? summaryData : createDefaultChartData(translate));
@@ -104,7 +104,7 @@ const Dashboard: React.FC = () => {
                 ...filterParams
             };
 
-            const tableResult = await fetchDashboardTable(tableParams);
+            const tableResult = await dashboardService.getRequests(tableParams);
             setTableData(tableResult.items);
             setTotal(tableResult.total);
 

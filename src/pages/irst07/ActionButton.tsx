@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useTranslate } from "../../provider/hooks/translate.hook";
 import { useState } from "react";
 import type { PostponeTuitionFormData } from "../../services/api/postponeTuitionService";
-import { processPostponeTuitionData, validateRequiredFields } from "../../utils/dataProcessor";
+import { validateRequiredFields } from "../../utils/dataProcessor";
+import { postponeTuitionService } from "../../services/api/postponeTuitionService";
 
 interface ActionButtonProps {
     formData?: Partial<PostponeTuitionFormData>;
@@ -65,6 +66,12 @@ const ActionButton = ({ formData, studentData, mode }: ActionButtonProps) => {
                 combinedData = {
                     ...formData,
                     studentCode: formData?.studentCode || studentData.studentId || '',
+                    studentName: formData?.studentName || studentData.studentName || '',
+                    studentYear: formData?.studentYear || studentData.studentYear || '',
+                    faculty: formData?.faculty || studentData.faculty || '',
+                    major: formData?.major || studentData.major || '',
+                    email: formData?.email || studentData.email || '',
+                    phoneNumber: formData?.phoneNumber || studentData.phoneNumber || '',
                 };
             }
 
@@ -79,45 +86,26 @@ const ActionButton = ({ formData, studentData, mode }: ActionButtonProps) => {
                 return;
             }
 
-            // ประมวลผลข้อมูล
-            const processedData = processPostponeTuitionData(combinedData);
-            console.log("Processed data for API:", processedData);
+            // เรียก API service
+            const response = await postponeTuitionService.createPostponeTuitionRequest(combinedData as PostponeTuitionFormData);
+            console.log("API Response:", response);
 
-            // ส่งข้อมูลไปยัง API
-            const response = await fetch('/api/irst07/create-request-post', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    postponeTuitionFee: processedData
-                })
-            });
+            // ตรวจสอบ response และแสดงข้อความสำเร็จ
+            message.success(
+                translate(
+                    action === 'save' ? "บันทึกคำร้องเรียบร้อย" : "ส่งคำร้องเรียบร้อย",
+                    action === 'save' ? "Request saved successfully" : "Request submitted successfully"
+                )
+            );
 
-            if (response.ok) {
-                const result = await response.json();
-                console.log(`Request ${action}ed successfully:`, result);
-
-                const successMessage = action === 'save'
-                    ? translate("บันทึกคำร้องสำเร็จ", "Saved successfully")
-                    : translate("ส่งข้อมูลเรียบร้อย", "Submit successfully");
-                message.success(successMessage);
-            } else {
-                const error = await response.json();
-                console.error(`Error ${action}ing request:`, error);
-
-                const errorMessage = action === 'save'
-                    ? translate(`บันทึกคำร้องไม่สำเร็จ: ${error.message || 'Unknown error'}`, "Save failed")
-                    : translate(`ส่งข้อมูลไม่สำเร็จ: ${error.message || 'Unknown error'}`, "Submit failed");
-                message.error(errorMessage);
-            }
-        } catch (error) {
+            // อาจจะต้องการ navigate ไปหน้าอื่นหรือ refresh หลังจากส่งสำเร็จ
+            // navigate("/irst07/postpone-tuition-and-fee-payments/list");
+        } catch (error: any) {
             console.error(`Error ${action}ing request:`, error);
 
             const errorMessage = action === 'save'
-                ? translate("เกิดข้อผิดพลาดในการบันทึกคำร้อง", "Save error")
-                : translate("เกิดข้อผิดพลาดในการส่งข้อมูล", "Submit error");
+                ? translate(`บันทึกคำร้องไม่สำเร็จ: ${error?.message || 'Unknown error'}`, "Save failed")
+                : translate(`ส่งข้อมูลไม่สำเร็จ: ${error?.message || 'Unknown error'}`, "Submit failed");
             message.error(errorMessage);
         } finally {
             setLoading(false);

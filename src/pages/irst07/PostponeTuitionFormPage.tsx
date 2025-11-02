@@ -4,6 +4,7 @@ import { Row, Col } from "antd";
 import { useForm } from "react-hook-form";
 import { IreTextbox, IreTextarea, IreRadioButton, IreCalendar, IreUpload } from "../../components/utils";
 
+
 interface PostponeTuitionFormPageProps {
   onFormChange: (data: any) => void;
   studentData?: any; // ข้อมูลจาก StudentForm
@@ -15,19 +16,19 @@ const PostponeTuitionFormPage = ({ onFormChange, studentData }: PostponeTuitionF
 
   const formContext = useForm({
     defaultValues: {
-      semesterCode: "1", // ต้น
+      semesterCode: "1", 
       academicYear: null,
       feeAmount: "",
-      hasOutstandingDept: "no", // ไม่มีหนี้ค้างชำระในภาคการศึกษาที่แล้ว
+      hasOutstandingDept: "no",
       cause: "",
       expectedPayDate: null,
       studentCode: "",
       parentPhone: "",
       guardianConsentFile: null,
-      // ฟิลด์เพิ่มเติมสำหรับหนี้ค้างชำระ
-      deptSemesterCode: "1", // ภาคสำหรับหนี้ค้างชำระ
-      deptAmount: "", // จำนวนเงินหนี้ค้างชำระ
-      deptAcademicYear: null // ปีการศึกษาสำหรับหนี้ค้างชำระ
+      
+      deptSemesterCode: "1", 
+      deptAmount: "", 
+      deptAcademicYear: null 
     }
   });
 
@@ -74,7 +75,7 @@ const PostponeTuitionFormPage = ({ onFormChange, studentData }: PostponeTuitionF
   // ติดตามการเปลี่ยนแปลงของฟิลด์หนี้ค้างชำระ
   useEffect(() => {
     const subscription = formContext.watch((value) => {
-      if (value.hasOutstandingDept !== hasOutstandingDebt) {
+      if (value.hasOutstandingDept && value.hasOutstandingDept !== hasOutstandingDebt) {
         setHasOutstandingDebt(value.hasOutstandingDept);
       }
     });
@@ -251,7 +252,6 @@ const PostponeTuitionFormPage = ({ onFormChange, studentData }: PostponeTuitionF
               formContext={formContext}
               registerName={formContext.register('guardianConsentFile')}
               accept=".pdf,.jpg,.jpeg,.png"
-              maxSize={5}
               isRequired={false}
             />
           </Col>

@@ -1,3 +1,4 @@
+import { apiConfigurations } from '../ApiConfigurations';
 import { UserManagementApi } from '../generated-api/apis/UserManagementApi';
 import type {
     GetAllUsersRequest,
@@ -14,16 +15,8 @@ import type {
     CreateUserRequest,
     UpdateUserRequest
 } from '../generated-api/models';
-import { Configuration } from '../generated-api/runtime';
 
-// สร้าง configuration สำหรับ API
-const configuration = new Configuration({
-    basePath: '/api',
-    credentials: 'include'
-});
-
-// สร้าง API instance
-const userManagementApi = new UserManagementApi(configuration);
+const userManagementApi = new UserManagementApi(apiConfigurations);
 
 export const userManagementService = {
     /**

@@ -5,7 +5,8 @@ import { useTranslate } from "../../provider/hooks/translate.hook";
 import { LANGUAGE, LOGIN_TYPE } from "../../constants/common";
 import { useForm } from "react-hook-form";
 import { IreTextbox } from "../../components/utils";
-import { useAuthService } from "../../services/api/auth";
+import { authenticationService } from "../../services/api/auth";
+
 
 
 interface SignInForm {
@@ -19,7 +20,6 @@ const Login = () => {
     const [loginType, setLoginType] = useState<typeof LOGIN_TYPE[keyof typeof LOGIN_TYPE]>(LOGIN_TYPE.ADMIN);
     const [loading, setLoading] = useState(false);
     const { language, setLanguage, translate } = useTranslate();
-    const { login } = useAuthService();
 
 
     const signInForm = useForm<SignInForm>();
@@ -45,8 +45,7 @@ const Login = () => {
 
             setLoading(true);
 
-            // ใช้ useAuthService() login function
-            const loginResponse = await login({
+            const loginResponse = await authenticationService.login({
                 username,
                 password
             });
@@ -54,7 +53,7 @@ const Login = () => {
             if (loginResponse.success) {
                 message.success(translate("เข้าสู่ระบบสำเร็จ", "Login successful"));
 
-                // นำทางไปยังหน้า Dashboard หรือ return URL
+  
                 navigate(from, { replace: true });
             } else {
                 message.error(loginResponse.message || translate("เข้าสู่ระบบไม่สำเร็จ", "Login failed"));
@@ -76,7 +75,7 @@ const Login = () => {
         try {
             setLoading(true);
             // Mock KU All-Login
-            const loginResponse = await login({
+            const loginResponse = await authenticationService.login({
                 username: "ku_user",
                 password: "ku_password"
             });

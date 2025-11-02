@@ -12,6 +12,7 @@ interface IreCalendarProps {
     widthFull?: boolean;
     format?: string;
     disabled?: boolean;
+    picker?: "date" | "month" | "year";
 }
 
 const IreCalendar = ({

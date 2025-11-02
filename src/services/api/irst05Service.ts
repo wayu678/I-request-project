@@ -1,12 +1,10 @@
 import { IRST05GeneralRequestApi, type ApproveGeneralRequestByHeaderUuidPutRequest, type CancelGeneralRequestByHeaderUuidPutRequest, type CreateGeneralRequestPostRequest, type FindGeneralRequestByHeaderUuidGetRequest, type RejectGeneralRequestByHeaderUuidPutRequest, type SendApproveGeneralRequestByHeaderUuidPutRequest, type UpdateGeneralRequestDetailByUuidPutRequest } from '../generated-api/apis/IRST05GeneralRequestApi';
 import type { GeneralRequestDetailRequest, GeneralRequestDetailResponse, GeneralRequestRequest, GeneralRequestResponse, PostponeTuitionFee } from '../generated-api/models';
 import { Configuration } from '../generated-api/runtime';
+import { apiConfigurations } from '../ApiConfigurations';
 
-const configuration = new Configuration({
-    credentials: 'include'
-});
+const generalRequestApi = new IRST05GeneralRequestApi(apiConfigurations);
 
-const generalRequestApi = new IRST05GeneralRequestApi(configuration);
 
 export const generalRequestService = {
     async createGeneralRequestPost(generalRequestRequest: GeneralRequestRequest): Promise<GeneralRequestResponse> {

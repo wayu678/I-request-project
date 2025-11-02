@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { useAuthService } from '../services/api/auth';
+import { authenticationService } from '../services/api/auth';
 
 interface User {
     id: number;
@@ -44,7 +44,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<User | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const authService = useAuthService();
 
     useEffect(() => {
         checkAuth();
@@ -55,31 +54,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             console.log('🔍 Fetching current user from API...');
             setError(null); // Clear previous errors
 
-            const response = await fetch('/api/auth/current-user', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include' // ส่ง cookies อัตโนมัติ
-            });
-
-            if (!response.ok) {
-                if (response.status === 401) {
-                    console.log('🔒 User not authenticated');
-                    return null;
-                }
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const userData = await response.json();
+            // ✅ 4.3 เรียกใช้ service แทน fetch
+            const userData = await authenticationService.getCurrentUser();
             console.log('✅ Current user data received:', userData);
 
             // แปลงข้อมูลจาก API response เป็น User interface
+            // ✅ Type assertion: UserResponse fields อาจเป็น optional แต่ในทางปฏิบัติ required fields จะมีค่าเสมอ
             const user: User = {
-                id: userData.id,
-                username: userData.username,
-                roleCode: userData.roleCode,
-                campusCode: userData.campusCode,
+                id: userData.id ?? 0,
+                username: userData.username ?? '',
+                roleCode: userData.roleCode ?? '',
+                campusCode: userData.campusCode ?? '',
                 facultyCode: userData.facultyCode,
                 majorCode: userData.majorCode,
                 departmentCode: userData.departmentCode,
@@ -94,8 +79,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             };
 
             return user;
-        } catch (error) {
+        } catch (error: any) {
             console.error('❌ Error getting current user:', error);
+            // ✅ จัดการ 401 error
+            if (error?.status === 401 || error?.response?.status === 401) {
+                console.log('🔒 User not authenticated');
+                return null;
+            }
             setError(error instanceof Error ? error.message : 'Failed to get user data');
             return null;
         }
@@ -129,7 +119,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setError(null);
             console.log('🔐 Attempting login...');
 
-            const response = await authService.login({ username, password });
+            // ✅ 4.3 เรียกใช้ service โดยตรง
+            const response = await authenticationService.login({ username, password });
 
             if (response.success) {
                 console.log('✅ Login successful, fetching user profile...');
@@ -148,9 +139,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                     return false;
                 }
             } else {
-                console.log('❌ Login failed:', response.status);
-                const errorData = await response.json().catch(() => ({}));
-                setError(errorData.message || 'Login failed');
+                // ✅ response เป็น UserLoginResponse object (มี success, message, accessToken, etc.)
+                console.log('❌ Login failed:', response.message);
+                setError(response.message || 'Login failed');
                 return false;
             }
         } catch (error) {
@@ -165,10 +156,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const logout = async (): Promise<void> => {
         try {
             setError(null);
-            await fetch('/api/auth/logout', {
-                method: 'POST',
-                credentials: 'include' // ส่ง cookies อัตโนมัติ
-            });
+            
+            // ✅ 4.3 ถ้ามี userId ใน user state ให้ใช้ service
+            if (user?.id) {
+                await authenticationService.logout(user.id);
+            } else {
+                // ✅ ถ้าไม่มี userId ให้ใช้ fetch (fallback)
+                await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+            }
 
             setIsAuthenticated(false);
             setUser(null);

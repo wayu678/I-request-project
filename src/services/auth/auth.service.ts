@@ -32,10 +32,9 @@ class AuthServiceImpl implements AuthService {
             }
 
             // Import here to avoid circular dependency
-            const { useAuthService } = await import('../api/auth');
-            const authService = useAuthService();
+            const { authenticationService } = await import('../api/auth');
 
-            const response = await authService.refreshToken(refreshToken);
+            const response = await authenticationService.refreshToken(refreshToken);
 
             if (response.success) {
                 this.setToken(response.accessToken);

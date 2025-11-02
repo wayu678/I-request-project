@@ -1,17 +1,9 @@
 import { RequestTypeManagementApi, type GetRequestTypesRequest, type GetRequestTypeByUuidRequest } from '../generated-api/apis/RequestTypeManagementApi';
 import type { RequestTypeResponse, GetRequestTypesResponse } from '../generated-api/models';
-import { Configuration } from '../generated-api/runtime';
+import { apiConfigurations } from '../ApiConfigurations';
 
-// สร้าง configuration สำหรับ API
-const configuration = new Configuration({
-    basePath: '/api', // ใช้ proxy แทนการระบุ URL เต็ม
-    credentials: 'include' // ✅ เพิ่ม credentials เพื่อส่ง cookies
-});
+const requestTypeApi = new RequestTypeManagementApi(apiConfigurations);
 
-// สร้าง API instance
-const requestTypeApi = new RequestTypeManagementApi(configuration);
-
-// Interface สำหรับ table row (ใช้ใน component)
 export interface RequestTypeRow {
     key: string;
     no: number;
@@ -22,7 +14,6 @@ export interface RequestTypeRow {
     uuid?: string;
 }
 
-// Interface สำหรับ request parameters
 export interface GetRequestTypesParams {
     page?: number;
     pageSize?: number;
