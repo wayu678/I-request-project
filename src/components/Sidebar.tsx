@@ -21,9 +21,10 @@ interface MenuItem {
 
 interface SidebarProps {
     isOpen: boolean;
+    onClose?: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const { translate, language } = useTranslate();

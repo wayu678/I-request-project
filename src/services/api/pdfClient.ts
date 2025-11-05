@@ -4,13 +4,20 @@ import { message } from 'antd';
 
 export async function getPostponePdfBlobUrl(uuid: string): Promise<string> {
     try {
+        console.log('[getPostponePdfBlobUrl] Starting with UUID:', uuid);
+
         if (!uuid) {
             throw new Error('UUID is required');
         }
 
         // ใช้ API client จาก folder api
+        console.log('[getPostponePdfBlobUrl] Calling postponeTuitionService.getPostponeTuitionFeePdf...');
         const blob = await postponeTuitionService.getPostponeTuitionFeePdf(uuid);
-        return URL.createObjectURL(blob);
+        console.log('[getPostponePdfBlobUrl] Received blob:', { size: blob.size, type: blob.type });
+
+        const blobUrl = URL.createObjectURL(blob);
+        console.log('[getPostponePdfBlobUrl] Created blob URL:', blobUrl);
+        return blobUrl;
     } catch (error: any) {
         console.error('[getPostponePdfBlobUrl] Error:', error);
 
@@ -52,21 +59,43 @@ export async function getPostponePdfBlobUrl(uuid: string): Promise<string> {
 
 export async function previewPostponePdf(uuid: string): Promise<void> {
     try {
+        console.log('[previewPostponePdf] Starting preview with UUID:', uuid);
+
         if (!uuid) {
-            message.error('ไม่พบ UUID สำหรับดาวน์โหลด PDF');
+            const errorMsg = 'ไม่พบ UUID สำหรับดาวน์โหลด PDF';
+            console.error('[previewPostponePdf]', errorMsg);
+            message.error(errorMsg);
             return;
         }
 
+        console.log('[previewPostponePdf] Getting blob URL...');
         const blobUrl = await getPostponePdfBlobUrl(uuid);
 
         if (!blobUrl) {
-            message.error('ไม่สามารถสร้าง URL สำหรับ PDF ได้');
+            const errorMsg = 'ไม่สามารถสร้าง URL สำหรับ PDF ได้';
+            console.error('[previewPostponePdf]', errorMsg);
+            message.error(errorMsg);
             return;
         }
 
-        window.open(blobUrl, '_blank');
+        console.log('[previewPostponePdf] Opening PDF in new window...');
+        const newWindow = window.open(blobUrl, '_blank');
+
+        if (!newWindow) {
+            // Popup blocked - fallback to download
+            console.warn('[previewPostponePdf] Popup blocked, creating download link instead');
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = `postpone_tuition_${uuid}.pdf`;
+            link.click();
+            message.info('ได้ทำการดาวน์โหลด PDF เนื่องจาก popup ถูกบล็อก');
+        }
+
         // Clean up blob URL after a delay (to allow browser to load it)
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 10000); // เพิ่มเวลาเป็น 10 วินาที
+        setTimeout(() => {
+            console.log('[previewPostponePdf] Cleaning up blob URL');
+            URL.revokeObjectURL(blobUrl);
+        }, 10000); // เพิ่มเวลาเป็น 10 วินาที
     } catch (error: any) {
         console.error('[previewPostponePdf] Error:', error);
 

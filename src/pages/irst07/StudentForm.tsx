@@ -14,7 +14,7 @@ interface StudentFormData {
 }
 
 interface StudentFormProps {
-    onFormChange?: (data: StudentFormData) => void;
+    onFormChange?: (data: Partial<StudentFormData>) => void;
 }
 
 const StudentForm = ({ onFormChange }: StudentFormProps) => {
@@ -35,11 +35,11 @@ const StudentForm = ({ onFormChange }: StudentFormProps) => {
     useEffect(() => {
         if (onFormChange) {
             const subscription = formContext.watch((value) => {
-                onFormChange(value);
+                onFormChange(value as Partial<StudentFormData>);
             });
             return () => subscription.unsubscribe();
         }
-    }, [formContext.watch, onFormChange]);
+    }, [formContext, onFormChange]);
 
     const formFields: { field: keyof StudentFormData, label: string, placeholder: string, formatType?: string, className?: string }[] = [
         {

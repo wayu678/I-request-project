@@ -105,7 +105,34 @@ const Dashboard: React.FC = () => {
             };
 
             const tableResult = await dashboardService.getRequests(tableParams);
-            setTableData(tableResult.items);
+            console.log('[Dashboard] API response:', tableResult);
+            console.log('[Dashboard] API items sample:', tableResult.items?.slice(0, 3));
+
+            // Map ข้อมูลเพื่อเพิ่ม headerUuid จาก dashboard API response
+            const mappedTableData: DashboardRow[] = (tableResult.items || []).map((item: any, index: number) => {
+                const mappedItem = {
+                    ...item,
+                    // Map headerUuid จาก API response (รองรับทั้ง snake_case และ camelCase)
+                    headerUuid: item.headerUuid || item.header_uuid || null,
+                };
+
+                // Debug: Log first few items
+                if (index < 3) {
+                    console.log(`[Dashboard] Mapping item ${index}:`, {
+                        original: item,
+                        mapped: mappedItem,
+                        headerUuid: mappedItem.headerUuid
+                    });
+                }
+
+                return mappedItem;
+            });
+
+            console.log('[Dashboard] Mapped table data sample:', mappedTableData.slice(0, 3));
+            console.log('[Dashboard] Items with headerUuid:', mappedTableData.filter(i => i.headerUuid).length);
+            console.log('[Dashboard] Items without headerUuid:', mappedTableData.filter(i => !i.headerUuid).length);
+
+            setTableData(mappedTableData);
             setTotal(tableResult.total);
 
         } catch (error) {
@@ -170,6 +197,7 @@ const Dashboard: React.FC = () => {
                     total={total}
                     pageSize={pageSize}
                     onPageChange={handlePageChange}
+                    onRefresh={loadDashboardData}
                 />
             </div>
         </div>

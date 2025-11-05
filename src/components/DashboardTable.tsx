@@ -1,11 +1,14 @@
 import React from 'react';
-import { Table, Button, Pagination, Flex, Dropdown } from 'antd';
-import { EditOutlined, DownOutlined, UpOutlined, PlusOutlined } from '@ant-design/icons';
+import { Table, Button, Pagination, Flex, Dropdown, message, Modal } from 'antd';
+import type { MenuProps } from 'antd';
+import { EditOutlined, DownOutlined, UpOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useTranslate } from '../provider/hooks/translate.hook';
 import { useAuth } from '../contexts/AuthContext';
 import { createTranslationFunctions, getStatusColor } from '../utils/dashboardUtils';
 import { previewPostponePdf } from '../services/api/pdfClient';
+import { dashboardService } from '../services/api/dashboard';
 
 interface DashboardRow {
     key: string;
@@ -26,6 +29,7 @@ interface DashboardTableProps {
     total: number;
     pageSize: number;
     onPageChange: (page: number) => void;
+    onRefresh?: () => void;
 }
 
 const DashboardTable: React.FC<DashboardTableProps> = ({
@@ -34,7 +38,8 @@ const DashboardTable: React.FC<DashboardTableProps> = ({
     currentPage,
     total,
     pageSize,
-    onPageChange
+    onPageChange,
+    onRefresh
 }) => {
     const { translate } = useTranslate();
     const { user } = useAuth();
@@ -143,19 +148,94 @@ const DashboardTable: React.FC<DashboardTableProps> = ({
             width: 120,
             align: 'center' as const,
             render: (_: any, row: DashboardRow) => {
-                const items = [
+                // Debug: Log row data to check headerUuid
+                console.log('[DashboardTable] Rendering row:', {
+                    key: row.key,
+                    headerUuid: row.headerUuid,
+                    fullRow: row
+                });
+
+                const items: MenuProps['items'] = [
                     {
                         key: 'preview',
                         label: translate('พรีวิว PDF', 'Preview PDF'),
-                        onClick: async () => {
-                            if (!row?.headerUuid) return;
-                            await previewPostponePdf(row.headerUuid);
-                        },
                         disabled: !row?.headerUuid,
                     },
+                    {
+                        key: 'delete',
+                        label: translate('ลบ', 'Delete'),
+                        icon: <DeleteOutlined />,
+                        danger: true,
+                        disabled: !row?.headerUuid || row?.status !== 'ร่าง',
+                    },
                 ];
+
+                const onMenuClick: MenuProps['onClick'] = async ({ key }) => {
+                    console.log('[DashboardTable] Menu clicked:', {
+                        key,
+                        headerUuid: row?.headerUuid,
+                        rowKey: row?.key,
+                        fullRow: row
+                    });
+
+                    if (key === 'preview') {
+                        if (!row?.headerUuid) {
+                            const errorMsg = `ไม่สามารถพรีวิว PDF ได้: ไม่พบ headerUuid สำหรับ row key: ${row?.key}`;
+                            console.warn('[DashboardTable] Cannot preview PDF: headerUuid is missing', {
+                                row: row,
+                                availableKeys: Object.keys(row || {}),
+                                rowKey: row?.key
+                            });
+                            message.error(errorMsg);
+                            return;
+                        }
+
+                        console.log('[DashboardTable] Starting PDF preview with headerUuid:', row.headerUuid);
+                        try {
+                            await previewPostponePdf(row.headerUuid);
+                            console.log('[DashboardTable] PDF preview initiated successfully');
+                        } catch (error: any) {
+                            console.error('[DashboardTable] Error previewing PDF:', error);
+                            const errorMsg = error?.message || 'เกิดข้อผิดพลาดในการพรีวิว PDF';
+                            message.error(errorMsg);
+                        }
+                    } else if (key === 'delete') {
+                        if (!row?.headerUuid) {
+                            message.error(translate('ไม่สามารถลบคำร้องได้: ไม่พบ headerUuid', 'Cannot delete request: headerUuid not found'));
+                            return;
+                        }
+
+                        const headerUuidToDelete = row.headerUuid; // Store in a const to satisfy TypeScript
+
+                        Modal.confirm({
+                            title: translate('ยืนยันการลบคำร้อง', 'Confirm Delete Request'),
+                            icon: <ExclamationCircleOutlined />,
+                            content: translate('คุณต้องการลบคำร้องนี้หรือไม่? การกระทำนี้ไม่สามารถยกเลิกได้', 'Are you sure you want to delete this request? This action cannot be undone.'),
+                            okText: translate('ลบ', 'Delete'),
+                            okType: 'danger',
+                            cancelText: translate('ยกเลิก', 'Cancel'),
+                            onOk: async () => {
+                                try {
+                                    console.log('[DashboardTable] Deleting request with headerUuid:', headerUuidToDelete);
+                                    await dashboardService.deleteRequest(headerUuidToDelete);
+                                    message.success(translate('ลบคำร้องเรียบร้อย', 'Request deleted successfully'));
+
+                                    // Refresh table data
+                                    if (onRefresh) {
+                                        onRefresh();
+                                    }
+                                } catch (error: any) {
+                                    console.error('[DashboardTable] Error deleting request:', error);
+                                    const errorMsg = error?.message || translate('เกิดข้อผิดพลาดในการลบคำร้อง', 'Failed to delete request');
+                                    message.error(errorMsg);
+                                }
+                            },
+                        });
+                    }
+                };
+
                 return (
-                    <Dropdown menu={{ items }} trigger={['click']}>
+                    <Dropdown menu={{ items, onClick: onMenuClick }} trigger={['click']}>
                         <Button
                             type="primary"
                             icon={<EditOutlined />}
@@ -197,6 +277,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({
                     <Table
                         columns={columns}
                         dataSource={tableData}
+                        rowKey={(record) => record.key || String(record.no)}
                         pagination={false}
                         size="middle"
                         loading={loading}

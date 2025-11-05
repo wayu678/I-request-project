@@ -39,12 +39,13 @@ const PostponeTuitionRequestListPage = () => {
             console.log('[PostponeTuitionRequestListPage] Items count:', result.items?.length || 0);
             console.log('[PostponeTuitionRequestListPage] Total:', result.total);
 
-            // Map ข้อมูลเพื่อเพิ่ม UUID จาก dashboard API
+            // Map ข้อมูลเพื่อเพิ่ม headerUuid จาก dashboard API response
             const mappedData: RequestListRow[] = (result.items || []).map((item: any, index: number) => {
                 console.log(`[PostponeTuitionRequestListPage] Item ${index}:`, item);
                 return {
                     ...item,
-                    headerUuid: item.header_uuid || item.headerUuid || item.key || '',
+                    // Map headerUuid จาก API response (รองรับทั้ง snake_case และ camelCase)
+                    headerUuid: item.headerUuid || item.header_uuid || null,
                 };
             });
 

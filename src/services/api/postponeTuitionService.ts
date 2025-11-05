@@ -1,4 +1,4 @@
-import { Irst07PostponeTuitionFeePaymentRequestApi, type CreatePostponeTuitionRequestPostOperationRequest, type GetPostponeTuitionFeePdfRequest, type GetRequestByUuidRequest } from '../generated-api/apis/Irst07PostponeTuitionFeePaymentRequestApi';
+import { Irst07PostponeTuitionFeePaymentRequestApi, type CreatePostponeTuitionRequestPostOperationRequest, type GetPostponeTuitionFeePdfRequest, type GetRequestByUuidRequest } from '../generated-api/apis/IRST07POSTPONETUITIONFEEPAYMENTREQUESTApi';
 import type { PostponeTuitionFee } from '../generated-api/models';
 import { apiConfigurations } from '../ApiConfigurations';
 import dayjs from 'dayjs';

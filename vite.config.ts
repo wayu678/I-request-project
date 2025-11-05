@@ -9,6 +9,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  base: '/english-learning-app/', // 👈 base ต้องเป็นชื่อ repo ของคุณ
   server: {
     port: 8080,
     proxy: {

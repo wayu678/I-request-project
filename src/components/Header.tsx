@@ -8,8 +8,9 @@ import { LANGUAGE } from '../constants/common';
 import type { BreadcrumbItemType } from 'antd/es/breadcrumb/Breadcrumb';
 
 interface HeaderProps {
-    isOpen: boolean;
-    onSidebarTrigger: () => void;
+    isOpen?: boolean;
+    onSidebarTrigger?: () => void;
+    onMenuClick?: () => void;
 }
 
 interface BreadcrumbHeader {
@@ -19,11 +20,20 @@ interface BreadcrumbHeader {
 const Header = ({
     isOpen,
     onSidebarTrigger,
+    onMenuClick,
 }: HeaderProps) => {
     const location = useLocation();
     const navigate = useNavigate();
     const { language, setLanguage, translate } = useTranslate();
     const { logout } = useAuth();
+
+    const handleMenuClick = () => {
+        if (onSidebarTrigger) {
+            onSidebarTrigger();
+        } else if (onMenuClick) {
+            onMenuClick();
+        }
+    };
 
     const breadcrumbHeaders: BreadcrumbHeader = useMemo(() => {
         const home = {
@@ -106,7 +116,7 @@ const Header = ({
                 <Flex align="center" justify="space-between">
                     {/* Left Side - Mobile Menu Button + Breadcrumb */}
                     <div className="flex items-center space-x-6">
-                        <MenuOutlined onClick={onSidebarTrigger} className={`cursor-pointer`} />
+                        <MenuOutlined onClick={handleMenuClick} className={`cursor-pointer`} />
                         <Breadcrumb items={breadcrumbHeaderItems()} />
                     </div>
 

@@ -33,7 +33,10 @@ const MainTemplate: React.FC<MainTemplateProps> = ({ children }) => {
             {/* Main Content Area - ด้านขวา */}
             <div className="flex-1 lg:ml-70 flex flex-col min-w-0">
                 {/* Header - ด้านบน */}
-                <Header onMenuClick={() => setSidebarOpen(true)} />
+                <Header 
+                    isOpen={sidebarOpen}
+                    onSidebarTrigger={() => setSidebarOpen(true)} 
+                />
 
                 {/* Page Content - เนื้อหาหลัก */}
                 <main className="flex-1 overflow-auto">
